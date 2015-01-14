@@ -105,17 +105,16 @@ void main() {
         var parser = new ArgParser();
         parser.addFlag('a', callback: (value) => a = value);
 
-        var args = parser.parse(['--a']);
+        parser.parse(['--a']);
         expect(a, isTrue);
       });
 
       test('for absent flags are invoked with the default value', () {
         var a;
         var parser = new ArgParser();
-        parser.addFlag('a', defaultsTo: false,
-            callback: (value) => a = value);
+        parser.addFlag('a', defaultsTo: false, callback: (value) => a = value);
 
-        var args = parser.parse([]);
+        parser.parse([]);
         expect(a, isFalse);
       });
 
@@ -124,7 +123,7 @@ void main() {
         var parser = new ArgParser();
         parser.addFlag('a', callback: (value) => a = value);
 
-        var args = parser.parse([]);
+        parser.parse([]);
         expect(a, isFalse);
       });
 
@@ -133,17 +132,16 @@ void main() {
         var parser = new ArgParser();
         parser.addOption('a', callback: (value) => a = value);
 
-        var args = parser.parse(['--a=v']);
+        parser.parse(['--a=v']);
         expect(a, equals('v'));
       });
 
       test('for absent options are invoked with the default value', () {
         var a;
         var parser = new ArgParser();
-        parser.addOption('a', defaultsTo: 'v',
-            callback: (value) => a = value);
+        parser.addOption('a', defaultsTo: 'v', callback: (value) => a = value);
 
-        var args = parser.parse([]);
+        parser.parse([]);
         expect(a, equals('v'));
       });
 
@@ -152,51 +150,53 @@ void main() {
         var parser = new ArgParser();
         parser.addOption('a', callback: (value) => a = value);
 
-        var args = parser.parse([]);
+        parser.parse([]);
         expect(a, isNull);
       });
 
       test('for multiple present, allowMultiple, options are invoked with '
-           'value as a list', () {
+          'value as a list', () {
         var a;
         var parser = new ArgParser();
-        parser.addOption('a', allowMultiple: true,
-            callback: (value) => a = value);
+        parser.addOption('a',
+            allowMultiple: true, callback: (value) => a = value);
 
-        var args = parser.parse(['--a=v', '--a=x']);
+        parser.parse(['--a=v', '--a=x']);
         expect(a, equals(['v', 'x']));
       });
 
       test('for single present, allowMultiple, options are invoked with '
-           ' value as a single element list', () {
+          ' value as a single element list', () {
         var a;
         var parser = new ArgParser();
-        parser.addOption('a', allowMultiple: true,
-            callback: (value) => a = value);
+        parser.addOption('a',
+            allowMultiple: true, callback: (value) => a = value);
 
-        var args = parser.parse(['--a=v']);
+        parser.parse(['--a=v']);
         expect(a, equals(['v']));
       });
 
       test('for absent, allowMultiple, options are invoked with default '
-           'value as a list.', () {
+          'value as a list.', () {
         var a;
         var parser = new ArgParser();
-        parser.addOption('a', allowMultiple: true, defaultsTo: 'v',
+        parser.addOption('a',
+            allowMultiple: true,
+            defaultsTo: 'v',
             callback: (value) => a = value);
 
-        var args = parser.parse([]);
+        parser.parse([]);
         expect(a, equals(['v']));
       });
 
       test('for absent, allowMultiple, options are invoked with value '
-           'as an empty list.', () {
+          'as an empty list.', () {
         var a;
         var parser = new ArgParser();
-        parser.addOption('a', allowMultiple: true,
-            callback: (value) => a = value);
+        parser.addOption('a',
+            allowMultiple: true, callback: (value) => a = value);
 
-        var args = parser.parse([]);
+        parser.parse([]);
         expect(a, isEmpty);
       });
     });
@@ -392,11 +392,11 @@ void main() {
         var args = parser.parse(['--define=1']);
         expect(args['define'], equals(['1']));
         args = parser.parse(['--define=1', '--define=2']);
-        expect(args['define'], equals(['1','2']));
+        expect(args['define'], equals(['1', '2']));
       });
 
       test('returns the default value for multi-valued arguments '
-           'if not explicitly set', () {
+          'if not explicitly set', () {
         var parser = new ArgParser();
         parser.addOption('define', defaultsTo: '0', allowMultiple: true);
         var args = parser.parse(['']);

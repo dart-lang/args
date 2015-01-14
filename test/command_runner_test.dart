@@ -4,7 +4,6 @@
 
 library command_runner_test;
 
-import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:unittest/unittest.dart';
 
@@ -28,8 +27,7 @@ void main() {
   });
 
   test(".invocation has a sane default", () {
-    expect(runner.invocation,
-        equals("test <command> [arguments]"));
+    expect(runner.invocation, equals("test <command> [arguments]"));
   });
 
   group(".usage", () {
@@ -200,7 +198,7 @@ Usage: test foo [arguments]
 
 Run "test help" to see global options.
 """));
-    });
+      });
 
       test("prints its own usage", () {
         expect(() => runner.run(["help", "help"]), prints("""
@@ -229,31 +227,28 @@ Also, footer!"""));
     });
 
     test("includes the footer in usage errors", () {
-      expect(runner.run(["--bad"]),
-          throwsUsageError('Could not find an option named "bad".',
-              "$_DEFAULT_USAGE\nAlso, footer!"));
+      expect(runner.run(["--bad"]), throwsUsageError(
+          'Could not find an option named "bad".',
+          "$_DEFAULT_USAGE\nAlso, footer!"));
     });
   });
 
   group("throws a useful error when", () {
     test("arg parsing fails", () {
-      expect(runner.run(["--bad"]),
-          throwsUsageError('Could not find an option named "bad".',
-              _DEFAULT_USAGE));
+      expect(runner.run(["--bad"]), throwsUsageError(
+          'Could not find an option named "bad".', _DEFAULT_USAGE));
     });
 
     test("a top-level command doesn't exist", () {
-      expect(runner.run(["bad"]),
-          throwsUsageError('Could not find a command named "bad".',
-              _DEFAULT_USAGE));
+      expect(runner.run(["bad"]), throwsUsageError(
+          'Could not find a command named "bad".', _DEFAULT_USAGE));
     });
 
     test("a subcommand doesn't exist", () {
-      runner.addCommand(
-          new FooCommand()..addSubcommand(new AsyncCommand()));
+      runner.addCommand(new FooCommand()..addSubcommand(new AsyncCommand()));
 
-      expect(runner.run(["foo bad"]),
-          throwsUsageError('Could not find a command named "foo bad".', """
+      expect(runner.run(["foo bad"]), throwsUsageError(
+          'Could not find a command named "foo bad".', """
 Usage: test <command> [arguments]
 
 Global options:
@@ -267,11 +262,10 @@ Run "test help <command>" for more information about a command."""));
     });
 
     test("a subcommand wasn't passed", () {
-      runner.addCommand(
-          new FooCommand()..addSubcommand(new AsyncCommand()));
+      runner.addCommand(new FooCommand()..addSubcommand(new AsyncCommand()));
 
-      expect(runner.run(["foo"]),
-          throwsUsageError('Missing subcommand for "test foo".', """
+      expect(runner.run(["foo"]), throwsUsageError(
+          'Missing subcommand for "test foo".', """
 Usage: test foo <subcommand> [arguments]
 -h, --help    Print this usage information.
 
@@ -284,8 +278,8 @@ Run "test help" to see global options."""));
     test("a command that doesn't take arguments was given them", () {
       runner.addCommand(new FooCommand());
 
-      expect(runner.run(["foo", "bar"]),
-          throwsUsageError('Command "foo" does not take any arguments.', """
+      expect(runner.run(["foo", "bar"]), throwsUsageError(
+          'Command "foo" does not take any arguments.', """
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 

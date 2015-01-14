@@ -61,8 +61,7 @@ Run "$executableName help <command>" for more information about a command.''';
   }
 
   /// An unmodifiable view of all top-level commands defined for this runner.
-  Map<String, Command> get commands =>
-      new UnmodifiableMapView(_commands);
+  Map<String, Command> get commands => new UnmodifiableMapView(_commands);
   final _commands = new Map<String, Command>();
 
   /// The top-level argument parser.
@@ -73,8 +72,8 @@ Run "$executableName help <command>" for more information about a command.''';
   final argParser = new ArgParser();
 
   CommandRunner(this.executableName, this.description) {
-    argParser.addFlag('help', abbr: 'h', negatable: false,
-        help: 'Print this usage information.');
+    argParser.addFlag('help',
+        abbr: 'h', negatable: false, help: 'Print this usage information.');
     addCommand(new HelpCommand());
   }
 
@@ -206,9 +205,9 @@ abstract class Command {
     parents.add(runner.executableName);
 
     var invocation = parents.reversed.join(" ");
-    return _subcommands.isNotEmpty ?
-        "$invocation <subcommand> [arguments]" :
-        "$invocation [arguments]";
+    return _subcommands.isNotEmpty
+        ? "$invocation <subcommand> [arguments]"
+        : "$invocation [arguments]";
   }
 
   /// The command's parent command, if this is a subcommand.
@@ -263,8 +262,8 @@ abstract class Command {
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
     var buffer = new StringBuffer()
-        ..writeln('Usage: $invocation')
-        ..writeln(argParser.usage);
+      ..writeln('Usage: $invocation')
+      ..writeln(argParser.usage);
 
     if (_subcommands.isNotEmpty) {
       buffer.writeln();
@@ -283,8 +282,7 @@ abstract class Command {
   }
 
   /// An unmodifiable view of all sublevel commands of this command.
-  Map<String, Command> get subcommands =>
-      new UnmodifiableMapView(_subcommands);
+  Map<String, Command> get subcommands => new UnmodifiableMapView(_subcommands);
   final _subcommands = new Map<String, Command>();
 
   /// Whether or not this command should be hidden from help listings.
@@ -321,8 +319,8 @@ abstract class Command {
   final aliases = const <String>[];
 
   Command() {
-    argParser.addFlag('help', abbr: 'h', negatable: false,
-        help: 'Print this usage information.');
+    argParser.addFlag('help',
+        abbr: 'h', negatable: false, help: 'Print this usage information.');
   }
 
   /// Runs this command.
@@ -361,8 +359,8 @@ abstract class Command {
 String _getCommandUsage(Map<String, Command> commands,
     {bool isSubcommand: false}) {
   // Don't include aliases.
-  var names = commands.keys
-      .where((name) => !commands[name].aliases.contains(name));
+  var names =
+      commands.keys.where((name) => !commands[name].aliases.contains(name));
 
   // Filter out hidden ones, unless they are all hidden.
   var visible = names.where((name) => !commands[name].hidden);
@@ -372,8 +370,8 @@ String _getCommandUsage(Map<String, Command> commands,
   names = names.toList()..sort();
   var length = names.map((name) => name.length).reduce(math.max);
 
-  var buffer = new StringBuffer(
-      'Available ${isSubcommand ? "sub" : ""}commands:');
+  var buffer =
+      new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
   for (var name in names) {
     buffer.writeln();
     buffer.write('  ${padRight(name, length)}   '

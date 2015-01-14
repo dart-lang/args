@@ -1,6 +1,10 @@
-## 0.12.3-dev
+## 0.12.2+2
 
 * Updated dependency constraint on `unittest`.
+
+* Formatted source code.
+
+* Fixed use of deprecated API in example.
 
 ## 0.12.2+1
 

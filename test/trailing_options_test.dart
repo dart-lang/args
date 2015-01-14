@@ -19,9 +19,9 @@ void main() {
       parser = new ArgParser(allowTrailingOptions: true);
     });
 
-    void expectThrows(List<String> args) =>
-      expect(() => parser.parse(args), throwsFormatException,
-          reason: "with allowTrailingOptions: true");
+    void expectThrows(List<String> args) => expect(
+        () => parser.parse(args), throwsFormatException,
+        reason: "with allowTrailingOptions: true");
 
     test('collects non-options in rest', () {
       parser.addFlag('flag');
@@ -84,8 +84,8 @@ void main() {
   test("uses the innermost command's trailing options behavior", () {
     var parser = new ArgParser(allowTrailingOptions: true);
     parser.addFlag('flag', abbr: 'f');
-    var command = parser.addCommand('cmd',
-        new ArgParser(allowTrailingOptions: false));
+    var command =
+        parser.addCommand('cmd', new ArgParser(allowTrailingOptions: false));
     command.addFlag('verbose', abbr: 'v');
 
     var results = parser.parse(['a', '-f', 'b']);

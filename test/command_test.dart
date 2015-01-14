@@ -4,7 +4,6 @@
 
 library command_test;
 
-import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:unittest/unittest.dart';
 import 'utils.dart';
@@ -14,28 +13,25 @@ void main() {
   setUp(() {
     foo = new FooCommand();
 
-      // Make sure [Command.runner] is set up.
+    // Make sure [Command.runner] is set up.
     new CommandRunner("test", "A test command runner.").addCommand(foo);
   });
 
   group(".invocation has a sane default", () {
     test("without subcommands", () {
-      expect(foo.invocation,
-          equals("test foo [arguments]"));
+      expect(foo.invocation, equals("test foo [arguments]"));
     });
 
     test("with subcommands", () {
       foo.addSubcommand(new AsyncCommand());
-      expect(foo.invocation,
-          equals("test foo <subcommand> [arguments]"));
+      expect(foo.invocation, equals("test foo <subcommand> [arguments]"));
     });
 
     test("for a subcommand", () {
       var async = new AsyncCommand();
       foo.addSubcommand(async);
 
-      expect(async.invocation,
-          equals("test foo async [arguments]"));
+      expect(async.invocation, equals("test foo async [arguments]"));
     });
   });
 

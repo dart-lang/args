@@ -34,8 +34,7 @@ void main() {
 
   group('ArgParser.parse()', () {
     test('parses a command', () {
-      var parser = new ArgParser();
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()..addCommand('install');
 
       var args = parser.parse(['install']);
 
@@ -53,9 +52,9 @@ void main() {
     });
 
     test('parses a parent solo option before the command', () {
-      var parser = new ArgParser();
-      parser.addOption('mode', abbr: 'm');
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()
+        ..addOption('mode', abbr: 'm')
+        ..addCommand('install');
 
       var args = parser.parse(['-m', 'debug', 'install']);
       expect(args['mode'], equals('debug'));
@@ -63,9 +62,9 @@ void main() {
     });
 
     test('parses a parent solo option after the command', () {
-      var parser = new ArgParser();
-      parser.addOption('mode', abbr: 'm');
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()
+        ..addOption('mode', abbr: 'm')
+        ..addCommand('install');
 
       var args = parser.parse(['install', '-m', 'debug']);
       expect(args['mode'], equals('debug'));
@@ -73,9 +72,9 @@ void main() {
     });
 
     test('parses a parent option before the command', () {
-      var parser = new ArgParser();
-      parser.addFlag('verbose');
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()
+        ..addFlag('verbose')
+        ..addCommand('install');
 
       var args = parser.parse(['--verbose', 'install']);
       expect(args['verbose'], isTrue);
@@ -83,9 +82,9 @@ void main() {
     });
 
     test('parses a parent option after the command', () {
-      var parser = new ArgParser();
-      parser.addFlag('verbose');
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()
+        ..addFlag('verbose')
+        ..addCommand('install');
 
       var args = parser.parse(['install', '--verbose']);
       expect(args['verbose'], isTrue);
@@ -93,9 +92,9 @@ void main() {
     });
 
     test('parses a parent negated option before the command', () {
-      var parser = new ArgParser();
-      parser.addFlag('verbose', defaultsTo: true);
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()
+        ..addFlag('verbose', defaultsTo: true)
+        ..addCommand('install');
 
       var args = parser.parse(['--no-verbose', 'install']);
       expect(args['verbose'], isFalse);
@@ -103,9 +102,9 @@ void main() {
     });
 
     test('parses a parent negated option after the command', () {
-      var parser = new ArgParser();
-      parser.addFlag('verbose', defaultsTo: true);
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()
+        ..addFlag('verbose', defaultsTo: true)
+        ..addCommand('install');
 
       var args = parser.parse(['install', '--no-verbose']);
       expect(args['verbose'], isFalse);
@@ -113,10 +112,10 @@ void main() {
     });
 
     test('parses a parent abbreviation before the command', () {
-      var parser = new ArgParser();
-      parser.addFlag('debug', abbr: 'd');
-      parser.addFlag('verbose', abbr: 'v');
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()
+        ..addFlag('debug', abbr: 'd')
+        ..addFlag('verbose', abbr: 'v')
+        ..addCommand('install');
 
       var args = parser.parse(['-dv', 'install']);
       expect(args['debug'], isTrue);
@@ -125,10 +124,10 @@ void main() {
     });
 
     test('parses a parent abbreviation after the command', () {
-      var parser = new ArgParser();
-      parser.addFlag('debug', abbr: 'd');
-      parser.addFlag('verbose', abbr: 'v');
-      var command = parser.addCommand('install');
+      var parser = new ArgParser()
+        ..addFlag('debug', abbr: 'd')
+        ..addFlag('verbose', abbr: 'v')
+        ..addCommand('install');
 
       var args = parser.parse(['install', '-dv']);
       expect(args['debug'], isTrue);
@@ -180,9 +179,9 @@ void main() {
     test('option is given to innermost command that can take it', () {
       var parser = new ArgParser();
       parser.addFlag('verbose');
-      var command = parser.addCommand('cmd');
-      command.addFlag('verbose');
-      var subcommand = command.addCommand('subcmd');
+      parser.addCommand('cmd')
+        ..addFlag('verbose')
+        ..addCommand('subcmd');
 
       var args = parser.parse(['cmd', 'subcmd', '--verbose']);
       expect(args['verbose'], isFalse);
@@ -193,8 +192,7 @@ void main() {
 
     test('remaining arguments are given to the innermost command', () {
       var parser = new ArgParser();
-      var command = parser.addCommand('cmd');
-      var subcommand = command.addCommand('subcmd');
+      parser.addCommand('cmd')..addCommand('subcmd');
 
       var args = parser.parse(['cmd', 'subcmd', 'other', 'stuff']);
       expect(args.command.name, equals('cmd'));

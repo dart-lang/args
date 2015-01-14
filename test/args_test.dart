@@ -29,7 +29,7 @@ void main() {
     });
 
     test('throws ArgumentError if the abbreviation is longer '
-         'than one character', () {
+        'than one character', () {
       var parser = new ArgParser();
       throwsIllegalArg(() => parser.addFlag('flummox', abbr: 'flu'));
     });
@@ -37,7 +37,7 @@ void main() {
     test('throws ArgumentError if a flag name is invalid', () {
       var parser = new ArgParser();
 
-      for(var name in _INVALID_OPTIONS) {
+      for (var name in _INVALID_OPTIONS) {
         var reason = '${Error.safeToString(name)} is not valid';
         throwsIllegalArg(() => parser.addFlag(name), reason: reason);
       }
@@ -46,7 +46,7 @@ void main() {
     test('accepts valid flag names', () {
       var parser = new ArgParser();
 
-      for(var name in _VALID_OPTIONS) {
+      for (var name in _VALID_OPTIONS) {
         var reason = '${Error.safeToString(name)} is valid';
         expect(() => parser.addFlag(name), returnsNormally, reason: reason);
       }
@@ -73,7 +73,7 @@ void main() {
     });
 
     test('throws ArgumentError if the abbreviation is longer '
-         'than one character', () {
+        'than one character', () {
       var parser = new ArgParser();
       throwsIllegalArg(() => parser.addOption('flummox', abbr: 'flu'));
     });
@@ -85,7 +85,7 @@ void main() {
 
     test('throws ArgumentError if the abbreviation is an invalid value', () {
       var parser = new ArgParser();
-      for(var name in _INVALID_OPTIONS.where((v) => v != null)) {
+      for (var name in _INVALID_OPTIONS.where((v) => v != null)) {
         throwsIllegalArg(() => parser.addOption('flummox', abbr: name));
       }
     });
@@ -103,7 +103,7 @@ void main() {
     test('throws ArgumentError if an option name is invalid', () {
       var parser = new ArgParser();
 
-      for(var name in _INVALID_OPTIONS) {
+      for (var name in _INVALID_OPTIONS) {
         var reason = '${Error.safeToString(name)} is not valid';
         throwsIllegalArg(() => parser.addOption(name), reason: reason);
       }
@@ -112,7 +112,7 @@ void main() {
     test('accepts valid option names', () {
       var parser = new ArgParser();
 
-      for(var name in _VALID_OPTIONS) {
+      for (var name in _VALID_OPTIONS) {
         var reason = '${Error.safeToString(name)} is valid';
         expect(() => parser.addOption(name), returnsNormally, reason: reason);
       }
@@ -286,24 +286,28 @@ void main() {
 }
 
 const _INVALID_OPTIONS = const [
- ' ', '', '-', '--', '--foo',
- ' with space',
- 'with\ttab',
- 'with\rcarriage\rreturn',
- 'with\nline\nfeed',
- "'singlequotes'",
- '"doublequotes"',
- 'back\\slash',
- 'forward/slash'
+  ' ',
+  '',
+  '-',
+  '--',
+  '--foo',
+  ' with space',
+  'with\ttab',
+  'with\rcarriage\rreturn',
+  'with\nline\nfeed',
+  "'singlequotes'",
+  '"doublequotes"',
+  'back\\slash',
+  'forward/slash'
 ];
 
 const _VALID_OPTIONS = const [
- 'a' // One character.
- 'contains-dash',
- 'contains_underscore',
- 'ends-with-dash-',
- 'contains--doubledash--',
- '1starts-with-number',
- 'contains-a-1number',
- 'ends-with-a-number8'
+  'a' // One character.
+      'contains-dash',
+  'contains_underscore',
+  'ends-with-dash-',
+  'contains--doubledash--',
+  '1starts-with-number',
+  'contains-a-1number',
+  'ends-with-a-number8'
 ];
