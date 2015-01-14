@@ -1,3 +1,7 @@
+## 0.12.3-dev
+
+* Updated dependency constraint on `unittest`.
+
 ## 0.12.2+1
 
 * Fix the built-in `help` command for `CommandRunner`.
