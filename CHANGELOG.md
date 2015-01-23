@@ -1,3 +1,8 @@
+## 0.12.2+3
+
+* Fixed implementation of ArgResults.options to really use Iterable<String>
+  instead of Iterable<dynamic> cast to Iterable<String>.
+
 ## 0.12.2+2
 
 * Updated dependency constraint on `unittest`.
