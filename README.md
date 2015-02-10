@@ -69,7 +69,14 @@ calling [ArgParser.parse()][parse] with a set of arguments:
 
     var results = parser.parse(['some', 'command', 'line', 'args']);
 
-These arguments usually come from the arguments to `main()`, but you can pass in
+These arguments usually come from the arguments to `main()`. For example:
+
+    main(List<String> args) {
+      // ...
+      var results = parser.parse(args);
+    }
+
+However, you can pass in
 any list of strings. The `parse()` method returns an instance of [ArgResults][],
 a map-like object that contains the values of the parsed options.
 
