@@ -76,9 +76,9 @@ These arguments usually come from the arguments to `main()`. For example:
       var results = parser.parse(args);
     }
 
-However, you can pass in
-any list of strings. The `parse()` method returns an instance of [ArgResults][],
-a map-like object that contains the values of the parsed options.
+However, you can pass in any list of strings. The `parse()` method returns an
+instance of [ArgResults][], a map-like object that contains the values of the
+parsed options.
 
     var parser = new ArgParser();
     parser.addOption('mode');
