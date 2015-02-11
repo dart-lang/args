@@ -1,3 +1,7 @@
+## 0.12.2+4
+
+* Add an example of using command-line arguments to the README.
+
 ## 0.12.2+3
 
 * Fixed implementation of ArgResults.options to really use Iterable<String>
