@@ -127,9 +127,9 @@ You can set it to false using the following:
 Multiple flag abbreviations can be collapsed into a single argument. Say you
 define these flags:
 
-    parser.addFlag('verbose', abbr: 'v');
-    parser.addFlag('french', abbr: 'f');
-    parser.addFlag('iambic-pentameter', abbr: 'i');
+    parser.addFlag('verbose', abbr: 'v')
+      ..addFlag('french', abbr: 'f')
+      ..addFlag('iambic-pentameter', abbr: 'i');
 
 You can set all three flags at once:
 
@@ -211,10 +211,10 @@ and [Command][] classes to help structure it. [CommandRunner][] has built-in
 support for dispatching to [Command][]s based on command-line arguments, as well
 as handling `--help` flags and invalid arguments. For example:
 
-    var runner = new CommandRunner("git", "Distributed version control.");
-    runner.addCommand(new CommitCommand());
-    runner.addCommand(new StashCommand());
-    runner.run(['commit', '-a']); // Calls [CommitCommand.run()]
+    var runner = new CommandRunner("git", "Distributed version control.")
+      ..addCommand(new CommitCommand())
+      ..addCommand(new StashCommand())
+      ..run(['commit', '-a']); // Calls [CommitCommand.run()]
 
 Custom commands are defined by extending the [Command][] class. For example:
 
