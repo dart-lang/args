@@ -302,8 +302,8 @@ const _INVALID_OPTIONS = const [
 ];
 
 const _VALID_OPTIONS = const [
-  'a' // One character.
-      'contains-dash',
+  'a', // One character.
+  'contains-dash',
   'contains_underscore',
   'ends-with-dash-',
   'contains--doubledash--',
