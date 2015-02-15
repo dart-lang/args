@@ -127,7 +127,8 @@ You can set it to false using the following:
 Multiple flag abbreviations can be collapsed into a single argument. Say you
 define these flags:
 
-    parser.addFlag('verbose', abbr: 'v')
+    parser
+      ..addFlag('verbose', abbr: 'v')
       ..addFlag('french', abbr: 'f')
       ..addFlag('iambic-pentameter', abbr: 'i');
 
