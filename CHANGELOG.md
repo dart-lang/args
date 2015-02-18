@@ -1,6 +1,10 @@
-## 0.12.2+5
+## 0.12.2+6
 
 * Remove the dependency on the `collection` package.
+
+## 0.12.2+5
+
+* Add syntax highlighting to the README.
 
 ## 0.12.2+4
 
