@@ -1,3 +1,7 @@
+## 0.12.2+5
+
+* Remove the dependency on the `collection` package.
+
 ## 0.12.2+4
 
 * Add an example of using command-line arguments to the README.
