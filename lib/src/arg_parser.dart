@@ -77,18 +77,25 @@ class ArgParser {
   ///
   /// * There is already an option with name [name].
   /// * There is already an option using abbreviation [abbr].
+  /// * [splitCommas] is passed but [allowMultiple] is `false`.
   void addOption(String name, {String abbr, String help, String valueHelp,
       List<String> allowed, Map<String, String> allowedHelp, String defaultsTo,
-      void callback(value), bool allowMultiple: false, bool hide: false}) {
+      void callback(value), bool allowMultiple: false, bool splitCommas,
+      bool hide: false}) {
+    if (!allowMultiple && splitCommas != null) {
+      throw new ArgumentError(
+          'splitCommas may not be set if allowMultiple is false.');
+    }
+
     _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
         callback, allowMultiple ? OptionType.MULTIPLE : OptionType.SINGLE,
-        hide: hide);
+        splitCommas: splitCommas, hide: hide);
   }
 
   void _addOption(String name, String abbr, String help, String valueHelp,
       List<String> allowed, Map<String, String> allowedHelp, defaultsTo,
       void callback(value), OptionType type,
-      {bool negatable: false, bool hide: false}) {
+      {bool negatable: false, bool splitCommas, bool hide: false}) {
     // Make sure the name isn't in use.
     if (_options.containsKey(name)) {
       throw new ArgumentError('Duplicate option "$name".');
@@ -105,7 +112,7 @@ class ArgParser {
 
     _options[name] = newOption(name, abbr, help, valueHelp, allowed,
         allowedHelp, defaultsTo, callback, type,
-        negatable: negatable, hide: hide);
+        negatable: negatable, splitCommas: splitCommas, hide: hide);
   }
 
   /// Parses [args], a list of command-line arguments, matches them against the

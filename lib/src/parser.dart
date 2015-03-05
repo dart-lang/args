@@ -131,7 +131,7 @@ class Parser {
     args.removeAt(0);
 
     if (option.isFlag) {
-      setOption(results, option, true);
+      setFlag(results, option, true);
     } else {
       readNextArgAsValue(option);
     }
@@ -196,7 +196,7 @@ class Parser {
     validate(
         option.isFlag, 'Option "-$c" must be a flag to be in a collapsed "-".');
 
-    setOption(results, option, true);
+    setFlag(results, option, true);
   }
 
   /// Tries to parse the current argument as a long-form named option, which
@@ -213,7 +213,7 @@ class Parser {
         validate(longOpt[3] == null,
             'Flag option "$name" should not be given a value.');
 
-        setOption(results, option, true);
+        setFlag(results, option, true);
       } else if (longOpt[3] != null) {
         // We have a value like --foo=bar.
         setOption(results, option, longOpt[3]);
@@ -235,7 +235,7 @@ class Parser {
       validate(option.isFlag, 'Cannot negate non-flag option "$name".');
       validate(option.negatable, 'Cannot negate option "$name".');
 
-      setOption(results, option, false);
+      setFlag(results, option, false);
     } else {
       // Walk up to the parent command if possible.
       validate(parent != null, 'Could not find an option named "$name".');
@@ -252,19 +252,42 @@ class Parser {
     if (!condition) throw new FormatException(message);
   }
 
-  /// Validates and stores [value] as the value for [option].
-  void setOption(Map results, Option option, value) {
-    // See if it's one of the allowed values.
-    if (option.allowed != null) {
-      validate(option.allowed.any((allow) => allow == value),
-          '"$value" is not an allowed value for option "${option.name}".');
+  /// Validates and stores [value] as the value for [option], which must not be
+  /// a flag.
+  void setOption(Map results, Option option, String value) {
+    assert(!option.isFlag);
+
+    if (!option.isMultiple) {
+      _validateAllowed(option, value);
+      results[option.name] = value;
+      return;
     }
 
-    if (option.isMultiple) {
-      var list = results.putIfAbsent(option.name, () => []);
-      list.add(value);
+    var list = results.putIfAbsent(option.name, () => []);
+
+    if (option.splitCommas) {
+      for (var element in value.split(",")) {
+        _validateAllowed(option, element);
+        list.add(element);
+      }
     } else {
-      results[option.name] = value;
+      _validateAllowed(option, value);
+      list.add(value);
     }
+  }
+
+  /// Validates and stores [value] as the value for [option], which must be a
+  /// flag.
+  void setFlag(Map results, Option option, bool value) {
+    assert(option.isFlag);
+    results[option.name] = value;
+  }
+
+  /// Validates that [value] is allowed as a value of [option].
+  void _validateAllowed(Option option, String value) {
+    if (option.allowed == null) return;
+
+    validate(option.allowed.contains(value),
+        '"$value" is not an allowed value for option "${option.name}".');
   }
 }

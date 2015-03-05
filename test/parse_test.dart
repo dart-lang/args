@@ -199,6 +199,51 @@ void main() {
         parser.parse([]);
         expect(a, isEmpty);
       });
+
+      test('allowMultiple parses comma-separated strings', () {
+        var a;
+        var parser = new ArgParser();
+        parser.addOption('a',
+            allowMultiple: true, callback: (value) => a = value);
+
+        parser.parse(['--a=v,w', '--a=x']);
+        expect(a, equals(['v', 'w', 'x']));
+      });
+
+      test("allowMultiple doesn't parses comma-separated strings with "
+          "splitCommas: false", () {
+        var a;
+        var parser = new ArgParser();
+        parser.addOption('a',
+            allowMultiple: true,
+            splitCommas: false,
+            callback: (value) => a = value);
+
+        parser.parse(['--a=v,w', '--a=x']);
+        expect(a, equals(['v,w', 'x']));
+      });
+
+      test('allowMultiple parses empty strings', () {
+        var a;
+        var parser = new ArgParser();
+        parser.addOption('a',
+            allowMultiple: true, callback: (value) => a = value);
+
+        parser.parse(['--a=,v', '--a=w,', '--a=,', '--a=x,,y', '--a', '']);
+        expect(a, equals(['', 'v', 'w', '', '', '', 'x', '', 'y', '']));
+      });
+
+      test('allowMultiple with allowed parses comma-separated strings', () {
+        var a;
+        var parser = new ArgParser();
+        parser.addOption('a',
+            allowMultiple: true,
+            allowed: ['v', 'w', 'x'],
+            callback: (value) => a = value);
+
+        parser.parse(['--a=v,w', '--a=x']);
+        expect(a, equals(['v', 'w', 'x']));
+      });
     });
 
     group('abbreviations', () {
@@ -285,6 +330,14 @@ void main() {
         parser.addOption('mode', abbr: 'm', allowed: ['debug', 'release']);
 
         throwsFormat(parser, ['-mprofile']);
+      });
+
+      test('throw if a comma-separated value is not allowed', () {
+        var parser = new ArgParser();
+        parser.addOption('mode', abbr: 'm', allowMultiple: true,
+            allowed: ['debug', 'release']);
+
+        throwsFormat(parser, ['-mdebug,profile']);
       });
 
       test('throw if any but the first is not a flag', () {

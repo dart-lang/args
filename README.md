@@ -189,6 +189,17 @@ var results = parser.parse(['--mode', 'on', '--mode', 'off']);
 print(results['mode']); // prints '[on, off]'
 ```
 
+By default, values for a multi-valued option may also be separated with commas:
+
+```dart
+var parser = new ArgParser();
+parser.addOption('mode', allowMultiple: true);
+var results = parser.parse(['--mode', 'on,off']);
+print(results['mode']); // prints '[on, off]'
+```
+
+This can be disabled by passing `splitCommas: false`.
+
 ## Defining commands ##
 
 In addition to *options*, you can also define *commands*. A command is a named

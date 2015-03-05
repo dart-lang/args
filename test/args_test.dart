@@ -109,6 +109,13 @@ void main() {
       }
     });
 
+    test('throws ArgumentError if splitCommas is passed with allowMultiple: '
+        'false', () {
+      var parser = new ArgParser();
+      throwsIllegalArg(() => parser.addOption('flummox', splitCommas: true));
+      throwsIllegalArg(() => parser.addOption('flummox', splitCommas: false));
+    });
+
     test('accepts valid option names', () {
       var parser = new ArgParser();
 

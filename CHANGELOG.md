@@ -1,3 +1,9 @@
+## 0.13.0
+
+* **Breaking change**: An option that allows multiple values will now
+  automatically split apart comma-separated values. This can be controlled with
+  the `splitCommas` option.
+
 ## 0.12.2+6
 
 * Remove the dependency on the `collection` package.
