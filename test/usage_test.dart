@@ -205,6 +205,77 @@ void main() {
           --[no-]third    The third flag
           ''');
     });
+
+    group("separators", () {
+      test("separates options where it's placed", () {
+        var parser = new ArgParser();
+        parser.addFlag('zebra', help: 'First');
+        parser.addSeparator('Primate:');
+        parser.addFlag('monkey', help: 'Second');
+        parser.addSeparator('Marsupial:');
+        parser.addFlag('wombat', help: 'Third');
+
+        validateUsage(parser, '''
+            --[no-]zebra     First
+
+            Primate:
+            --[no-]monkey    Second
+
+            Marsupial:
+            --[no-]wombat    Third
+            ''');
+      });
+
+      test("doesn't add extra newlines after a multiline option", () {
+        var parser = new ArgParser();
+        parser.addFlag('zebra', help: 'Multi\nline');
+        parser.addSeparator('Primate:');
+        parser.addFlag('monkey', help: 'Second');
+
+        validateUsage(parser, '''
+            --[no-]zebra     Multi
+                             line
+
+            Primate:
+            --[no-]monkey    Second
+            ''');
+      });
+
+      test("doesn't add newlines if it's the first component", () {
+        var parser = new ArgParser();
+        parser.addSeparator('Equine:');
+        parser.addFlag('zebra', help: 'First');
+
+        validateUsage(parser, '''
+            Equine:
+            --[no-]zebra    First
+            ''');
+      });
+
+      test("doesn't add trailing newlines if it's the last component", () {
+        var parser = new ArgParser();
+        parser.addFlag('zebra', help: 'First');
+        parser.addSeparator('Primate:');
+
+        validateUsage(parser, '''
+            --[no-]zebra    First
+
+            Primate:
+            ''');
+      });
+
+      test("adds a newline after another separator", () {
+        var parser = new ArgParser();
+        parser.addSeparator('First');
+        parser.addSeparator('Second');
+
+        validateUsage(parser, '''
+            First
+
+            Second
+            ''');
+      });
+    });
   });
 }
 

@@ -1,3 +1,8 @@
+## 0.13.1
+
+* Add `ArgParser.addSeparator()`. Separators allow users to group their options
+  in the usage text.
+
 ## 0.13.0
 
 * **Breaking change**: An option that allows multiple values will now
