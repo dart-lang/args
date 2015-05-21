@@ -8,7 +8,7 @@ import 'dart:async';
 
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 class CommandRunnerWithFooter extends CommandRunner {
   final usageFooter = "Also, footer!";

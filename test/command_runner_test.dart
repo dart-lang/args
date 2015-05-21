@@ -5,7 +5,7 @@
 library command_runner_test;
 
 import 'package:args/command_runner.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import 'utils.dart';
 

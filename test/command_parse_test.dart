@@ -4,7 +4,7 @@
 
 library command_parse_test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:args/args.dart';
 import 'utils.dart';
 

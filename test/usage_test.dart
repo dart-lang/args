@@ -4,7 +4,7 @@
 
 library usage_test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:args/args.dart';
 
 void main() {
