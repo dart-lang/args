@@ -315,14 +315,15 @@ void main() {
         throwsFormat(parser, ['-f']);
       });
 
-      test('throw if the value looks like an option', () {
+      test('does not throw if the value looks like an option', () {
         var parser = new ArgParser();
         parser.addOption('file', abbr: 'f');
         parser.addOption('other');
 
-        throwsFormat(parser, ['-f', '--other']);
-        throwsFormat(parser, ['-f', '--unknown']);
-        throwsFormat(parser, ['-f', '-abbr']);
+        expect(parser.parse(['-f', '--other'])['file'], equals('--other'));
+        expect(parser.parse(['-f', '--unknown'])['file'], equals('--unknown'));
+        expect(parser.parse(['-f', '-abbr'])['file'], equals('-abbr'));
+        expect(parser.parse(['-f', '--'])['file'], equals('--'));
       });
 
       test('throw if the value is not allowed', () {
@@ -409,14 +410,16 @@ void main() {
         throwsFormat(parser, ['--mode']);
       });
 
-      test('throw if the value looks like an option', () {
+      test('do not throw if the value looks like an option', () {
         var parser = new ArgParser();
         parser.addOption('mode');
         parser.addOption('other');
 
-        throwsFormat(parser, ['--mode', '--other']);
-        throwsFormat(parser, ['--mode', '--unknown']);
-        throwsFormat(parser, ['--mode', '-abbr']);
+        expect(parser.parse(['--mode', '--other'])['mode'], equals('--other'));
+        expect(parser.parse(['--mode', '--unknown'])['mode'],
+            equals('--unknown'));
+        expect(parser.parse(['--mode', '-abbr'])['mode'], equals('-abbr'));
+        expect(parser.parse(['--mode', '--'])['mode'], equals('--'));
       });
 
       test('do not throw if the value is in the allowed set', () {

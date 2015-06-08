@@ -103,10 +103,6 @@ class Parser {
     // Take the option argument from the next command line arg.
     validate(args.length > 0, 'Missing argument for "${option.name}".');
 
-    // Make sure it isn't an option itself.
-    validate(!_ABBR_OPT.hasMatch(current) && !_LONG_OPT.hasMatch(current),
-        'Missing argument for "${option.name}".');
-
     setOption(results, option, current);
     args.removeAt(0);
   }
