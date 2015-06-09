@@ -1,4 +1,4 @@
-## 0.13.1+1
+## 0.13.2
 
 * Allow option values that look like options. This more closely matches the
   behavior of [`getopt`][getopt], the *de facto* standard for option parsing.
