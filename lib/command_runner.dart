@@ -158,8 +158,8 @@ Run "$executableName help <command>" for more information about a command.''';
         // Step into the command.
         argResults = argResults.command;
         command = commands[argResults.name];
-        command._globalResults = topLevelResults;
-        command._argResults = argResults;
+        command.globalResults = topLevelResults;
+        command.argResults = argResults;
         commands = command._subcommands;
         commandString += " ${argResults.name}";
 
@@ -231,12 +231,16 @@ abstract class Command {
   ///
   /// This will be `null` until just before [Command.run] is called.
   ArgResults get globalResults => _globalResults;
+  /// The setter is intended for use during testing, to facilitate mocking.
+  void set globalResults(ArgResults results) { _globalResults = results; }
   ArgResults _globalResults;
 
   /// The parsed argument results for this command.
   ///
   /// This will be `null` until just before [Command.run] is called.
   ArgResults get argResults => _argResults;
+  /// The setter is intended for use during testing, to facilitate mocking.
+  void set argResults(ArgResults results) { _argResults = results; }
   ArgResults _argResults;
 
   /// The argument parser for this command.
