@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library args.help_command;
-
 import '../command_runner.dart';
 
 /// The built-in help command that's added to every [CommandRunner].
