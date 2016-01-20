@@ -371,9 +371,15 @@ String _getCommandUsage(Map<String, Command> commands,
   var buffer =
       new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
   for (var name in names) {
+    var lines = commands[name].description.split("\n");
     buffer.writeln();
-    buffer.write('  ${padRight(name, length)}   '
-        '${commands[name].description.split("\n").first}');
+    buffer.write('  ${padRight(name, length)}   ${lines.first}');
+
+    for (var line in lines.skip(1)) {
+      buffer.writeln();
+      buffer.write(' ' * (length + 5));
+      buffer.write(line);
+    }
   }
 
   return buffer.toString();

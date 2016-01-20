@@ -27,6 +27,18 @@ class FooCommand extends Command {
   }
 }
 
+class MultilineCommand extends Command {
+  var hasRun = false;
+
+  final name = "multiline";
+  final description = "Multi\nline.";
+  final takesArguments = false;
+
+  void run() {
+    hasRun = true;
+  }
+}
+
 class HiddenCommand extends Command {
   var hasRun = false;
 

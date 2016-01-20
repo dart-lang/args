@@ -1,3 +1,7 @@
+## 0.13.2+1
+
+* Print all lines of multi-line command descriptions.
+
 ## 0.13.2
 
 * Allow option values that look like options. This more closely matches the

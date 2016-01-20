@@ -1,5 +1,5 @@
 name: args
-version: 0.13.3-dev
+version: 0.13.3+1
 author: "Dart Team <misc@dartlang.org>"
 homepage: https://github.com/dart-lang/args
 description: >

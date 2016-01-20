@@ -54,6 +54,25 @@ Available commands:
 Run "test help <command>" for more information about a command."""));
     });
 
+    test("supports newlines in command descriptions", () {
+      runner.addCommand(new MultilineCommand());
+
+      expect(runner.usage, equals("""
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+  help        Display help information for test.
+  multiline   Multi
+              line.
+
+Run "test help <command>" for more information about a command."""));
+    });
+
     test("contains custom options", () {
       runner.argParser.addFlag("foo", help: "Do something.");
 
