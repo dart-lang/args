@@ -294,9 +294,9 @@ class CommitCommand extends Command {
 
   // [run] may also return a Future.
   void run() {
-    // [options] is set before [run()] is called and contains the options
+    // [argResults] is set before [run()] is called and contains the options
     // passed to this command.
-    print(options['all']);
+    print(argResults['all']);
   }
 }
 ```

@@ -1,3 +1,7 @@
+## 0.13.3+2
+
+* Documentation fixes.
+
 ## 0.13.3+1
 
 * Print all lines of multi-line command descriptions.
