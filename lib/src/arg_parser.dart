@@ -35,12 +35,12 @@ class ArgParser {
   /// after it finds an argument that is neither an option nor a command.
   /// This allows options to be specified after regular arguments. Defaults to
   /// `false`.
-  factory ArgParser({bool allowTrailingOptions}) => new ArgParser._(
+  factory ArgParser({bool allowTrailingOptions: false}) => new ArgParser._(
       <String, Option>{}, <String, ArgParser>{},
       allowTrailingOptions: allowTrailingOptions);
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
-      {bool allowTrailingOptions})
+      {bool allowTrailingOptions: false})
       : this._options = options,
         this.options = new UnmodifiableMapView(options),
         this._commands = commands,
