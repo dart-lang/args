@@ -1,3 +1,9 @@
+## 0.13.3+3
+
+* Add an explicit default value for the `allowTrailingOptions` parameter to `new
+  ArgParser()`. This doesn't change the behavior at all; the option already
+  defaulted to `false`, and passing in `null` still works.
+
 ## 0.13.3+2
 
 * Documentation fixes.
