@@ -1,3 +1,7 @@
+## 0.13.3+4
+
+* Use the proper `usage` getter in the README.
+
 ## 0.13.3+3
 
 * Add an explicit default value for the `allowTrailingOptions` parameter to `new
