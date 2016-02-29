@@ -363,10 +363,10 @@ parser.addOption('arch', help: 'The architecture to compile for',
     });
 ```
 
-To display the help, use the [getUsage()][getUsage] method:
+To display the help, use the [usage][usage] getter:
 
 ```dart
-print(parser.getUsage());
+print(parser.usage);
 ```
 
 The resulting string looks something like this:
