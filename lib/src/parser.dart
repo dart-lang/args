@@ -35,7 +35,8 @@ class Parser {
   /// The accumulated parsed options.
   final Map<String, dynamic> results = <String, dynamic>{};
 
-  Parser(this.commandName, this.grammar, this.args, this.parent, rest) {
+  Parser(this.commandName, this.grammar, this.args,
+      [this.parent, List<String> rest]) {
     if (rest != null) this.rest.addAll(rest);
   }
 

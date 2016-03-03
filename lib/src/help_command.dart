@@ -23,7 +23,7 @@ class HelpCommand extends Command {
     // Walk the command tree to show help for the selected command or
     // subcommand.
     var commands = runner.commands;
-    var command = null;
+    Command command;
     var commandString = runner.executableName;
 
     for (var name in argResults.rest) {

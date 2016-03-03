@@ -117,7 +117,7 @@ void main() {
       });
 
       test('are invoked even if the flag is not present', () {
-        var a = 'not called';
+        var a = true;
         var parser = new ArgParser();
         parser.addFlag('a', callback: (value) => a = value);
 

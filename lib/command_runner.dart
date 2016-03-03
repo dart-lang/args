@@ -40,7 +40,7 @@ class CommandRunner {
   ///
   /// If a subclass overrides this to return a string, it will automatically be
   /// added to the end of [usage].
-  final String usageFooter = null;
+  String get usageFooter => null;
 
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
@@ -60,7 +60,7 @@ Run "$executableName help <command>" for more information about a command.''';
 
   /// An unmodifiable view of all top-level commands defined for this runner.
   Map<String, Command> get commands => new UnmodifiableMapView(_commands);
-  final _commands = new Map<String, Command>();
+  final _commands = <String, Command>{};
 
   /// The top-level argument parser.
   ///
@@ -129,7 +129,7 @@ Run "$executableName help <command>" for more information about a command.''';
     return new Future.sync(() {
       var argResults = topLevelResults;
       var commands = _commands;
-      var command;
+      Command command;
       var commandString = executableName;
 
       while (commands.isNotEmpty) {
@@ -255,7 +255,7 @@ abstract class Command {
   ///
   /// If a subclass overrides this to return a string, it will automatically be
   /// added to the end of [usage].
-  final String usageFooter = null;
+  String get usageFooter => null;
 
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
@@ -281,7 +281,7 @@ abstract class Command {
 
   /// An unmodifiable view of all sublevel commands of this command.
   Map<String, Command> get subcommands => new UnmodifiableMapView(_subcommands);
-  final _subcommands = new Map<String, Command>();
+  final _subcommands = <String, Command>{};
 
   /// Whether or not this command should be hidden from help listings.
   ///
@@ -306,7 +306,7 @@ abstract class Command {
   ///
   /// This is intended to be overridden by commands that don't want to receive
   /// arguments. It has no effect for branch commands.
-  final takesArguments = true;
+  bool get takesArguments => true;
 
   /// Alternate names for this command.
   ///
@@ -314,7 +314,7 @@ abstract class Command {
   /// invoked on the command line.
   ///
   /// This is intended to be overridden.
-  final aliases = const <String>[];
+  List<String> get aliases => const [];
 
   Command() {
     argParser.addFlag('help',

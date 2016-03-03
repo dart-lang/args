@@ -9,7 +9,7 @@ import 'package:args/command_runner.dart';
 import 'package:test/test.dart';
 
 class CommandRunnerWithFooter extends CommandRunner {
-  final usageFooter = "Also, footer!";
+  String get usageFooter => "Also, footer!";
 
   CommandRunnerWithFooter(String executableName, String description)
       : super(executableName, description);
