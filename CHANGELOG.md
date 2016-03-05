@@ -1,3 +1,7 @@
+## 0.13.3+6
+
+* README fixes.
+
 ## 0.13.3+5
 
 * Make strong mode clean.
