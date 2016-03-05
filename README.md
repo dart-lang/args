@@ -320,12 +320,12 @@ class StashCommand extends Command {
 [CommandRunner][] automatically adds a `help` command that displays usage
 information for commands, as well as support for the `--help` flag for all
 commands. If it encounters an error parsing the arguments or processing a
-command, it throws a [UsageError][]; your `main()` method should catch these and
+command, it throws a [UsageException][]; your `main()` method should catch these and
 print them appropriately. For example:
 
 ```dart
 runner.run(arguments).catchError((error) {
-  if (error is! UsageError) throw error;
+  if (error is! UsageException) throw error;
   print(error);
   exit(64); // Exit code 64 indicates a usage error.
 });
@@ -386,14 +386,14 @@ The resulting string looks something like this:
 [gnu]: http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
 [ArgParser]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser
 [ArgResults]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgResults
-[CommandRunner]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.CommandRunner
-[Command]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.Command
-[UsageError]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.UsageError
+[CommandRunner]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.CommandRunner
+[Command]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.Command
+[UsageException]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.UsageException
 [addOption]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_addOption
 [addFlag]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_addFlag
 [parse]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_parse
 [rest]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgResults@id_rest
 [addCommand]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_addCommand
 [getUsage]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_getUsage
-[addSubcommand]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.Command@id_addSubcommand
-[run]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.Command@id_run
+[addSubcommand]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.Command@id_addSubcommand
+[run]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.Command@id_run
