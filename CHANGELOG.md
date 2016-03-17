@@ -1,3 +1,14 @@
+## 0.13.4
+
+* By default, only the first line of a command's description is included in its
+  parent runner's usage string. This returns to the default behavior from
+  before 0.13.3+1.
+
+* A `Command.summary` getter has been added to explicitly control the summary
+  that appears in the parent runner's usage string. This getter defaults to the
+  first line of the description, but can be overridden if the user wants a
+  multi-line summary.
+
 ## 0.13.3+6
 
 * README fixes.

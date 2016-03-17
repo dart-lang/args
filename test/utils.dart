@@ -39,6 +39,10 @@ class MultilineCommand extends Command {
   }
 }
 
+class MultilineSummaryCommand extends MultilineCommand {
+  String get summary => description;
+}
+
 class HiddenCommand extends Command {
   var hasRun = false;
 

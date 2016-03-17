@@ -190,8 +190,14 @@ abstract class Command {
   /// The name of this command.
   String get name;
 
-  /// A short description of this command.
+  /// A description of this command, included in [usage].
   String get description;
+
+  /// A short description of this command, included in [parent]'s
+  /// [CommandRunner.usage].
+  ///
+  /// This defaults to the first line of [description].
+  String get summary => description.split("\n").first;
 
   /// A single-line template for how to invoke this command (e.g. `"pub get
   /// [package]"`).
@@ -371,7 +377,7 @@ String _getCommandUsage(Map<String, Command> commands,
   var buffer =
       new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
   for (var name in names) {
-    var lines = commands[name].description.split("\n");
+    var lines = commands[name].summary.split("\n");
     buffer.writeln();
     buffer.write('  ${padRight(name, length)}   ${lines.first}');
 
