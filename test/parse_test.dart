@@ -161,6 +161,10 @@ void main() {
 
         parser.parse(['--a=v', '--a=x']);
         expect(a, equals(['v', 'x']));
+
+        // This reified type is important in strong mode so that people can
+        // safely write "as List<String>".
+        expect(a, new isInstanceOf<List<String>>());
       });
 
       test('for single present, allowMultiple, options are invoked with '

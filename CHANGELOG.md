@@ -1,3 +1,7 @@
+## 0.13.4+1
+
+* Ensure that multiple-value arguments produce reified `List<String>`s.
+
 ## 0.13.4
 
 * By default, only the first line of a command's description is included in its

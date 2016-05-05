@@ -258,7 +258,7 @@ class Parser {
       return;
     }
 
-    var list = results.putIfAbsent(option.name, () => []);
+    var list = results.putIfAbsent(option.name, () => <String>[]);
 
     if (option.splitCommas) {
       for (var element in value.split(",")) {
