@@ -1,3 +1,7 @@
+## 0.13.4+2
+
+* Fix a minor documentation error.
+
 ## 0.13.4+1
 
 * Ensure that multiple-value arguments produce reified `List<String>`s.

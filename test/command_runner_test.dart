@@ -139,7 +139,7 @@ Run "test help <command>" for more information about a command."""));
 
   test("usageException splits up the message and usage", () {
     expect(() => runner.usageException("message"),
-        throwsUsageError("message", _DEFAULT_USAGE));
+        throwsUsageException("message", _DEFAULT_USAGE));
   });
 
   group("run()", () {
@@ -262,7 +262,7 @@ Also, footer!"""));
     });
 
     test("includes the footer in usage errors", () {
-      expect(runner.run(["--bad"]), throwsUsageError(
+      expect(runner.run(["--bad"]), throwsUsageException(
           'Could not find an option named "bad".',
           "$_DEFAULT_USAGE\nAlso, footer!"));
     });
@@ -270,19 +270,19 @@ Also, footer!"""));
 
   group("throws a useful error when", () {
     test("arg parsing fails", () {
-      expect(runner.run(["--bad"]), throwsUsageError(
+      expect(runner.run(["--bad"]), throwsUsageException(
           'Could not find an option named "bad".', _DEFAULT_USAGE));
     });
 
     test("a top-level command doesn't exist", () {
-      expect(runner.run(["bad"]), throwsUsageError(
+      expect(runner.run(["bad"]), throwsUsageException(
           'Could not find a command named "bad".', _DEFAULT_USAGE));
     });
 
     test("a subcommand doesn't exist", () {
       runner.addCommand(new FooCommand()..addSubcommand(new AsyncCommand()));
 
-      expect(runner.run(["foo bad"]), throwsUsageError(
+      expect(runner.run(["foo bad"]), throwsUsageException(
           'Could not find a command named "foo bad".', """
 Usage: test <command> [arguments]
 
@@ -299,7 +299,7 @@ Run "test help <command>" for more information about a command."""));
     test("a subcommand wasn't passed", () {
       runner.addCommand(new FooCommand()..addSubcommand(new AsyncCommand()));
 
-      expect(runner.run(["foo"]), throwsUsageError(
+      expect(runner.run(["foo"]), throwsUsageException(
           'Missing subcommand for "test foo".', """
 Usage: test foo <subcommand> [arguments]
 -h, --help    Print this usage information.
@@ -313,7 +313,7 @@ Run "test help" to see global options."""));
     test("a command that doesn't take arguments was given them", () {
       runner.addCommand(new FooCommand());
 
-      expect(runner.run(["foo", "bar"]), throwsUsageError(
+      expect(runner.run(["foo", "bar"]), throwsUsageException(
           'Command "foo" does not take any arguments.', """
 Usage: test foo [arguments]
 -h, --help    Print this usage information.

@@ -87,7 +87,7 @@ void throwsFormat(ArgParser parser, List<String> args) {
   expect(() => parser.parse(args), throwsFormatException);
 }
 
-Matcher throwsUsageError(message, usage) {
+Matcher throwsUsageException(message, usage) {
   return throwsA(predicate((error) {
     expect(error, new isInstanceOf<UsageException>());
     expect(error.message, message);

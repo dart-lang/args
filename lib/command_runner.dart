@@ -98,7 +98,7 @@ Run "$executableName help <command>" for more information about a command.''';
   /// Parses [args] and invokes [Command.run] on the chosen command.
   ///
   /// This always returns a [Future] in case the command is asynchronous. The
-  /// [Future] will throw a [UsageError] if [args] was invalid.
+  /// [Future] will throw a [UsageException] if [args] was invalid.
   Future run(Iterable<String> args) =>
       new Future.sync(() => runCommand(parse(args)));
 

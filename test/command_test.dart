@@ -90,7 +90,8 @@ Run "test help" to see global options."""));
   });
 
   test("usageException splits up the message and usage", () {
-    expect(() => foo.usageException("message"), throwsUsageError("message", """
+    expect(() => foo.usageException("message"),
+        throwsUsageException("message", """
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 
