@@ -1,3 +1,8 @@
+## 0.13.5
+
+* Allow `CommandRunner.argParser` and `Command.argParser` to be overridden in
+  strong mode.
+
 ## 0.13.4+2
 
 * Fix a minor documentation error.

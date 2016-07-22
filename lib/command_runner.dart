@@ -67,7 +67,8 @@ Run "$executableName help <command>" for more information about a command.''';
   /// Global options should be registered with this parser; they'll end up
   /// available via [Command.globalResults]. Commands should be registered with
   /// [addCommand] rather than directly on the parser.
-  final argParser = new ArgParser();
+  ArgParser get argParser => _argParser;
+  final _argParser = new ArgParser();
 
   CommandRunner(this.executableName, this.description) {
     argParser.addFlag('help',
@@ -249,7 +250,8 @@ abstract class Command {
   /// the constructor); they'll end up available via [argResults]. Subcommands
   /// should be registered with [addSubcommand] rather than directly on the
   /// parser.
-  final argParser = new ArgParser();
+  ArgParser get argParser => _argParser;
+  final _argParser = new ArgParser();
 
   /// Generates a string displaying usage information for this command.
   ///
