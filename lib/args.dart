@@ -3,5 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 export 'src/arg_parser.dart';
+export 'src/arg_parser_exception.dart';
 export 'src/arg_results.dart' hide newArgResults;
 export 'src/option.dart' hide newOption;

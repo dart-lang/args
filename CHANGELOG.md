@@ -1,3 +1,11 @@
+## 0.13.6
+
+* `ArgParser.parse()` now throws an `ArgParserException`, which implements
+  `FormatException` and has a field that lists the commands that were parsed.
+
+* If `CommandRunner.run()` encounters a parse error for a subcommand, it now
+  prints the subcommand's usage rather than the global usage.
+
 ## 0.13.5
 
 * Allow `CommandRunner.argParser` and `Command.argParser` to be overridden in
