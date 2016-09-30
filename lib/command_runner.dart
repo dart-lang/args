@@ -7,6 +7,7 @@ import 'dart:collection';
 import 'dart:math' as math;
 
 import 'src/arg_parser.dart';
+import 'src/arg_parser_exception.dart';
 import 'src/arg_results.dart';
 import 'src/help_command.dart';
 import 'src/usage_exception.dart';
@@ -103,18 +104,23 @@ Run "$executableName help <command>" for more information about a command.''';
   Future run(Iterable<String> args) =>
       new Future.sync(() => runCommand(parse(args)));
 
-  /// Parses [args] and returns the result, converting a [FormatException] to a
-  /// [UsageException].
+  /// Parses [args] and returns the result, converting an [ArgParserException]
+  /// to a [UsageException].
   ///
   /// This is notionally a protected method. It may be overridden or called from
   /// subclasses, but it shouldn't be called externally.
   ArgResults parse(Iterable<String> args) {
     try {
-      // TODO(nweiz): if arg parsing fails for a command, print that command's
-      // usage, not the global usage.
       return argParser.parse(args);
-    } on FormatException catch (error) {
-      usageException(error.message);
+    } on ArgParserException catch (error) {
+      if (error.commands.isEmpty) usageException(error.message);
+
+      var command = commands[error.commands.first];
+      for (var commandName in error.commands.skip(1)) {
+        command = command.subcommands[commandName];
+      }
+
+      command.usageException(error.message);
     }
   }
 

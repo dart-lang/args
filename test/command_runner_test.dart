@@ -246,6 +246,27 @@ Run "test help" to see global options.
 """));
       });
     });
+
+    group("with an invalid argument", () {
+      test("at the root throws the root usage", () {
+        expect(runner.run(["--asdf"]), throwsUsageException(
+            'Could not find an option named "asdf".',
+            '$_DEFAULT_USAGE'));
+      });
+
+      test("for a command throws the command usage", () {
+        var command = new FooCommand();
+        runner.addCommand(command);
+
+        expect(runner.run(["foo", "--asdf"]), throwsUsageException(
+            'Could not find an option named "asdf".',
+            """
+Usage: test foo [arguments]
+-h, --help    Print this usage information.
+
+Run "test help" to see global options."""));
+      });
+    });
   });
 
   group("with a footer", () {

@@ -51,9 +51,11 @@ The default value for non-flag options can be any string. For flags, it must
 be a `bool`.
 
 To validate a non-flag option, you can use the `allowed` parameter to provide an
-allowed set of values. When you do, the parser throws a [FormatException] if the
-value for an option is not in the allowed set. Here's an example of specifying
-allowed values:
+allowed set of values. When you do, the parser throws an
+[`ArgParserException`][ArgParserException] if the value for an option is not in
+the allowed set. Here's an example of specifying allowed values:
+
+[ArgParserException]: https://www.dartdocs.org/documentation/args/latest/args/ArgParserException-class.html
 
 ```dart
 parser.addOption('mode', allowed: ['debug', 'release']);
