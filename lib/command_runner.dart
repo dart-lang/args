@@ -132,56 +132,59 @@ Run "$executableName help <command>" for more information about a command.''';
   /// It's useful to override this to handle global flags and/or wrap the entire
   /// command in a block. For example, you might handle the `--verbose` flag
   /// here to enable verbose logging before running the command.
-  Future runCommand(ArgResults topLevelResults) {
-    return new Future.sync(() {
-      var argResults = topLevelResults;
-      var commands = _commands;
-      Command command;
-      var commandString = executableName;
+  Future runCommand(ArgResults topLevelResults) async {
+    var argResults = topLevelResults;
+    var commands = _commands;
+    Command command;
+    var commandString = executableName;
 
-      while (commands.isNotEmpty) {
-        if (argResults.command == null) {
-          if (argResults.rest.isEmpty) {
-            if (command == null) {
-              // No top-level command was chosen.
-              printUsage();
-              return new Future.value();
-            }
-
-            command.usageException('Missing subcommand for "$commandString".');
-          } else {
-            if (command == null) {
-              usageException(
-                  'Could not find a command named "${argResults.rest[0]}".');
-            }
-
-            command.usageException('Could not find a subcommand named '
-                '"${argResults.rest[0]}" for "$commandString".');
+    while (commands.isNotEmpty) {
+      if (argResults.command == null) {
+        if (argResults.rest.isEmpty) {
+          if (command == null) {
+            // No top-level command was chosen.
+            printUsage();
+            return;
           }
-        }
 
-        // Step into the command.
-        argResults = argResults.command;
-        command = commands[argResults.name];
-        command._globalResults = topLevelResults;
-        command._argResults = argResults;
-        commands = command._subcommands;
-        commandString += " ${argResults.name}";
+          command.usageException('Missing subcommand for "$commandString".');
+        } else {
+          if (command == null) {
+            usageException(
+                'Could not find a command named "${argResults.rest[0]}".');
+          }
 
-        if (argResults['help']) {
-          command.printUsage();
-          return new Future.value();
+          command.usageException('Could not find a subcommand named '
+              '"${argResults.rest[0]}" for "$commandString".');
         }
       }
 
-      // Make sure there aren't unexpected arguments.
-      if (!command.takesArguments && argResults.rest.isNotEmpty) {
-        command.usageException(
-            'Command "${argResults.name}" does not take any arguments.');
-      }
+      // Step into the command.
+      argResults = argResults.command;
+      command = commands[argResults.name];
+      command._globalResults = topLevelResults;
+      command._argResults = argResults;
+      commands = command._subcommands;
+      commandString += " ${argResults.name}";
 
-      return command.run();
-    });
+      if (argResults['help']) {
+        command.printUsage();
+        return;
+      }
+    }
+
+    if (topLevelResults['help']) {
+      command.printUsage();
+      return;
+    }
+
+    // Make sure there aren't unexpected arguments.
+    if (!command.takesArguments && argResults.rest.isNotEmpty) {
+      command.usageException(
+          'Command "${argResults.name}" does not take any arguments.');
+    }
+
+    await command.run();
   }
 }
 
@@ -217,8 +220,8 @@ abstract class Command {
 
     var invocation = parents.reversed.join(" ");
     return _subcommands.isNotEmpty
-        ? "$invocation <subcommand> [arguments]"
-        : "$invocation [arguments]";
+    ? "$invocation <subcommand> [arguments]"
+    : "$invocation [arguments]";
   }
 
   /// The command's parent command, if this is a subcommand.
@@ -274,8 +277,8 @@ abstract class Command {
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
     var buffer = new StringBuffer()
-      ..writeln('Usage: $invocation')
-      ..writeln(argParser.usage);
+    ..writeln('Usage: $invocation')
+    ..writeln(argParser.usage);
 
     if (_subcommands.isNotEmpty) {
       buffer.writeln();
@@ -361,7 +364,7 @@ abstract class Command {
 
   /// Throws a [UsageException] with [message].
   void usageException(String message) =>
-      throw new UsageException(message, _usageWithoutDescription);
+    throw new UsageException(message, _usageWithoutDescription);
 }
 
 /// Returns a string representation of [commands] fit for use in a usage string.
@@ -372,7 +375,7 @@ String _getCommandUsage(Map<String, Command> commands,
     {bool isSubcommand: false}) {
   // Don't include aliases.
   var names =
-      commands.keys.where((name) => !commands[name].aliases.contains(name));
+    commands.keys.where((name) => !commands[name].aliases.contains(name));
 
   // Filter out hidden ones, unless they are all hidden.
   var visible = names.where((name) => !commands[name].hidden);
@@ -383,7 +386,7 @@ String _getCommandUsage(Map<String, Command> commands,
   var length = names.map((name) => name.length).reduce(math.max);
 
   var buffer =
-      new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
+    new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
   for (var name in names) {
     var lines = commands[name].summary.split("\n");
     buffer.writeln();

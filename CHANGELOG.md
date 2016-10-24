@@ -1,3 +1,8 @@
+## 0.13.6+1
+
+* When a `CommandRunner` is passed `--help` before any commands, it now prints
+  the usage of the chosen command.
+
 ## 0.13.6
 
 * `ArgParser.parse()` now throws an `ArgParserException`, which implements
