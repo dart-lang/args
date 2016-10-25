@@ -121,6 +121,7 @@ Run "$executableName help <command>" for more information about a command.''';
       }
 
       command.usageException(error.message);
+      return null;
     }
   }
 
