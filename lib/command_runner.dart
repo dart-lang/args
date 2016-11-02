@@ -220,8 +220,8 @@ abstract class Command {
 
     var invocation = parents.reversed.join(" ");
     return _subcommands.isNotEmpty
-    ? "$invocation <subcommand> [arguments]"
-    : "$invocation [arguments]";
+        ? "$invocation <subcommand> [arguments]"
+        : "$invocation [arguments]";
   }
 
   /// The command's parent command, if this is a subcommand.
