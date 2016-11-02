@@ -197,11 +197,25 @@ $_DEFAULT_USAGE
 """));
       });
 
-      test("with a command prints the usage for that command", () {
+      test("with a preceding command prints the usage for that command", () {
         var command = new FooCommand();
         runner.addCommand(command);
 
         expect(() => runner.run(["foo", "--help"]), prints("""
+Set a value.
+
+Usage: test foo [arguments]
+-h, --help    Print this usage information.
+
+Run "test help" to see global options.
+"""));
+      });
+
+      test("with a following command prints the usage for that command", () {
+        var command = new FooCommand();
+        runner.addCommand(command);
+
+        expect(() => runner.run(["--help", "foo"]), prints("""
 Set a value.
 
 Usage: test foo [arguments]
