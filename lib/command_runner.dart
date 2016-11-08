@@ -185,7 +185,7 @@ Run "$executableName help <command>" for more information about a command.''';
           'Command "${argResults.name}" does not take any arguments.');
     }
 
-    await command.run();
+    return await command.run();
   }
 }
 
