@@ -161,6 +161,22 @@ Run "test help <command>" for more information about a command."""));
       }), completes);
     });
 
+    test("runs a command with a return value", () {
+      var runner = new CommandRunner<int>("test", "");
+      var command = new ValueCommand();
+      runner.addCommand(command);
+
+      expect(runner.run(["foo"]), completion(equals(12)));
+    });
+
+    test("runs a command with an asynchronous return value", () {
+      var runner = new CommandRunner<String>("test", "");
+      var command = new AsyncValueCommand();
+      runner.addCommand(command);
+
+      expect(runner.run(["foo"]), completion(equals("hi")));
+    });
+
     test("runs a hidden comand", () {
       var command = new HiddenCommand();
       runner.addCommand(command);

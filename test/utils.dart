@@ -27,6 +27,22 @@ class FooCommand extends Command {
   }
 }
 
+class ValueCommand extends Command<int> {
+  final name = "foo";
+  final description = "Return a value.";
+  final takesArguments = false;
+
+  int run() => 12;
+}
+
+class AsyncValueCommand extends Command<String> {
+  final name = "foo";
+  final description = "Return a future.";
+  final takesArguments = false;
+
+  Future<String> run() async => "hi";
+}
+
 class MultilineCommand extends Command {
   var hasRun = false;
 
