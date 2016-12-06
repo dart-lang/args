@@ -145,12 +145,10 @@ class ArgParser {
 
   /// Get the default value for an option. Useful after parsing to test if the
   /// user specified something other than the default.
-  getDefault(String option) {
-    if (!options.containsKey(option)) {
-      throw new ArgumentError('No option named $option');
-    }
-    return options[option].defaultValue;
-  }
+  getDefault(String option) =>
+      (!options.containsKey(option))
+        ? throw new ArgumentError('No option named $option')
+        : options[option].defaultValue;
 
   /// Finds the option whose abbreviation is [abbr], or `null` if no option has
   /// that abbreviation.

@@ -106,13 +106,8 @@ class Usage {
     return buffer.toString();
   }
 
-  String getAbbreviation(Option option) {
-    if (option.abbreviation != null) {
-      return '-${option.abbreviation}, ';
-    } else {
-      return '';
-    }
-  }
+  String getAbbreviation(Option option) =>
+      (option.abbreviation != null) ? '-${option.abbreviation}, ' : '';
 
   String getLongOption(Option option) {
     var result;
