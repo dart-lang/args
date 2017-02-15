@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dart-lang/args.svg?branch=master)](https://travis-ci.org/dart-lang/args)
+
 Parses raw command-line arguments into a set of options and values.
 
 This library supports [GNU][] and [POSIX][] style options, and it works
