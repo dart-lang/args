@@ -6,9 +6,9 @@ import 'package:test/test.dart';
 import 'package:args/args.dart';
 
 void main() {
-  test('allowTrailingOptions defaults to false', () {
+  test('allowTrailingOptions defaults to true', () {
     var parser = new ArgParser();
-    expect(parser.allowTrailingOptions, isFalse);
+    expect(parser.allowTrailingOptions, isTrue);
   });
 
   group('when trailing options are allowed', () {

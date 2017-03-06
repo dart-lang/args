@@ -1,3 +1,8 @@
+## 1.0.0
+
+* **Breaking change**: The `allowTrailingOptions` argument to `new
+  ArgumentParser()` defaults to `true` instead of `false`.
+
 ## 0.13.7
 
 * Add explicit support for forwarding the value returned by `Command.run()` to
