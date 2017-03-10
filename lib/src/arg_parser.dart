@@ -33,8 +33,8 @@ class ArgParser {
   ///
   /// If [allowTrailingOptions] is `true` (the default), the parser will parse
   /// flags and options that appear after positional arguments. If it's `false`,
-  /// the parser will stop parsing as soon as it finds an argument that is
-  /// neither an option nor a command.
+  /// the parser stops parsing as soon as it finds an argument that is neither
+  /// an option nor a command.
   factory ArgParser({bool allowTrailingOptions: true}) => new ArgParser._(
       <String, Option>{}, <String, ArgParser>{},
       allowTrailingOptions: allowTrailingOptions);

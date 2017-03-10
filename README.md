@@ -106,9 +106,9 @@ print(results['mode']); // debug
 print(results['verbose']); // true
 ```
 
-By default, the `parse()` method additional flags and options to be passed after
-positional parameters unless `--` is used to indicate that all further
-parameters will be positional. The positional arguments go into
+By default, the `parse()` method allows additional flags and options to be
+passed after positional parameters unless `--` is used to indicate that all
+further parameters will be positional. The positional arguments go into
 [ArgResults.rest][rest].
 
 ```dart
