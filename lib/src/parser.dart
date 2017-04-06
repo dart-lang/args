@@ -70,8 +70,7 @@ class Parser {
         } on ArgParserException catch (error) {
           if (commandName == null) rethrow;
           throw new ArgParserException(
-              error.message,
-              [commandName]..addAll(error.commands));
+              error.message, [commandName]..addAll(error.commands));
         }
 
         // All remaining arguments were passed to command so clear them here.
@@ -167,7 +166,8 @@ class Parser {
     } else {
       // If we got some non-flag characters, then it must be a value, but
       // if we got here, it's a flag, which is wrong.
-      validate(abbrOpt[2] == '',
+      validate(
+          abbrOpt[2] == '',
           'Option "-$c" is a flag and cannot handle value '
           '"${abbrOpt[1].substring(1)}${abbrOpt[2]}".');
 

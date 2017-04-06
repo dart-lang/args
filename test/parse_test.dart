@@ -152,7 +152,8 @@ void main() {
         expect(a, isNull);
       });
 
-      test('for multiple present, allowMultiple, options are invoked with '
+      test(
+          'for multiple present, allowMultiple, options are invoked with '
           'value as a list', () {
         var a;
         var parser = new ArgParser();
@@ -167,7 +168,8 @@ void main() {
         expect(a, new isInstanceOf<List<String>>());
       });
 
-      test('for single present, allowMultiple, options are invoked with '
+      test(
+          'for single present, allowMultiple, options are invoked with '
           ' value as a single element list', () {
         var a;
         var parser = new ArgParser();
@@ -178,7 +180,8 @@ void main() {
         expect(a, equals(['v']));
       });
 
-      test('for absent, allowMultiple, options are invoked with default '
+      test(
+          'for absent, allowMultiple, options are invoked with default '
           'value as a list.', () {
         var a;
         var parser = new ArgParser();
@@ -191,7 +194,8 @@ void main() {
         expect(a, equals(['v']));
       });
 
-      test('for absent, allowMultiple, options are invoked with value '
+      test(
+          'for absent, allowMultiple, options are invoked with value '
           'as an empty list.', () {
         var a;
         var parser = new ArgParser();
@@ -212,7 +216,8 @@ void main() {
         expect(a, equals(['v', 'w', 'x']));
       });
 
-      test("allowMultiple doesn't parses comma-separated strings with "
+      test(
+          "allowMultiple doesn't parses comma-separated strings with "
           "splitCommas: false", () {
         var a;
         var parser = new ArgParser();
@@ -337,8 +342,8 @@ void main() {
 
       test('throw if a comma-separated value is not allowed', () {
         var parser = new ArgParser();
-        parser.addOption('mode', abbr: 'm', allowMultiple: true,
-            allowed: ['debug', 'release']);
+        parser.addOption('mode',
+            abbr: 'm', allowMultiple: true, allowed: ['debug', 'release']);
 
         throwsFormat(parser, ['-mdebug,profile']);
       });
@@ -418,8 +423,8 @@ void main() {
         parser.addOption('other');
 
         expect(parser.parse(['--mode', '--other'])['mode'], equals('--other'));
-        expect(parser.parse(['--mode', '--unknown'])['mode'],
-            equals('--unknown'));
+        expect(
+            parser.parse(['--mode', '--unknown'])['mode'], equals('--unknown'));
         expect(parser.parse(['--mode', '-abbr'])['mode'], equals('-abbr'));
         expect(parser.parse(['--mode', '--'])['mode'], equals('--'));
       });
@@ -453,7 +458,8 @@ void main() {
         expect(args['define'], equals(['1', '2']));
       });
 
-      test('returns the default value for multi-valued arguments '
+      test(
+          'returns the default value for multi-valued arguments '
           'if not explicitly set', () {
         var parser = new ArgParser();
         parser.addOption('define', defaultsTo: '0', allowMultiple: true);

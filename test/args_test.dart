@@ -26,7 +26,8 @@ void main() {
       throwsIllegalArg(() => parser.addFlag('flummox', abbr: 'f'));
     });
 
-    test('throws ArgumentError if the abbreviation is longer '
+    test(
+        'throws ArgumentError if the abbreviation is longer '
         'than one character', () {
       var parser = new ArgParser();
       throwsIllegalArg(() => parser.addFlag('flummox', abbr: 'flu'));
@@ -70,7 +71,8 @@ void main() {
       throwsIllegalArg(() => parser.addOption('flummox', abbr: 'f'));
     });
 
-    test('throws ArgumentError if the abbreviation is longer '
+    test(
+        'throws ArgumentError if the abbreviation is longer '
         'than one character', () {
       var parser = new ArgParser();
       throwsIllegalArg(() => parser.addOption('flummox', abbr: 'flu'));
@@ -107,7 +109,8 @@ void main() {
       }
     });
 
-    test('throws ArgumentError if splitCommas is passed with allowMultiple: '
+    test(
+        'throws ArgumentError if splitCommas is passed with allowMultiple: '
         'false', () {
       var parser = new ArgParser();
       throwsIllegalArg(() => parser.addOption('flummox', splitCommas: true));

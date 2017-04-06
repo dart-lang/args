@@ -35,9 +35,9 @@ class ArgParser {
   /// after it finds an argument that is neither an option nor a command.
   /// This allows options to be specified after regular arguments. Defaults to
   /// `false`.
-  factory ArgParser({bool allowTrailingOptions: false}) => new ArgParser._(
-      <String, Option>{}, <String, ArgParser>{},
-      allowTrailingOptions: allowTrailingOptions);
+  factory ArgParser({bool allowTrailingOptions: false}) =>
+      new ArgParser._(<String, Option>{}, <String, ArgParser>{},
+          allowTrailingOptions: allowTrailingOptions);
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
       {bool allowTrailingOptions: false})
@@ -45,9 +45,8 @@ class ArgParser {
         this.options = new UnmodifiableMapView(options),
         this._commands = commands,
         this.commands = new UnmodifiableMapView(commands),
-        this.allowTrailingOptions = allowTrailingOptions != null
-            ? allowTrailingOptions
-            : false;
+        this.allowTrailingOptions =
+            allowTrailingOptions != null ? allowTrailingOptions : false;
 
   /// Defines a command.
   ///
@@ -69,10 +68,16 @@ class ArgParser {
   ///
   /// * There is already an option named [name].
   /// * There is already an option using abbreviation [abbr].
-  void addFlag(String name, {String abbr, String help, bool defaultsTo: false,
-      bool negatable: true, void callback(bool value), bool hide: false}) {
+  void addFlag(String name,
+      {String abbr,
+      String help,
+      bool defaultsTo: false,
+      bool negatable: true,
+      void callback(bool value),
+      bool hide: false}) {
     _addOption(name, abbr, help, null, null, null, defaultsTo, callback,
-        OptionType.FLAG, negatable: negatable, hide: hide);
+        OptionType.FLAG,
+        negatable: negatable, hide: hide);
   }
 
   /// Defines a value-taking option. Throws an [ArgumentError] if:
@@ -80,9 +85,16 @@ class ArgParser {
   /// * There is already an option with name [name].
   /// * There is already an option using abbreviation [abbr].
   /// * [splitCommas] is passed but [allowMultiple] is `false`.
-  void addOption(String name, {String abbr, String help, String valueHelp,
-      List<String> allowed, Map<String, String> allowedHelp, String defaultsTo,
-      void callback(value), bool allowMultiple: false, bool splitCommas,
+  void addOption(String name,
+      {String abbr,
+      String help,
+      String valueHelp,
+      List<String> allowed,
+      Map<String, String> allowedHelp,
+      String defaultsTo,
+      void callback(value),
+      bool allowMultiple: false,
+      bool splitCommas,
       bool hide: false}) {
     if (!allowMultiple && splitCommas != null) {
       throw new ArgumentError(
@@ -94,10 +106,19 @@ class ArgParser {
         splitCommas: splitCommas, hide: hide);
   }
 
-  void _addOption(String name, String abbr, String help, String valueHelp,
-      List<String> allowed, Map<String, String> allowedHelp, defaultsTo,
-      void callback(value), OptionType type,
-      {bool negatable: false, bool splitCommas, bool hide: false}) {
+  void _addOption(
+      String name,
+      String abbr,
+      String help,
+      String valueHelp,
+      List<String> allowed,
+      Map<String, String> allowedHelp,
+      defaultsTo,
+      void callback(value),
+      OptionType type,
+      {bool negatable: false,
+      bool splitCommas,
+      bool hide: false}) {
     // Make sure the name isn't in use.
     if (_options.containsKey(name)) {
       throw new ArgumentError('Duplicate option "$name".');
@@ -112,8 +133,8 @@ class ArgParser {
       }
     }
 
-    var option = newOption(name, abbr, help, valueHelp, allowed,
-        allowedHelp, defaultsTo, callback, type,
+    var option = newOption(name, abbr, help, valueHelp, allowed, allowedHelp,
+        defaultsTo, callback, type,
         negatable: negatable, splitCommas: splitCommas, hide: hide);
     _options[name] = option;
     _optionsAndSeparators.add(option);

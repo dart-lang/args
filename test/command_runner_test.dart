@@ -147,18 +147,22 @@ Run "test help <command>" for more information about a command."""));
       var command = new FooCommand();
       runner.addCommand(command);
 
-      expect(runner.run(["foo"]).then((_) {
-        expect(command.hasRun, isTrue);
-      }), completes);
+      expect(
+          runner.run(["foo"]).then((_) {
+            expect(command.hasRun, isTrue);
+          }),
+          completes);
     });
 
     test("runs an asynchronous command", () {
       var command = new AsyncCommand();
       runner.addCommand(command);
 
-      expect(runner.run(["async"]).then((_) {
-        expect(command.hasRun, isTrue);
-      }), completes);
+      expect(
+          runner.run(["async"]).then((_) {
+            expect(command.hasRun, isTrue);
+          }),
+          completes);
     });
 
     test("runs a command with a return value", () {
@@ -181,27 +185,33 @@ Run "test help <command>" for more information about a command."""));
       var command = new HiddenCommand();
       runner.addCommand(command);
 
-      expect(runner.run(["hidden"]).then((_) {
-        expect(command.hasRun, isTrue);
-      }), completes);
+      expect(
+          runner.run(["hidden"]).then((_) {
+            expect(command.hasRun, isTrue);
+          }),
+          completes);
     });
 
     test("runs an aliased comand", () {
       var command = new AliasedCommand();
       runner.addCommand(command);
 
-      expect(runner.run(["als"]).then((_) {
-        expect(command.hasRun, isTrue);
-      }), completes);
+      expect(
+          runner.run(["als"]).then((_) {
+            expect(command.hasRun, isTrue);
+          }),
+          completes);
     });
 
     test("runs a subcommand", () {
       var command = new AsyncCommand();
       runner.addCommand(new FooCommand()..addSubcommand(command));
 
-      expect(runner.run(["foo", "async"]).then((_) {
-        expect(command.hasRun, isTrue);
-      }), completes);
+      expect(
+          runner.run(["foo", "async"]).then((_) {
+            expect(command.hasRun, isTrue);
+          }),
+          completes);
     });
 
     group("with --help", () {
@@ -279,18 +289,21 @@ Run "test help" to see global options.
 
     group("with an invalid argument", () {
       test("at the root throws the root usage", () {
-        expect(runner.run(["--asdf"]), throwsUsageException(
-            'Could not find an option named "asdf".',
-            '$_DEFAULT_USAGE'));
+        expect(
+            runner.run(["--asdf"]),
+            throwsUsageException(
+                'Could not find an option named "asdf".', '$_DEFAULT_USAGE'));
       });
 
       test("for a command throws the command usage", () {
         var command = new FooCommand();
         runner.addCommand(command);
 
-        expect(runner.run(["foo", "--asdf"]), throwsUsageException(
-            'Could not find an option named "asdf".',
-            """
+        expect(
+            runner.run(["foo", "--asdf"]),
+            throwsUsageException(
+                'Could not find an option named "asdf".',
+                """
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 
@@ -313,28 +326,36 @@ Also, footer!"""));
     });
 
     test("includes the footer in usage errors", () {
-      expect(runner.run(["--bad"]), throwsUsageException(
-          'Could not find an option named "bad".',
-          "$_DEFAULT_USAGE\nAlso, footer!"));
+      expect(
+          runner.run(["--bad"]),
+          throwsUsageException('Could not find an option named "bad".',
+              "$_DEFAULT_USAGE\nAlso, footer!"));
     });
   });
 
   group("throws a useful error when", () {
     test("arg parsing fails", () {
-      expect(runner.run(["--bad"]), throwsUsageException(
-          'Could not find an option named "bad".', _DEFAULT_USAGE));
+      expect(
+          runner.run(["--bad"]),
+          throwsUsageException(
+              'Could not find an option named "bad".', _DEFAULT_USAGE));
     });
 
     test("a top-level command doesn't exist", () {
-      expect(runner.run(["bad"]), throwsUsageException(
-          'Could not find a command named "bad".', _DEFAULT_USAGE));
+      expect(
+          runner.run(["bad"]),
+          throwsUsageException(
+              'Could not find a command named "bad".', _DEFAULT_USAGE));
     });
 
     test("a subcommand doesn't exist", () {
       runner.addCommand(new FooCommand()..addSubcommand(new AsyncCommand()));
 
-      expect(runner.run(["foo bad"]), throwsUsageException(
-          'Could not find a command named "foo bad".', """
+      expect(
+          runner.run(["foo bad"]),
+          throwsUsageException(
+              'Could not find a command named "foo bad".',
+              """
 Usage: test <command> [arguments]
 
 Global options:
@@ -350,8 +371,11 @@ Run "test help <command>" for more information about a command."""));
     test("a subcommand wasn't passed", () {
       runner.addCommand(new FooCommand()..addSubcommand(new AsyncCommand()));
 
-      expect(runner.run(["foo"]), throwsUsageException(
-          'Missing subcommand for "test foo".', """
+      expect(
+          runner.run(["foo"]),
+          throwsUsageException(
+              'Missing subcommand for "test foo".',
+              """
 Usage: test foo <subcommand> [arguments]
 -h, --help    Print this usage information.
 
@@ -364,8 +388,11 @@ Run "test help" to see global options."""));
     test("a command that doesn't take arguments was given them", () {
       runner.addCommand(new FooCommand());
 
-      expect(runner.run(["foo", "bar"]), throwsUsageException(
-          'Command "foo" does not take any arguments.', """
+      expect(
+          runner.run(["foo", "bar"]),
+          throwsUsageException(
+              'Command "foo" does not take any arguments.',
+              """
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 
