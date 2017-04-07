@@ -15,7 +15,7 @@ import 'src/utils.dart';
 
 export 'src/usage_exception.dart';
 
-/// A class for invoking [Commands] based on raw command-line arguments.
+/// A class for invoking [Command]s based on raw command-line arguments.
 ///
 /// The type argument `T` represents the type returned by [Command.run] and
 /// [CommandRunner.run]; it can be ommitted if you're not using the return
@@ -31,7 +31,7 @@ class CommandRunner<T> {
 
   /// A single-line template for how to invoke this executable.
   ///
-  /// Defaults to "$executableName <command> [arguments]". Subclasses can
+  /// Defaults to "$executableName <command> `arguments`". Subclasses can
   /// override this for a more specific template.
   String get invocation => "$executableName <command> [arguments]";
 
@@ -217,7 +217,7 @@ abstract class Command<T> {
   String get summary => description.split("\n").first;
 
   /// A single-line template for how to invoke this command (e.g. `"pub get
-  /// [package]"`).
+  /// `package`"`).
   String get invocation {
     var parents = [name];
     for (var command = parent; command != null; command = command.parent) {
@@ -233,7 +233,7 @@ abstract class Command<T> {
 
   /// The command's parent command, if this is a subcommand.
   ///
-  /// This will be `null` until [Command.addSubcommmand] has been called with
+  /// This will be `null` until [addSubcommand] has been called with
   /// this command.
   Command<T> get parent => _parent;
   Command<T> _parent;

@@ -7,9 +7,9 @@ import 'arg_parser_exception.dart';
 import 'arg_results.dart';
 import 'option.dart';
 
-final _SOLO_OPT = new RegExp(r'^-([a-zA-Z0-9])$');
-final _ABBR_OPT = new RegExp(r'^-([a-zA-Z0-9]+)(.*)$');
-final _LONG_OPT = new RegExp(r'^--([a-zA-Z\-_0-9]+)(=(.*))?$');
+final _soloOpt = new RegExp(r'^-([a-zA-Z0-9])$');
+final _abbrOpt = new RegExp(r'^-([a-zA-Z0-9]+)(.*)$');
+final _longOpt = new RegExp(r'^--([a-zA-Z\-_0-9]+)(=(.*))?$');
 
 /// The actual argument parsing class.
 ///
@@ -47,7 +47,7 @@ class Parser {
   /// Parses the arguments. This can only be called once.
   ArgResults parse() {
     var arguments = args.toList();
-    var commandResults = null;
+    ArgResults commandResults;
 
     // Parse the args.
     while (args.length > 0) {
@@ -120,7 +120,7 @@ class Parser {
   /// We treat this differently than collapsed abbreviations (like "-abc") to
   /// handle the possible value that may follow it.
   bool parseSoloOption() {
-    var soloOpt = _SOLO_OPT.firstMatch(current);
+    var soloOpt = _soloOpt.firstMatch(current);
     if (soloOpt == null) return false;
 
     var option = grammar.findByAbbreviation(soloOpt[1]);
@@ -146,7 +146,7 @@ class Parser {
   /// (like "-abc") or a single abbreviation with the value directly attached
   /// to it (like "-mrelease").
   bool parseAbbreviation(Parser innermostCommand) {
-    var abbrOpt = _ABBR_OPT.firstMatch(current);
+    var abbrOpt = _abbrOpt.firstMatch(current);
     if (abbrOpt == null) return false;
 
     // If the first character is the abbreviation for a non-flag option, then
@@ -206,7 +206,7 @@ class Parser {
   /// Tries to parse the current argument as a long-form named option, which
   /// may include a value like "--mode=release" or "--mode release".
   bool parseLongOption() {
-    var longOpt = _LONG_OPT.firstMatch(current);
+    var longOpt = _longOpt.firstMatch(current);
     if (longOpt == null) return false;
 
     var name = longOpt[1];

@@ -6,7 +6,7 @@ import 'dart:collection';
 
 /// Creates a new [Option].
 ///
-/// Since [Option] doesn't have a public constructor, this lets [ArgParser]
+/// Since [Option] doesn't have a public constructor, this lets `ArgParser`
 /// get to it. This function isn't exported to the public API of the package.
 Option newOption(
     String name,
@@ -137,7 +137,7 @@ class OptionType {
   ///
   ///     --output text --output xml
   ///
-  /// In the parsed [ArgResults], a multiple-valued option will always return
+  /// In the parsed `ArgResults`, a multiple-valued option will always return
   /// a list, even if one or no values were passed.
   static const MULTIPLE = const OptionType._("OptionType.MULTIPLE");
 

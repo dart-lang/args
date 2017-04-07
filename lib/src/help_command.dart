@@ -8,11 +8,17 @@ import '../command_runner.dart';
 ///
 /// This command displays help information for the various subcommands.
 class HelpCommand<T> extends Command<T> {
+  @override
   final name = "help";
+
+  @override
   String get description =>
       "Display help information for ${runner.executableName}.";
+
+  @override
   String get invocation => "${runner.executableName} help [command]";
 
+  @override
   T run() {
     // Show the default help if no command was specified.
     if (argResults.rest.isEmpty) {
