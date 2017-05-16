@@ -47,6 +47,11 @@ class Parser {
   /// Parses the arguments. This can only be called once.
   ArgResults parse() {
     var arguments = args.toList();
+    if (grammar.allowsAnything) {
+      return newArgResults(
+          grammar, const {}, commandName, null, arguments, arguments);
+    }
+
     ArgResults commandResults;
 
     // Parse the args.

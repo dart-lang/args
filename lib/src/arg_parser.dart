@@ -4,6 +4,7 @@
 
 import 'dart:collection';
 
+import 'allow_anything_parser.dart';
 import 'arg_results.dart';
 import 'option.dart';
 import 'parser.dart';
@@ -29,6 +30,10 @@ class ArgParser {
   /// arguments.
   final bool allowTrailingOptions;
 
+  /// Whether or not this parser treats unrecognized options as non-option
+  /// arguments.
+  bool get allowsAnything => false;
+
   /// Creates a new ArgParser.
   ///
   /// If [allowTrailingOptions] is set, the parser will continue parsing even
@@ -36,8 +41,15 @@ class ArgParser {
   /// This allows options to be specified after regular arguments. Defaults to
   /// `false`.
   factory ArgParser({bool allowTrailingOptions: false}) =>
-      new ArgParser._(<String, Option>{}, <String, ArgParser>{},
-          allowTrailingOptions: allowTrailingOptions);
+      new ArgParser._({}, {}, allowTrailingOptions: allowTrailingOptions);
+
+  /// Creates a new ArgParser that treats *all input* as non-option arguments.
+  ///
+  /// This is intended to allow arguments to be passed through to child
+  /// processes without needing to be redefined in the parent.
+  ///
+  /// Options may not be defined for this parser.
+  factory ArgParser.allowAnything() = AllowAnythingParser;
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
       {bool allowTrailingOptions: false})
