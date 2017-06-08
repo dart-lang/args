@@ -267,6 +267,9 @@ abstract class Command<T> {
   /// the constructor); they'll end up available via [argResults]. Subcommands
   /// should be registered with [addSubcommand] rather than directly on the
   /// parser.
+  ///
+  /// This can be overridden to change the arguments passed to the `ArgParser`
+  /// constructor.
   ArgParser get argParser => _argParser;
   final _argParser = new ArgParser();
 
