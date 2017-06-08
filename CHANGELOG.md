@@ -1,7 +1,7 @@
 ## 0.13.8
 
-* Add `new ArgParser.allowAnything()`. This allow any input, without parsing any
-  options.
+* Add `new ArgParser.allowAnything()`. This allows any input, without parsing
+  any options.
 
 ## 0.13.7
 
