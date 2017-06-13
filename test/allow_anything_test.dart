@@ -10,10 +10,10 @@ import 'utils.dart';
 
 void main() {
   group('new ArgParser.allowAnything()', () {
-  ArgParser parser;
-  setUp(() {
-    parser = new ArgParser.allowAnything();
-  });
+    ArgParser parser;
+    setUp(() {
+      parser = new ArgParser.allowAnything();
+    });
 
     test('exposes empty values', () {
       expect(parser.options, isEmpty);
@@ -26,14 +26,10 @@ void main() {
     });
 
     test('mutation methods throw errors', () {
-      expect(() =>parser.addCommand("command"),
-          throwsUnsupportedError);
-      expect(() =>parser.addFlag("flag"),
-          throwsUnsupportedError);
-      expect(() =>parser.addOption("option"),
-          throwsUnsupportedError);
-      expect(() =>parser.addSeparator("==="),
-          throwsUnsupportedError);
+      expect(() => parser.addCommand("command"), throwsUnsupportedError);
+      expect(() => parser.addFlag("flag"), throwsUnsupportedError);
+      expect(() => parser.addOption("option"), throwsUnsupportedError);
+      expect(() => parser.addSeparator("==="), throwsUnsupportedError);
     });
 
     test('getDefault() throws an error', () {
@@ -51,7 +47,8 @@ void main() {
 
     test('works as a subcommand', () {
       var commandParser = new ArgParser()..addCommand('command', parser);
-      var results = commandParser.parse(['command', '--foo', '-abc', '--', 'bar']);
+      var results =
+          commandParser.parse(['command', '--foo', '-abc', '--', 'bar']);
       expect(results.command.options, isEmpty);
       expect(results.command.rest, equals(['--foo', '-abc', '--', 'bar']));
       expect(results.command.arguments, equals(['--foo', '-abc', '--', 'bar']));
