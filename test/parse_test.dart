@@ -502,8 +502,10 @@ void main() {
         expect(results.rest, equals(['--meow']));
       });
 
-      test('leaves "--" if not the first non-option', () {
-        var parser = new ArgParser();
+      test(
+          'with allowTrailingOptions: false, leaves "--" if not the first '
+          'non-option', () {
+        var parser = new ArgParser(allowTrailingOptions: false);
         parser.addFlag('woof');
 
         var results = parser.parse(['--woof', 'stop', '--', 'arg']);

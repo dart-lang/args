@@ -106,16 +106,17 @@ print(results['mode']); // debug
 print(results['verbose']); // true
 ```
 
-By default, the `parse()` method stops as soon as it reaches `--` by itself or
-anything that the parser doesn't recognize as an option, flag, or option value.
-If arguments still remain, they go into [ArgResults.rest][rest].
+By default, the `parse()` method allows additional flags and options to be
+passed after positional parameters unless `--` is used to indicate that all
+further parameters will be positional. The positional arguments go into
+[ArgResults.rest][rest].
 
 ```dart
 print(results.rest); // ['something', 'else']
 ```
 
-To continue to parse options found after non-option arguments, pass
-`allowTrailingOptions: true` when creating the [ArgParser][].
+To stop parsing options as soon as a positional argument is found,
+`allowTrailingOptions: false` when creating the [ArgParser][].
 
 ## Specifying options
 

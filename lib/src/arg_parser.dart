@@ -36,12 +36,13 @@ class ArgParser {
 
   /// Creates a new ArgParser.
   ///
-  /// If [allowTrailingOptions] is set, the parser will continue parsing even
-  /// after it finds an argument that is neither an option nor a command.
-  /// This allows options to be specified after regular arguments. Defaults to
-  /// `false`.
-  factory ArgParser({bool allowTrailingOptions: false}) =>
-      new ArgParser._({}, {}, allowTrailingOptions: allowTrailingOptions);
+  /// If [allowTrailingOptions] is `true` (the default), the parser will parse
+  /// flags and options that appear after positional arguments. If it's `false`,
+  /// the parser stops parsing as soon as it finds an argument that is neither
+  /// an option nor a command.
+  factory ArgParser({bool allowTrailingOptions: true}) =>
+      new ArgParser._(<String, Option>{}, <String, ArgParser>{},
+          allowTrailingOptions: allowTrailingOptions);
 
   /// Creates a new ArgParser that treats *all input* as non-option arguments.
   ///
@@ -52,7 +53,7 @@ class ArgParser {
   factory ArgParser.allowAnything() = AllowAnythingParser;
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
-      {bool allowTrailingOptions: false})
+      {bool allowTrailingOptions: true})
       : this._options = options,
         this.options = new UnmodifiableMapView(options),
         this._commands = commands,

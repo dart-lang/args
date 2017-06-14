@@ -1,4 +1,7 @@
-## 0.13.8
+## 1.0.0
+
+* **Breaking change**: The `allowTrailingOptions` argument to `new
+  ArgumentParser()` defaults to `true` instead of `false`.
 
 * Add `new ArgParser.allowAnything()`. This allows any input, without parsing
   any options.
