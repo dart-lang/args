@@ -10,3 +10,7 @@ dev_dependencies:
   test: ">=0.12.0 <0.13.0"
 environment:
   sdk: ">=1.4.0 <2.0.0"
+
+# Test currently depends on args 0.13.x.
+dependency_overrides:
+  test: ">=0.12.0 <0.13.0"
