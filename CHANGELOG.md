@@ -1,3 +1,8 @@
+## 0.13.8
+
+* Add `new ArgParser.allowAnything()`. This allows any input, without parsing
+  any options.
+
 ## 0.13.7
 
 * Add explicit support for forwarding the value returned by `Command.run()` to
