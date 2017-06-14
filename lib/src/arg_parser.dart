@@ -40,9 +40,9 @@ class ArgParser {
   /// flags and options that appear after positional arguments. If it's `false`,
   /// the parser stops parsing as soon as it finds an argument that is neither
   /// an option nor a command.
-  factory ArgParser({bool allowTrailingOptions: true}) => new ArgParser._(
-      <String, Option>{}, <String, ArgParser>{},
-      allowTrailingOptions: allowTrailingOptions);
+  factory ArgParser({bool allowTrailingOptions: true}) =>
+      new ArgParser._(<String, Option>{}, <String, ArgParser>{},
+          allowTrailingOptions: allowTrailingOptions);
 
   /// Creates a new ArgParser that treats *all input* as non-option arguments.
   ///
