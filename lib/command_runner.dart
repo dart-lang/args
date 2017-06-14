@@ -15,7 +15,7 @@ import 'src/utils.dart';
 
 export 'src/usage_exception.dart';
 
-/// A class for invoking [Commands] based on raw command-line arguments.
+/// A class for invoking [Command]s based on raw command-line arguments.
 ///
 /// The type argument `T` represents the type returned by [Command.run] and
 /// [CommandRunner.run]; it can be ommitted if you're not using the return
@@ -31,7 +31,7 @@ class CommandRunner<T> {
 
   /// A single-line template for how to invoke this executable.
   ///
-  /// Defaults to "$executableName <command> [arguments]". Subclasses can
+  /// Defaults to "$executableName <command> `arguments`". Subclasses can
   /// override this for a more specific template.
   String get invocation => "$executableName <command> [arguments]";
 
@@ -138,7 +138,7 @@ Run "$executableName help <command>" for more information about a command.''';
   /// command in a block. For example, you might handle the `--verbose` flag
   /// here to enable verbose logging before running the command.
   ///
-  /// This returns the return value of [Command.run]. 
+  /// This returns the return value of [Command.run].
   Future<T> runCommand(ArgResults topLevelResults) async {
     var argResults = topLevelResults;
     var commands = _commands;
@@ -217,7 +217,7 @@ abstract class Command<T> {
   String get summary => description.split("\n").first;
 
   /// A single-line template for how to invoke this command (e.g. `"pub get
-  /// [package]"`).
+  /// `package`"`).
   String get invocation {
     var parents = [name];
     for (var command = parent; command != null; command = command.parent) {
@@ -233,7 +233,7 @@ abstract class Command<T> {
 
   /// The command's parent command, if this is a subcommand.
   ///
-  /// This will be `null` until [Command.addSubcommmand] has been called with
+  /// This will be `null` until [addSubcommand] has been called with
   /// this command.
   Command<T> get parent => _parent;
   Command<T> _parent;
@@ -246,6 +246,7 @@ abstract class Command<T> {
     if (parent == null) return _runner;
     return parent.runner;
   }
+
   CommandRunner<T> _runner;
 
   /// The parsed global argument results.
@@ -266,6 +267,9 @@ abstract class Command<T> {
   /// the constructor); they'll end up available via [argResults]. Subcommands
   /// should be registered with [addSubcommand] rather than directly on the
   /// parser.
+  ///
+  /// This can be overridden to change the arguments passed to the `ArgParser`
+  /// constructor.
   ArgParser get argParser => _argParser;
   final _argParser = new ArgParser();
 
@@ -284,8 +288,8 @@ abstract class Command<T> {
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
     var buffer = new StringBuffer()
-    ..writeln('Usage: $invocation')
-    ..writeln(argParser.usage);
+      ..writeln('Usage: $invocation')
+      ..writeln(argParser.usage);
 
     if (_subcommands.isNotEmpty) {
       buffer.writeln();
@@ -373,7 +377,7 @@ abstract class Command<T> {
 
   /// Throws a [UsageException] with [message].
   void usageException(String message) =>
-    throw new UsageException(message, _usageWithoutDescription);
+      throw new UsageException(message, _usageWithoutDescription);
 }
 
 /// Returns a string representation of [commands] fit for use in a usage string.
@@ -384,7 +388,7 @@ String _getCommandUsage(Map<String, Command> commands,
     {bool isSubcommand: false}) {
   // Don't include aliases.
   var names =
-    commands.keys.where((name) => !commands[name].aliases.contains(name));
+      commands.keys.where((name) => !commands[name].aliases.contains(name));
 
   // Filter out hidden ones, unless they are all hidden.
   var visible = names.where((name) => !commands[name].hidden);
@@ -395,7 +399,7 @@ String _getCommandUsage(Map<String, Command> commands,
   var length = names.map((name) => name.length).reduce(math.max);
 
   var buffer =
-    new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
+      new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
   for (var name in names) {
     var lines = commands[name].summary.split("\n");
     buffer.writeln();

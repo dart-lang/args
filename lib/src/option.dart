@@ -6,15 +6,24 @@ import 'dart:collection';
 
 /// Creates a new [Option].
 ///
-/// Since [Option] doesn't have a public constructor, this lets [ArgParser]
+/// Since [Option] doesn't have a public constructor, this lets `ArgParser`
 /// get to it. This function isn't exported to the public API of the package.
-Option newOption(String name, String abbreviation, String help,
-    String valueHelp, List<String> allowed, Map<String, String> allowedHelp,
-    defaultValue, Function callback, OptionType type,
-    {bool negatable, bool splitCommas, bool hide: false}) {
+Option newOption(
+    String name,
+    String abbreviation,
+    String help,
+    String valueHelp,
+    List<String> allowed,
+    Map<String, String> allowedHelp,
+    defaultValue,
+    Function callback,
+    OptionType type,
+    {bool negatable,
+    bool splitCommas,
+    bool hide: false}) {
   return new Option._(name, abbreviation, help, valueHelp, allowed, allowedHelp,
-      defaultValue, callback, type, negatable: negatable,
-      splitCommas: splitCommas, hide: hide);
+      defaultValue, callback, type,
+      negatable: negatable, splitCommas: splitCommas, hide: hide);
 }
 
 /// A command-line option. Includes both flags and options which take a value.
@@ -41,22 +50,28 @@ class Option {
   /// Whether the option allows multiple values.
   bool get isMultiple => type == OptionType.MULTIPLE;
 
-  Option._(this.name, this.abbreviation, this.help, this.valueHelp,
-      List<String> allowed, Map<String, String> allowedHelp, this.defaultValue,
-      this.callback, OptionType type, {this.negatable, bool splitCommas,
+  Option._(
+      this.name,
+      this.abbreviation,
+      this.help,
+      this.valueHelp,
+      List<String> allowed,
+      Map<String, String> allowedHelp,
+      this.defaultValue,
+      this.callback,
+      OptionType type,
+      {this.negatable,
+      bool splitCommas,
       this.hide: false})
-      : this.allowed = allowed == null
-          ? null
-          : new UnmodifiableListView(allowed),
-        this.allowedHelp = allowedHelp == null
-            ? null
-            : new UnmodifiableMapView(allowedHelp),
+      : this.allowed =
+            allowed == null ? null : new UnmodifiableListView(allowed),
+        this.allowedHelp =
+            allowedHelp == null ? null : new UnmodifiableMapView(allowedHelp),
         this.type = type,
         // If the user doesn't specify [splitCommas], it defaults to true for
         // multiple options.
-        this.splitCommas = splitCommas == null
-            ? type == OptionType.MULTIPLE
-            : splitCommas {
+        this.splitCommas =
+            splitCommas == null ? type == OptionType.MULTIPLE : splitCommas {
     if (name.isEmpty) {
       throw new ArgumentError('Name cannot be empty.');
     } else if (name.startsWith('-')) {
@@ -122,7 +137,7 @@ class OptionType {
   ///
   ///     --output text --output xml
   ///
-  /// In the parsed [ArgResults], a multiple-valued option will always return
+  /// In the parsed `ArgResults`, a multiple-valued option will always return
   /// a list, even if one or no values were passed.
   static const MULTIPLE = const OptionType._("OptionType.MULTIPLE");
 

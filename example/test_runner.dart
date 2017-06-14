@@ -20,49 +20,53 @@ main() {
       abbr: 'c',
       defaultsTo: 'none',
       help: 'Specify any compilation step (if needed).',
-      allowed: ['none', 'dart2js', 'dartc'],
+      allowed: [
+        'none',
+        'dart2js',
+        'dartc'
+      ],
       allowedHelp: {
-    'none': 'Do not compile the Dart code (run native Dart code on the'
-        ' VM).\n(only valid with the following runtimes: vm, drt)',
-    'dart2js': 'Compile dart code to JavaScript by running dart2js.\n'
-        '(only valid with the following runtimes: d8, drt, chrome\n'
-        'safari, ie, firefox, opera, none (compile only))',
-    'dartc': 'Perform static analysis on Dart code by running dartc.\n'
-        '(only valid with the following runtimes: none)',
-  });
+        'none': 'Do not compile the Dart code (run native Dart code on the'
+            ' VM).\n(only valid with the following runtimes: vm, drt)',
+        'dart2js': 'Compile dart code to JavaScript by running dart2js.\n'
+            '(only valid with the following runtimes: d8, drt, chrome\n'
+            'safari, ie, firefox, opera, none (compile only))',
+        'dartc': 'Perform static analysis on Dart code by running dartc.\n'
+            '(only valid with the following runtimes: none)',
+      });
 
   parser.addOption('runtime',
       abbr: 'r',
       defaultsTo: 'vm',
       help: 'Where the tests should be run.',
       allowed: [
-    'vm',
-    'd8',
-    'drt',
-    'dartium',
-    'ff',
-    'firefox',
-    'chrome',
-    'safari',
-    'ie',
-    'opera',
-    'none'
-  ],
+        'vm',
+        'd8',
+        'drt',
+        'dartium',
+        'ff',
+        'firefox',
+        'chrome',
+        'safari',
+        'ie',
+        'opera',
+        'none'
+      ],
       allowedHelp: {
-    'vm': 'Run Dart code on the standalone dart vm.',
-    'd8': 'Run JavaScript from the command line using v8.',
-    // TODO(antonm): rename flag.
-    'drt': 'Run Dart or JavaScript in the headless version of Chrome,\n'
-        'content shell.',
-    'dartium': 'Run Dart or JavaScript in Dartium.',
-    'ff': 'Run JavaScript in Firefox',
-    'chrome': 'Run JavaScript in Chrome',
-    'safari': 'Run JavaScript in Safari',
-    'ie': 'Run JavaScript in Internet Explorer',
-    'opera': 'Run JavaScript in Opera',
-    'none': 'No runtime, compile only (for example, used for dartc static\n'
-        'analysis tests).',
-  });
+        'vm': 'Run Dart code on the standalone dart vm.',
+        'd8': 'Run JavaScript from the command line using v8.',
+        // TODO(antonm): rename flag.
+        'drt': 'Run Dart or JavaScript in the headless version of Chrome,\n'
+            'content shell.',
+        'dartium': 'Run Dart or JavaScript in Dartium.',
+        'ff': 'Run JavaScript in Firefox',
+        'chrome': 'Run JavaScript in Chrome',
+        'safari': 'Run JavaScript in Safari',
+        'ie': 'Run JavaScript in Internet Explorer',
+        'opera': 'Run JavaScript in Opera',
+        'none': 'No runtime, compile only (for example, used for dartc static\n'
+            'analysis tests).',
+      });
 
   parser.addOption('arch',
       abbr: 'a',
@@ -115,14 +119,14 @@ main() {
       defaultsTo: 'compact',
       help: 'Progress indication mode',
       allowed: [
-    'compact',
-    'color',
-    'line',
-    'verbose',
-    'silent',
-    'status',
-    'buildbot'
-  ]);
+        'compact',
+        'color',
+        'line',
+        'verbose',
+        'silent',
+        'status',
+        'buildbot'
+      ]);
 
   parser.addFlag('report',
       defaultsTo: false,
@@ -146,7 +150,8 @@ main() {
       defaultsTo: false,
       help: 'Keep the generated files in the temporary directory');
 
-  parser.addOption('special-command', help: """
+  parser.addOption('special-command',
+      help: """
 Special command support. Wraps the command line in
 a special command. The special command should contain
 an '@' character which will be replaced by the normal

@@ -8,10 +8,14 @@ import 'arg_parser.dart';
 
 /// Creates a new [ArgResults].
 ///
-/// Since [ArgResults] doesn't have a public constructor, this lets [Parser]
+/// Since [ArgResults] doesn't have a public constructor, this lets [ArgParser]
 /// get to it. This function isn't exported to the public API of the package.
-ArgResults newArgResults(ArgParser parser, Map<String, dynamic> parsed,
-    String name, ArgResults command, List<String> rest,
+ArgResults newArgResults(
+    ArgParser parser,
+    Map<String, dynamic> parsed,
+    String name,
+    ArgResults command,
+    List<String> rest,
     List<String> arguments) {
   return new ArgResults._(parser, parsed, name, command, rest, arguments);
 }
