@@ -5,12 +5,11 @@ dart:
   - dev
 dart_task:
   - test: -p vm
-  - dartfmt
   - dartanalyzer
 
 matrix:
-  allow_failures:
-  - dart: dev
+  include:
+  - dart: stable
     dart_task: dartfmt
 
 # Only building master means that we don't run two builds for each pull request.
