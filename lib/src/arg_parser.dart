@@ -88,9 +88,18 @@ class ArgParser {
       bool negatable: true,
       void callback(bool value),
       bool hide: false}) {
-    _addOption(name, abbr, help, null, null, null, defaultsTo, callback,
+    _addOption(
+        name,
+        abbr,
+        help,
+        null,
+        null,
+        null,
+        defaultsTo,
+        callback == null ? null : (value) => callback(value as bool),
         OptionType.FLAG,
-        negatable: negatable, hide: hide);
+        negatable: negatable,
+        hide: hide);
   }
 
   /// Defines a value-taking option. Throws an [ArgumentError] if:
