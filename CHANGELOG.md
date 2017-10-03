@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Fix a fuzzy arrow type warning.
+
 ## 1.0.0
 
 * **Breaking change**: The `allowTrailingOptions` argument to `new
