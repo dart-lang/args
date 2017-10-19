@@ -6,8 +6,6 @@ import 'package:test/test.dart';
 
 import 'package:args/args.dart';
 
-import 'utils.dart';
-
 void main() {
   group('new ArgParser.allowAnything()', () {
     ArgParser parser;

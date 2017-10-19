@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Fix analyzer warning
+
 ## 1.0.1
 
 * Fix a fuzzy arrow type warning.
