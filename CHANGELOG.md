@@ -1,3 +1,11 @@
+## 1.1.0
+
+* `ArgParser.parse()` now takes an `Iterable<String>` rather than a
+  `List<String>`.
+
+* `ArgParser.addOption()`'s `allowed` option now takes an `Iterable<String>`
+  rather than a `List<String>`.
+
 ## 1.0.2
 
 * Fix analyzer warning

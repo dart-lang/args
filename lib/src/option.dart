@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:collection';
-
 /// Creates a new [Option].
 ///
 /// Since [Option] doesn't have a public constructor, this lets `ArgParser`
@@ -13,7 +11,7 @@ Option newOption(
     String abbreviation,
     String help,
     String valueHelp,
-    List<String> allowed,
+    Iterable<String> allowed,
     Map<String, String> allowedHelp,
     defaultValue,
     Function callback,
@@ -55,7 +53,7 @@ class Option {
       this.abbreviation,
       this.help,
       this.valueHelp,
-      List<String> allowed,
+      Iterable<String> allowed,
       Map<String, String> allowedHelp,
       this.defaultValue,
       this.callback,
@@ -64,9 +62,9 @@ class Option {
       bool splitCommas,
       this.hide: false})
       : this.allowed =
-            allowed == null ? null : new UnmodifiableListView(allowed),
+            allowed == null ? null : new List.unmodifiable(allowed),
         this.allowedHelp =
-            allowedHelp == null ? null : new UnmodifiableMapView(allowedHelp),
+            allowedHelp == null ? null : new Map.unmodifiable(allowedHelp),
         this.type = type,
         // If the user doesn't specify [splitCommas], it defaults to true for
         // multiple options.

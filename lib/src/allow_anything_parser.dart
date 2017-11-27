@@ -34,7 +34,7 @@ class AllowAnythingParser implements ArgParser {
       {String abbr,
       String help,
       String valueHelp,
-      List<String> allowed,
+      Iterable<String> allowed,
       Map<String, String> allowedHelp,
       String defaultsTo,
       void callback(value),
@@ -50,7 +50,7 @@ class AllowAnythingParser implements ArgParser {
         "ArgParser.allowAnything().addSeparator() isn't supported.");
   }
 
-  ArgResults parse(List<String> args) =>
+  ArgResults parse(Iterable<String> args) =>
       new Parser(null, this, args.toList()).parse();
 
   String getUsage() => usage;
