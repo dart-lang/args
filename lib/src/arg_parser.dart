@@ -111,7 +111,7 @@ class ArgParser {
       {String abbr,
       String help,
       String valueHelp,
-      List<String> allowed,
+      Iterable<String> allowed,
       Map<String, String> allowedHelp,
       String defaultsTo,
       void callback(value),
@@ -133,7 +133,7 @@ class ArgParser {
       String abbr,
       String help,
       String valueHelp,
-      List<String> allowed,
+      Iterable<String> allowed,
       Map<String, String> allowedHelp,
       defaultsTo,
       void callback(value),
@@ -172,7 +172,7 @@ class ArgParser {
 
   /// Parses [args], a list of command-line arguments, matches them against the
   /// flags and options defined by this parser, and returns the result.
-  ArgResults parse(List<String> args) =>
+  ArgResults parse(Iterable<String> args) =>
       new Parser(null, this, args.toList()).parse();
 
   /// Generates a string displaying usage information for the defined options.
