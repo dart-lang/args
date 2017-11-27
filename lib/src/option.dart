@@ -61,8 +61,7 @@ class Option {
       {this.negatable,
       bool splitCommas,
       this.hide: false})
-      : this.allowed =
-            allowed == null ? null : new List.unmodifiable(allowed),
+      : this.allowed = allowed == null ? null : new List.unmodifiable(allowed),
         this.allowedHelp =
             allowedHelp == null ? null : new Map.unmodifiable(allowedHelp),
         this.type = type,
