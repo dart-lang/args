@@ -1,3 +1,10 @@
+## 1.2.0
+
+* Type the `callback` parameter to `ArgParser.addOption()` as `Function` rather
+  than `void Function(value)`. This allows strong-mode users to write `callback:
+  (String value) { ... }` rather than having to manually cast `value` to a
+  `String` (or a `List<String>` with `allowMultiple: true`).
+
 ## 1.1.0
 
 * `ArgParser.parse()` now takes an `Iterable<String>` rather than a

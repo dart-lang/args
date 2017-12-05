@@ -114,7 +114,7 @@ class ArgParser {
       Iterable<String> allowed,
       Map<String, String> allowedHelp,
       String defaultsTo,
-      void callback(value),
+      Function callback,
       bool allowMultiple: false,
       bool splitCommas,
       bool hide: false}) {
@@ -136,7 +136,7 @@ class ArgParser {
       Iterable<String> allowed,
       Map<String, String> allowedHelp,
       defaultsTo,
-      void callback(value),
+      Function callback,
       OptionType type,
       {bool negatable: false,
       bool splitCommas,
