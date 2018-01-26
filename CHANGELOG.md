@@ -1,3 +1,7 @@
+## 1.3.0
+
+* Type `Command.run()`'s return value as `FutureOr<T>`.
+
 ## 1.2.0
 
 * Type the `callback` parameter to `ArgParser.addOption()` as `Function` rather

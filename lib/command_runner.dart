@@ -352,10 +352,9 @@ abstract class Command<T> {
 
   /// Runs this command.
   ///
-  /// This must return a `T`, a `Future<T>`, or `null`. The value is returned by
-  /// [CommandRunner.runCommand]. Subclasses must explicitly declare a return
-  /// type for `run()`, and may not use `void` if `T` is defined.
-  run() {
+  /// The return value is wrapped in a `Future` if necessary and returned by
+  /// [CommandRunner.runCommand].
+  FutureOr<T> run() {
     throw new UnimplementedError("Leaf command $this must implement run().");
   }
 
