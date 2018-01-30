@@ -1,3 +1,7 @@
+## 1.3.1
+
+* Narrow the SDK constraint to only allow SDK versions that support `FutureOr`.
+
 ## 1.3.0
 
 * Type `Command.run()`'s return value as `FutureOr<T>`.
