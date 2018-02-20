@@ -24,19 +24,53 @@ Option newOption(
       negatable: negatable, splitCommas: splitCommas, hide: hide);
 }
 
-/// A command-line option. Includes both flags and options which take a value.
+/// A command-line option.
+///
+/// This represents both boolean flags and options which take a value.
 class Option {
+  /// The name of the option that the user passes as an argument.
   final String name;
+
+  /// A single-character string that can be used as a shorthand for this option.
+  ///
+  /// For example, `abbr: "a"` will allow the user to pass `-a value` or
+  /// `-avalue`.
   final String abbreviation;
-  final List<String> allowed;
-  final defaultValue;
-  final Function callback;
+
+  /// A description of this option.
   final String help;
+
+  /// A name for the value this option takes.
   final String valueHelp;
+
+  /// A list of valid values for this option.
+  final List<String> allowed;
+
+  /// A map from values in [allowed] to documentation for those values.
   final Map<String, String> allowedHelp;
-  final OptionType type;
+
+  /// The value this option will have if the user doesn't explicitly pass it in
+  final defaultValue;
+
+  /// Whether this flag's value can be set to `false`.
+  ///
+  /// For example, if [name] is `flag`, the user can pass `--no-flag` to set its
+  /// value to `false`.
+  ///
+  /// This is `null` unless [type] is [OptionType.FLAG].
   final bool negatable;
+
+  /// The callback to invoke with the option's value when the option is parsed.
+  final Function callback;
+
+  /// Whether this is a flag, a single value option, or a multi-value option.
+  final OptionType type;
+
+  /// Whether multiple values may be passed by writing `--option a,b` in
+  /// addition to `--option a --option b`.
   final bool splitCommas;
+
+  /// Whether this option should be hidden from usage documentation.
   final bool hide;
 
   /// Whether the option is boolean-valued flag.
