@@ -88,11 +88,11 @@ class Usage {
         newline();
       } else if (option.allowed != null) {
         write(2, buildAllowedList(option));
-      } else if (option.defaultValue != null) {
-        if (option.isFlag && option.defaultValue == true) {
+      } else if (option.defaultsTo != null) {
+        if (option.isFlag && option.defaultsTo == true) {
           write(2, '(defaults to on)');
         } else if (!option.isFlag) {
-          write(2, '(defaults to "${option.defaultValue}")');
+          write(2, '(defaults to "${option.defaultsTo}")');
         }
       }
 
@@ -106,13 +106,8 @@ class Usage {
     return buffer.toString();
   }
 
-  String getAbbreviation(Option option) {
-    if (option.abbreviation != null) {
-      return '-${option.abbreviation}, ';
-    } else {
-      return '';
-    }
-  }
+  String getAbbreviation(Option option) =>
+      option.abbr == null ? '' : '-${option.abbr}, ';
 
   String getLongOption(Option option) {
     var result;
@@ -228,7 +223,7 @@ class Usage {
     for (var allowed in option.allowed) {
       if (!first) allowedBuffer.write(', ');
       allowedBuffer.write(allowed);
-      if (allowed == option.defaultValue) {
+      if (allowed == option.defaultsTo) {
         allowedBuffer.write(' (default)');
       }
       first = false;

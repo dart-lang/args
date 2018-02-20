@@ -4,6 +4,10 @@
   in favor of `OptionType.flag`, `OptionType.single`, and `OptionType.multiple`
   which follow the style guide.
 
+* Deprecated `Option.abbreviation` and `Option.defaultValue` in favor of
+  `Option.abbr` and `Option.defaultsTo`. This makes all of `Option`'s fields
+  match the corresponding parameters to `ArgParser.addOption()`.
+
 ## 1.3.0
 
 * Type `Command.run()`'s return value as `FutureOr<T>`.

@@ -8,19 +8,19 @@
 /// get to it. This function isn't exported to the public API of the package.
 Option newOption(
     String name,
-    String abbreviation,
+    String abbr,
     String help,
     String valueHelp,
     Iterable<String> allowed,
     Map<String, String> allowedHelp,
-    defaultValue,
+    defaultsTo,
     Function callback,
     OptionType type,
     {bool negatable,
     bool splitCommas,
     bool hide: false}) {
-  return new Option._(name, abbreviation, help, valueHelp, allowed, allowedHelp,
-      defaultValue, callback, type,
+  return new Option._(name, abbr, help, valueHelp, allowed, allowedHelp,
+      defaultsTo, callback, type,
       negatable: negatable, splitCommas: splitCommas, hide: hide);
 }
 
@@ -35,7 +35,10 @@ class Option {
   ///
   /// For example, `abbr: "a"` will allow the user to pass `-a value` or
   /// `-avalue`.
-  final String abbreviation;
+  final String abbr;
+
+  @Deprecated("Use abbr instead.")
+  String get abbreviation => abbr;
 
   /// A description of this option.
   final String help;
@@ -50,7 +53,10 @@ class Option {
   final Map<String, String> allowedHelp;
 
   /// The value this option will have if the user doesn't explicitly pass it in
-  final defaultValue;
+  final defaultsTo;
+
+  @Deprecated("Use defaultsTo instead.")
+  get defaultValue => defaultsTo;
 
   /// Whether this flag's value can be set to `false`.
   ///
@@ -84,12 +90,12 @@ class Option {
 
   Option._(
       this.name,
-      this.abbreviation,
+      this.abbr,
       this.help,
       this.valueHelp,
       Iterable<String> allowed,
       Map<String, String> allowedHelp,
-      this.defaultValue,
+      this.defaultsTo,
       this.callback,
       OptionType type,
       {this.negatable,
@@ -114,14 +120,14 @@ class Option {
       throw new ArgumentError('Name "$name" contains invalid characters.');
     }
 
-    if (abbreviation != null) {
-      if (abbreviation.length != 1) {
+    if (abbr != null) {
+      if (abbr.length != 1) {
         throw new ArgumentError('Abbreviation must be null or have length 1.');
-      } else if (abbreviation == '-') {
+      } else if (abbr == '-') {
         throw new ArgumentError('Abbreviation cannot be "-".');
       }
 
-      if (_invalidChars.hasMatch(abbreviation)) {
+      if (_invalidChars.hasMatch(abbr)) {
         throw new ArgumentError('Abbreviation is an invalid character.');
       }
     }
@@ -130,14 +136,14 @@ class Option {
   /// Returns [value] if non-`null`, otherwise returns the default value for
   /// this option.
   ///
-  /// For single-valued options, it will be [defaultValue] if set or `null`
+  /// For single-valued options, it will be [defaultsTo] if set or `null`
   /// otherwise. For multiple-valued options, it will be an empty list or a
-  /// list containing [defaultValue] if set.
+  /// list containing [defaultsTo] if set.
   dynamic getOrDefault(value) {
     if (value != null) return value;
 
-    if (!isMultiple) return defaultValue;
-    if (defaultValue != null) return [defaultValue];
+    if (!isMultiple) return defaultsTo;
+    if (defaultsTo != null) return [defaultsTo];
     return [];
   }
 

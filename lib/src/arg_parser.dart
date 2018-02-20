@@ -257,13 +257,13 @@ class ArgParser {
     if (!options.containsKey(option)) {
       throw new ArgumentError('No option named $option');
     }
-    return options[option].defaultValue;
+    return options[option].defaultsTo;
   }
 
   /// Finds the option whose abbreviation is [abbr], or `null` if no option has
   /// that abbreviation.
   Option findByAbbreviation(String abbr) {
-    return options.values.firstWhere((option) => option.abbreviation == abbr,
-        orElse: () => null);
+    return options.values
+        .firstWhere((option) => option.abbr == abbr, orElse: () => null);
   }
 }
