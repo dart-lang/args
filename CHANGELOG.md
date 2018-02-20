@@ -1,3 +1,9 @@
+## 1.4.0
+
+* Deprecated `OptionType.FLAG`, `OptionType.SINGLE`, and `OptionType.MULTIPLE`
+  in favor of `OptionType.flag`, `OptionType.single`, and `OptionType.multiple`
+  which follow the style guide.
+
 ## 1.3.0
 
 * Type `Command.run()`'s return value as `FutureOr<T>`.

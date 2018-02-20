@@ -121,7 +121,7 @@ class ArgParser {
         null,
         defaultsTo,
         callback == null ? null : (value) => callback(value as bool),
-        OptionType.FLAG,
+        OptionType.flag,
         negatable: negatable,
         hide: hide);
   }
@@ -161,7 +161,7 @@ class ArgParser {
   /// value will be `[]` rather than `null`, or `[defaultsTo]` if [defaultsTo]
   /// is passed.
   ///
-  /// If [splitCommas] is `true`, multiple options may be passed by writing
+  /// If [splitCommas] is `true`, multiple values may be passed by writing
   /// `--option a,b` in addition to `--option a --option b`. It defaults to
   /// `true` if [allowMultiple] is `true` and `false` otherwise.
   ///
@@ -189,7 +189,7 @@ class ArgParser {
     }
 
     _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
-        callback, allowMultiple ? OptionType.MULTIPLE : OptionType.SINGLE,
+        callback, allowMultiple ? OptionType.multiple : OptionType.single,
         splitCommas: splitCommas, hide: hide);
   }
 

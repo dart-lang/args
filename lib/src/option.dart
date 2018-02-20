@@ -57,7 +57,7 @@ class Option {
   /// For example, if [name] is `flag`, the user can pass `--no-flag` to set its
   /// value to `false`.
   ///
-  /// This is `null` unless [type] is [OptionType.FLAG].
+  /// This is `null` unless [type] is [OptionType.flag].
   final bool negatable;
 
   /// The callback to invoke with the option's value when the option is parsed.
@@ -74,13 +74,13 @@ class Option {
   final bool hide;
 
   /// Whether the option is boolean-valued flag.
-  bool get isFlag => type == OptionType.FLAG;
+  bool get isFlag => type == OptionType.flag;
 
   /// Whether the option takes a single value.
-  bool get isSingle => type == OptionType.SINGLE;
+  bool get isSingle => type == OptionType.single;
 
   /// Whether the option allows multiple values.
-  bool get isMultiple => type == OptionType.MULTIPLE;
+  bool get isMultiple => type == OptionType.multiple;
 
   Option._(
       this.name,
@@ -102,7 +102,7 @@ class Option {
         // If the user doesn't specify [splitCommas], it defaults to true for
         // multiple options.
         this.splitCommas =
-            splitCommas == null ? type == OptionType.MULTIPLE : splitCommas {
+            splitCommas == null ? type == OptionType.multiple : splitCommas {
     if (name.isEmpty) {
       throw new ArgumentError('Name cannot be empty.');
     } else if (name.startsWith('-')) {
@@ -149,7 +149,10 @@ class OptionType {
   /// An option that can only be `true` or `false`.
   ///
   /// The presence of the option name itself in the argument list means `true`.
-  static const FLAG = const OptionType._("OptionType.FLAG");
+  static const flag = const OptionType._("OptionType.flag");
+
+  @Deprecated("Use OptionType.flag instead.")
+  static const FLAG = flag;
 
   /// An option that takes a single value.
   ///
@@ -160,7 +163,10 @@ class OptionType {
   ///     --mode=debug
   ///
   /// If the option is passed more than once, the last one wins.
-  static const SINGLE = const OptionType._("OptionType.SINGLE");
+  static const single = const OptionType._("OptionType.single");
+
+  @Deprecated("Use OptionType.single instead.")
+  static const SINGLE = single;
 
   /// An option that allows multiple values.
   ///
@@ -170,7 +176,10 @@ class OptionType {
   ///
   /// In the parsed `ArgResults`, a multiple-valued option will always return
   /// a list, even if one or no values were passed.
-  static const MULTIPLE = const OptionType._("OptionType.MULTIPLE");
+  static const multiple = const OptionType._("OptionType.multiple");
+
+  @Deprecated("Use OptionType.multiple instead.")
+  static const MULTIPLE = multiple;
 
   final String name;
 
