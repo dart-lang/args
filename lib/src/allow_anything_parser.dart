@@ -45,6 +45,20 @@ class AllowAnythingParser implements ArgParser {
         "ArgParser.allowAnything().addOption() isn't supported.");
   }
 
+  void addMultiOption(String name,
+      {String abbr,
+      String help,
+      String valueHelp,
+      Iterable<String> allowed,
+      Map<String, String> allowedHelp,
+      Iterable<String> defaultsTo,
+      void callback(List<String> values),
+      bool splitCommas: true,
+      bool hide: false}) {
+    throw new UnsupportedError(
+        "ArgParser.allowAnything().addMultiOption() isn't supported.");
+  }
+
   void addSeparator(String text) {
     throw new UnsupportedError(
         "ArgParser.allowAnything().addSeparator() isn't supported.");

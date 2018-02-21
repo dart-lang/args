@@ -141,10 +141,8 @@ class Option {
   /// list containing [defaultsTo] if set.
   dynamic getOrDefault(value) {
     if (value != null) return value;
-
-    if (!isMultiple) return defaultsTo;
-    if (defaultsTo != null) return [defaultsTo];
-    return [];
+    if (isMultiple) return defaultsTo ?? <String>[];
+    return defaultsTo;
   }
 
   static final _invalidChars = new RegExp(r'''[ \t\r\n"'\\/]''');
