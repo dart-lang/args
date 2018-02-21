@@ -11,9 +11,7 @@ void main() {
       var parser = new ArgParser();
       parser.addFlag('mode', help: 'The mode');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --[no-]mode    The mode
           ''');
     });
@@ -22,9 +20,7 @@ void main() {
       var parser = new ArgParser();
       parser.addFlag('mode', negatable: false, help: 'The mode');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --mode    The mode
           ''');
     });
@@ -33,9 +29,7 @@ void main() {
       var parser = new ArgParser();
       parser.addFlag('mode', help: 'The mode');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --[no-]mode    The mode
           ''');
     });
@@ -45,9 +39,7 @@ void main() {
       parser.addFlag('mode', abbr: 'm', help: 'The mode');
       parser.addOption('long', help: 'Lacks an abbreviation');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           -m, --[no-]mode    The mode
               --long         Lacks an abbreviation
           ''');
@@ -58,9 +50,7 @@ void main() {
       parser.addFlag('mode', abbr: 'm', help: 'Lined up with below');
       parser.addOption('a-really-long-name', help: 'Its help text');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           -m, --[no-]mode             Lined up with below
               --a-really-long-name    Its help text
           ''');
@@ -70,9 +60,7 @@ void main() {
       var parser = new ArgParser();
       parser.addFlag('mode', help: '\n\n\n\nAfter newlines');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --[no-]mode    After newlines
           ''');
     });
@@ -81,9 +69,7 @@ void main() {
       var parser = new ArgParser();
       parser.addFlag('mode', help: 'Before newlines\n\n\n\n');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --[no-]mode    Before newlines
           ''');
     });
@@ -94,9 +80,7 @@ void main() {
       parser.addFlag('monkey', help: 'Second');
       parser.addFlag('wombat', help: 'Third');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --[no-]zebra     First
           --[no-]monkey    Second
           --[no-]wombat    Third
@@ -108,9 +92,7 @@ void main() {
       parser.addFlag('affirm', help: 'Should be on', defaultsTo: true);
       parser.addFlag('negate', help: 'Should be off', defaultsTo: false);
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --[no-]affirm    Should be on
                            (defaults to on)
 
@@ -122,9 +104,7 @@ void main() {
       var parser = new ArgParser();
       parser.addOption('any', help: 'Can be anything', defaultsTo: 'whatevs');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --any    Can be anything
                    (defaults to "whatevs")
           ''');
@@ -135,9 +115,7 @@ void main() {
       parser.addOption('out',
           abbr: 'o', help: 'Where to write file', valueHelp: 'path');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           -o, --out=<path>    Where to write file
           ''');
     });
@@ -148,9 +126,7 @@ void main() {
           help: 'Like in cards',
           allowed: ['spades', 'clubs', 'hearts', 'diamonds']);
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --suit    Like in cards
                     [spades, clubs, hearts, diamonds]
           ''');
@@ -163,9 +139,7 @@ void main() {
           defaultsTo: 'clubs',
           allowed: ['spades', 'clubs', 'hearts', 'diamonds']);
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --suit    Like in cards
                     [spades, clubs (default), hearts, diamonds]
           ''');
@@ -189,9 +163,7 @@ void main() {
             'hearts': 'The shape of my heart'
           });
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --suit              Like in cards
 
                 [clubs]       Weapons of war
@@ -207,9 +179,7 @@ void main() {
       parser.addOption('second', hide: true);
       parser.addOption('third', help: 'The third option');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --first    The first option
           --third    The third option
           ''');
@@ -221,9 +191,7 @@ void main() {
       parser.addFlag('second', hide: true);
       parser.addFlag('third', help: 'The third flag');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --[no-]first    The first flag
           --[no-]third    The third flag
           ''');
@@ -235,9 +203,7 @@ void main() {
       parser.addFlag('second-very-long-option', hide: true);
       parser.addFlag('third', help: 'The third flag');
 
-      validateUsage(
-          parser,
-          '''
+      validateUsage(parser, '''
           --[no-]first    The first flag
           --[no-]third    The third flag
           ''');
@@ -252,9 +218,7 @@ void main() {
         parser.addSeparator('Marsupial:');
         parser.addFlag('wombat', help: 'Third');
 
-        validateUsage(
-            parser,
-            '''
+        validateUsage(parser, '''
             --[no-]zebra     First
 
             Primate:
@@ -271,9 +235,7 @@ void main() {
         parser.addSeparator('Primate:');
         parser.addFlag('monkey', help: 'Second');
 
-        validateUsage(
-            parser,
-            '''
+        validateUsage(parser, '''
             --[no-]zebra     Multi
                              line
 
@@ -287,9 +249,7 @@ void main() {
         parser.addSeparator('Equine:');
         parser.addFlag('zebra', help: 'First');
 
-        validateUsage(
-            parser,
-            '''
+        validateUsage(parser, '''
             Equine:
             --[no-]zebra    First
             ''');
@@ -300,9 +260,7 @@ void main() {
         parser.addFlag('zebra', help: 'First');
         parser.addSeparator('Primate:');
 
-        validateUsage(
-            parser,
-            '''
+        validateUsage(parser, '''
             --[no-]zebra    First
 
             Primate:
@@ -314,9 +272,7 @@ void main() {
         parser.addSeparator('First');
         parser.addSeparator('Second');
 
-        validateUsage(
-            parser,
-            '''
+        validateUsage(parser, '''
             First
 
             Second

@@ -9,7 +9,7 @@ dart_task:
 
 matrix:
   include:
-  - dart: stable
+  - dart: dev
     dart_task: dartfmt
 
 # Only building master means that we don't run two builds for each pull request.
