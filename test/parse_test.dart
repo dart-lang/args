@@ -152,104 +152,186 @@ void main() {
         expect(a, isNull);
       });
 
-      test(
-          'for multiple present, allowMultiple, options are invoked with '
-          'value as a list', () {
-        var a;
-        var parser = new ArgParser();
-        parser.addOption('a',
-            allowMultiple: true, callback: (value) => a = value);
+      group("with allowMultiple", () {
+        test('for multiple present, options are invoked with value as a list',
+            () {
+          var a;
+          var parser = new ArgParser();
+          parser.addOption('a',
+              allowMultiple: true, callback: (value) => a = value);
 
-        parser.parse(['--a=v', '--a=x']);
-        expect(a, equals(['v', 'x']));
+          parser.parse(['--a=v', '--a=x']);
+          expect(a, equals(['v', 'x']));
 
-        // This reified type is important in strong mode so that people can
-        // safely write "as List<String>".
-        expect(a, new isInstanceOf<List<String>>());
+          // This reified type is important in strong mode so that people can
+          // safely write "as List<String>".
+          expect(a, new isInstanceOf<List<String>>());
+        });
+
+        test(
+            'for single present, options are invoked with value as a single '
+            'element list', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addOption('a',
+              allowMultiple: true, callback: (value) => a = value);
+
+          parser.parse(['--a=v']);
+          expect(a, equals(['v']));
+        });
+
+        test('for absent, options are invoked with default value as a list',
+            () {
+          var a;
+          var parser = new ArgParser();
+          parser.addOption('a',
+              allowMultiple: true,
+              defaultsTo: 'v',
+              callback: (value) => a = value);
+
+          parser.parse([]);
+          expect(a, equals(['v']));
+        });
+
+        test('for absent, options are invoked with value as an empty list', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addOption('a',
+              allowMultiple: true, callback: (value) => a = value);
+
+          parser.parse([]);
+          expect(a, isEmpty);
+        });
+
+        test('parses comma-separated strings', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addOption('a',
+              allowMultiple: true, callback: (value) => a = value);
+
+          parser.parse(['--a=v,w', '--a=x']);
+          expect(a, equals(['v', 'w', 'x']));
+        });
+
+        test("doesn't parse comma-separated strings with splitCommas: false",
+            () {
+          var a;
+          var parser = new ArgParser();
+          parser.addOption('a',
+              allowMultiple: true,
+              splitCommas: false,
+              callback: (value) => a = value);
+
+          parser.parse(['--a=v,w', '--a=x']);
+          expect(a, equals(['v,w', 'x']));
+        });
+
+        test('parses empty strings', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addOption('a',
+              allowMultiple: true, callback: (value) => a = value);
+
+          parser.parse(['--a=,v', '--a=w,', '--a=,', '--a=x,,y', '--a', '']);
+          expect(a, equals(['', 'v', 'w', '', '', '', 'x', '', 'y', '']));
+        });
+
+        test('with allowed parses comma-separated strings', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addOption('a',
+              allowMultiple: true,
+              allowed: ['v', 'w', 'x'],
+              callback: (value) => a = value);
+
+          parser.parse(['--a=v,w', '--a=x']);
+          expect(a, equals(['v', 'w', 'x']));
+        });
       });
 
-      test(
-          'for single present, allowMultiple, options are invoked with '
-          ' value as a single element list', () {
-        var a;
-        var parser = new ArgParser();
-        parser.addOption('a',
-            allowMultiple: true, callback: (value) => a = value);
+      group("with addMultiOption", () {
+        test('for multiple present, options are invoked with value as a list',
+            () {
+          var a;
+          var parser = new ArgParser();
+          parser.addMultiOption('a', callback: (value) => a = value);
 
-        parser.parse(['--a=v']);
-        expect(a, equals(['v']));
-      });
+          parser.parse(['--a=v', '--a=x']);
+          expect(a, equals(['v', 'x']));
 
-      test(
-          'for absent, allowMultiple, options are invoked with default '
-          'value as a list.', () {
-        var a;
-        var parser = new ArgParser();
-        parser.addOption('a',
-            allowMultiple: true,
-            defaultsTo: 'v',
-            callback: (value) => a = value);
+          // This reified type is important in strong mode so that people can
+          // safely write "as List<String>".
+          expect(a, new isInstanceOf<List<String>>());
+        });
 
-        parser.parse([]);
-        expect(a, equals(['v']));
-      });
+        test(
+            'for single present, options are invoked with value as a single '
+            'element list', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addMultiOption('a', callback: (value) => a = value);
 
-      test(
-          'for absent, allowMultiple, options are invoked with value '
-          'as an empty list.', () {
-        var a;
-        var parser = new ArgParser();
-        parser.addOption('a',
-            allowMultiple: true, callback: (value) => a = value);
+          parser.parse(['--a=v']);
+          expect(a, equals(['v']));
+        });
 
-        parser.parse([]);
-        expect(a, isEmpty);
-      });
+        test('for absent, options are invoked with default value', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addMultiOption('a',
+              defaultsTo: ['v', 'w'], callback: (value) => a = value);
 
-      test('allowMultiple parses comma-separated strings', () {
-        var a;
-        var parser = new ArgParser();
-        parser.addOption('a',
-            allowMultiple: true, callback: (value) => a = value);
+          parser.parse([]);
+          expect(a, equals(['v', 'w']));
+        });
 
-        parser.parse(['--a=v,w', '--a=x']);
-        expect(a, equals(['v', 'w', 'x']));
-      });
+        test('for absent, options are invoked with value as an empty list', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addMultiOption('a', callback: (value) => a = value);
 
-      test(
-          "allowMultiple doesn't parses comma-separated strings with "
-          "splitCommas: false", () {
-        var a;
-        var parser = new ArgParser();
-        parser.addOption('a',
-            allowMultiple: true,
-            splitCommas: false,
-            callback: (value) => a = value);
+          parser.parse([]);
+          expect(a, isEmpty);
+        });
 
-        parser.parse(['--a=v,w', '--a=x']);
-        expect(a, equals(['v,w', 'x']));
-      });
+        test('parses comma-separated strings', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addMultiOption('a', callback: (value) => a = value);
 
-      test('allowMultiple parses empty strings', () {
-        var a;
-        var parser = new ArgParser();
-        parser.addOption('a',
-            allowMultiple: true, callback: (value) => a = value);
+          parser.parse(['--a=v,w', '--a=x']);
+          expect(a, equals(['v', 'w', 'x']));
+        });
 
-        parser.parse(['--a=,v', '--a=w,', '--a=,', '--a=x,,y', '--a', '']);
-        expect(a, equals(['', 'v', 'w', '', '', '', 'x', '', 'y', '']));
-      });
+        test("doesn't parse comma-separated strings with splitCommas: false",
+            () {
+          var a;
+          var parser = new ArgParser();
+          parser.addMultiOption('a',
+              splitCommas: false, callback: (value) => a = value);
 
-      test('allowMultiple with allowed parses comma-separated strings', () {
-        var a;
-        var parser = new ArgParser();
-        parser.addOption('a',
-            allowMultiple: true,
-            allowed: ['v', 'w', 'x'],
-            callback: (value) => a = value);
+          parser.parse(['--a=v,w', '--a=x']);
+          expect(a, equals(['v,w', 'x']));
+        });
 
-        parser.parse(['--a=v,w', '--a=x']);
-        expect(a, equals(['v', 'w', 'x']));
+        test('parses empty strings', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addMultiOption('a', callback: (value) => a = value);
+
+          parser.parse(['--a=,v', '--a=w,', '--a=,', '--a=x,,y', '--a', '']);
+          expect(a, equals(['', 'v', 'w', '', '', '', 'x', '', 'y', '']));
+        });
+
+        test('with allowed parses comma-separated strings', () {
+          var a;
+          var parser = new ArgParser();
+          parser.addMultiOption('a',
+              allowed: ['v', 'w', 'x'], callback: (value) => a = value);
+
+          parser.parse(['--a=v,w', '--a=x']);
+          expect(a, equals(['v', 'w', 'x']));
+        });
       });
     });
 
@@ -340,12 +422,22 @@ void main() {
         throwsFormat(parser, ['-mprofile']);
       });
 
-      test('throw if a comma-separated value is not allowed', () {
-        var parser = new ArgParser();
-        parser.addOption('mode',
-            abbr: 'm', allowMultiple: true, allowed: ['debug', 'release']);
+      group('throw if a comma-separated value is not allowed', () {
+        test("with allowMultiple", () {
+          var parser = new ArgParser();
+          parser.addOption('mode',
+              abbr: 'm', allowMultiple: true, allowed: ['debug', 'release']);
 
-        throwsFormat(parser, ['-mdebug,profile']);
+          throwsFormat(parser, ['-mdebug,profile']);
+        });
+
+        test("with addMultiOption", () {
+          var parser = new ArgParser();
+          parser
+              .addMultiOption('mode', abbr: 'm', allowed: ['debug', 'release']);
+
+          throwsFormat(parser, ['-mdebug,profile']);
+        });
       });
 
       test('throw if any but the first is not a flag', () {
@@ -449,22 +541,40 @@ void main() {
         expect(args['define'], equals('2'));
       });
 
-      test('returns a List if multi-valued', () {
-        var parser = new ArgParser();
-        parser.addOption('define', allowMultiple: true);
-        var args = parser.parse(['--define=1']);
-        expect(args['define'], equals(['1']));
-        args = parser.parse(['--define=1', '--define=2']);
-        expect(args['define'], equals(['1', '2']));
+      group('returns a List', () {
+        test('with allowMultiple', () {
+          var parser = new ArgParser();
+          parser.addOption('define', allowMultiple: true);
+          var args = parser.parse(['--define=1']);
+          expect(args['define'], equals(['1']));
+          args = parser.parse(['--define=1', '--define=2']);
+          expect(args['define'], equals(['1', '2']));
+        });
+
+        test('with addMultiOption', () {
+          var parser = new ArgParser();
+          parser.addMultiOption('define');
+          var args = parser.parse(['--define=1']);
+          expect(args['define'], equals(['1']));
+          args = parser.parse(['--define=1', '--define=2']);
+          expect(args['define'], equals(['1', '2']));
+        });
       });
 
-      test(
-          'returns the default value for multi-valued arguments '
-          'if not explicitly set', () {
-        var parser = new ArgParser();
-        parser.addOption('define', defaultsTo: '0', allowMultiple: true);
-        var args = parser.parse(['']);
-        expect(args['define'], equals(['0']));
+      group('returns the default value if not explicitly set', () {
+        test('with allowMultiple', () {
+          var parser = new ArgParser();
+          parser.addOption('define', defaultsTo: '0', allowMultiple: true);
+          var args = parser.parse(['']);
+          expect(args['define'], equals(['0']));
+        });
+
+        test('with addMultiOption', () {
+          var parser = new ArgParser();
+          parser.addMultiOption('define', defaultsTo: ['0']);
+          var args = parser.parse(['']);
+          expect(args['define'], equals(['0']));
+        });
       });
 
       test('are case-sensitive', () {

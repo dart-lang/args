@@ -274,8 +274,11 @@ void main() {
       parser.addFlag('flag-def', defaultsTo: true);
       parser.addOption('single-no');
       parser.addOption('single-def', defaultsTo: 'def');
-      parser.addOption('multi-no', allowMultiple: true);
-      parser.addOption('multi-def', allowMultiple: true, defaultsTo: 'def');
+      parser.addOption('allow-multi-no', allowMultiple: true);
+      parser.addOption('allow-multi-def',
+          allowMultiple: true, defaultsTo: 'def');
+      parser.addMultiOption('multi-no');
+      parser.addMultiOption('multi-def', defaultsTo: ['def']);
 
       expect(parser.options['flag-no'].getOrDefault(null), equals(null));
       expect(parser.options['flag-no'].getOrDefault(false), equals(false));
@@ -285,6 +288,13 @@ void main() {
       expect(parser.options['single-no'].getOrDefault('v'), equals('v'));
       expect(parser.options['single-def'].getOrDefault(null), equals('def'));
       expect(parser.options['single-def'].getOrDefault('v'), equals('v'));
+      expect(parser.options['allow-multi-no'].getOrDefault(null), equals([]));
+      expect(
+          parser.options['allow-multi-no'].getOrDefault(['v']), equals(['v']));
+      expect(parser.options['allow-multi-def'].getOrDefault(null),
+          equals(['def']));
+      expect(
+          parser.options['allow-multi-def'].getOrDefault(['v']), equals(['v']));
       expect(parser.options['multi-no'].getOrDefault(null), equals([]));
       expect(parser.options['multi-no'].getOrDefault(['v']), equals(['v']));
       expect(parser.options['multi-def'].getOrDefault(null), equals(['def']));

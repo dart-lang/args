@@ -150,8 +150,7 @@ main() {
       defaultsTo: false,
       help: 'Keep the generated files in the temporary directory');
 
-  parser.addOption('special-command',
-      help: """
+  parser.addOption('special-command', help: """
 Special command support. Wraps the command line in
 a special command. The special command should contain
 an '@' character which will be replaced by the normal
