@@ -91,22 +91,63 @@ void main() {
       var parser = new ArgParser();
       parser.addFlag('affirm', help: 'Should be on', defaultsTo: true);
       parser.addFlag('negate', help: 'Should be off', defaultsTo: false);
+      parser.addFlag('null', help: 'Should be null', defaultsTo: null);
 
       validateUsage(parser, '''
           --[no-]affirm    Should be on
                            (defaults to on)
 
           --[no-]negate    Should be off
+          --[no-]null      Should be null
           ''');
     });
 
     test('the default value for an option with no allowed list is shown', () {
       var parser = new ArgParser();
-      parser.addOption('any', help: 'Can be anything', defaultsTo: 'whatevs');
+      parser.addOption('single',
+          help: 'Can be anything', defaultsTo: 'whatevs');
+      parser.addMultiOption('multiple',
+          help: 'Can be anything', defaultsTo: ['whatevs']);
+      parser.addOption('allow-multi',
+          help: 'Can be anything', defaultsTo: 'whatevs', allowMultiple: true);
+
+      validateUsage(parser, '''
+          --single         Can be anything
+                           (defaults to "whatevs")
+
+          --multiple       Can be anything
+                           (defaults to "whatevs")
+
+          --allow-multi    Can be anything
+                           (defaults to "whatevs")
+          ''');
+    });
+
+    test('multiple default values for an option with no allowed list are shown',
+        () {
+      var parser = new ArgParser();
+      parser.addMultiOption('any',
+          help: 'Can be anything', defaultsTo: ['some', 'stuff']);
 
       validateUsage(parser, '''
           --any    Can be anything
-                   (defaults to "whatevs")
+                   (defaults to "some", "stuff")
+          ''');
+    });
+
+    test('no default values are shown for a multi option with an empty default',
+        () {
+      var parser = new ArgParser();
+      parser.addMultiOption('implicit', help: 'Implicit default');
+      parser
+          .addMultiOption('explicit', help: 'Explicit default', defaultsTo: []);
+      parser.addOption('allow-multi',
+          help: 'Implicit with allowMultiple', allowMultiple: true);
+
+      validateUsage(parser, '''
+          --implicit       Implicit default
+          --explicit       Explicit default
+          --allow-multi    Implicit with allowMultiple
           ''');
     });
 
@@ -142,6 +183,19 @@ void main() {
       validateUsage(parser, '''
           --suit    Like in cards
                     [spades, clubs (default), hearts, diamonds]
+          ''');
+    });
+
+    test('multiple defaults are highlighted in the allowed list', () {
+      var parser = new ArgParser();
+      parser.addMultiOption('suit',
+          help: 'Like in cards',
+          defaultsTo: ['clubs', 'diamonds'],
+          allowed: ['spades', 'clubs', 'hearts', 'diamonds']);
+
+      validateUsage(parser, '''
+          --suit    Like in cards
+                    [spades, clubs (default), hearts, diamonds (default)]
           ''');
     });
 

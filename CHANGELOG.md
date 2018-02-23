@@ -1,3 +1,8 @@
+## 1.4.1
+
+* Fix the way default values for multi-valued options are printed in argument
+  usage.
+
 ## 1.4.0
 
 * Deprecated `OptionType.FLAG`, `OptionType.SINGLE`, and `OptionType.MULTIPLE`
