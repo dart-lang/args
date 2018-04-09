@@ -271,7 +271,7 @@ abstract class Command<T> {
   /// This can be overridden to change the arguments passed to the `ArgParser`
   /// constructor.
   ArgParser get argParser => _argParser;
-  final _argParser = new ArgParser();
+  final ArgParser _argParser;
 
   /// Generates a string displaying usage information for this command.
   ///
@@ -345,7 +345,8 @@ abstract class Command<T> {
   /// This is intended to be overridden.
   List<String> get aliases => const [];
 
-  Command() {
+  Command({bool allowTrailingOptions: true})
+      : _argParser = new ArgParser(allowTrailingOptions: allowTrailingOptions) {
     argParser.addFlag('help',
         abbr: 'h', negatable: false, help: 'Print this usage information.');
   }
