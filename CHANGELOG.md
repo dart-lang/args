@@ -1,3 +1,7 @@
+## 1.4.2
+
+* Narrow the SDK constraint to only allow SDK versions that support `FutureOr`.
+
 ## 1.4.1
 
 * Fix the way default values for multi-valued options are printed in argument

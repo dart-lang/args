@@ -1,5 +1,5 @@
 name: args
-version: 1.4.1
+version: 1.4.2
 author: "Dart Team <misc@dartlang.org>"
 homepage: https://github.com/dart-lang/args
 description: >
@@ -9,4 +9,4 @@ description: >
 dev_dependencies:
   test: ">=0.12.0 <0.13.0"
 environment:
-  sdk: ">=1.4.0 <2.0.0"
+  sdk: ">=1.22.0 <2.0.0"
