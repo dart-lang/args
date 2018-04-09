@@ -143,7 +143,7 @@ class AsyncCommand extends Command {
   Future run() => new Future.value().then((_) => hasRun = true);
 }
 
-void throwsIllegalArg(function, {String reason: null}) {
+void throwsIllegalArg(function, {String reason}) {
   expect(function, throwsArgumentError, reason: reason);
 }
 

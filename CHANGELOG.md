@@ -1,3 +1,7 @@
+## 1.5.0
+
+* Added optional `allowTrailingOptions` to `Command` constructor.
+
 ## 1.4.1
 
 * Fix the way default values for multi-valued options are printed in argument
