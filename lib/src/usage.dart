@@ -88,11 +88,21 @@ class Usage {
         newline();
       } else if (option.allowed != null) {
         write(2, buildAllowedList(option));
-      } else if (option.defaultValue != null) {
-        if (option.isFlag && option.defaultValue == true) {
+      } else if (option.isFlag) {
+        if (option.defaultsTo == true) {
           write(2, '(defaults to on)');
-        } else if (!option.isFlag) {
-          write(2, '(defaults to "${option.defaultValue}")');
+        }
+      } else if (option.isMultiple) {
+        if (option.defaultsTo != null && option.defaultsTo.isNotEmpty) {
+          write(
+              2,
+              '(defaults to ' +
+                  option.defaultsTo.map((value) => '"$value"').join(', ') +
+                  ')');
+        }
+      } else {
+        if (option.defaultsTo != null) {
+          write(2, '(defaults to "${option.defaultsTo}")');
         }
       }
 
@@ -106,13 +116,8 @@ class Usage {
     return buffer.toString();
   }
 
-  String getAbbreviation(Option option) {
-    if (option.abbreviation != null) {
-      return '-${option.abbreviation}, ';
-    } else {
-      return '';
-    }
-  }
+  String getAbbreviation(Option option) =>
+      option.abbr == null ? '' : '-${option.abbr}, ';
 
   String getLongOption(Option option) {
     var result;
@@ -222,13 +227,17 @@ class Usage {
   }
 
   String buildAllowedList(Option option) {
+    var isDefault = option.defaultsTo is List
+        ? option.defaultsTo.contains
+        : (value) => value == option.defaultsTo;
+
     var allowedBuffer = new StringBuffer();
     allowedBuffer.write('[');
-    bool first = true;
+    var first = true;
     for (var allowed in option.allowed) {
       if (!first) allowedBuffer.write(', ');
       allowedBuffer.write(allowed);
-      if (allowed == option.defaultValue) {
+      if (isDefault(allowed)) {
         allowedBuffer.write(' (default)');
       }
       first = false;

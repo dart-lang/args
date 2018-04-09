@@ -299,11 +299,8 @@ Run "test help" to see global options.
         var command = new FooCommand();
         runner.addCommand(command);
 
-        expect(
-            runner.run(["foo", "--asdf"]),
-            throwsUsageException(
-                'Could not find an option named "asdf".',
-                """
+        expect(runner.run(["foo", "--asdf"]),
+            throwsUsageException('Could not find an option named "asdf".', """
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 
@@ -351,11 +348,8 @@ Also, footer!"""));
     test("a subcommand doesn't exist", () {
       runner.addCommand(new FooCommand()..addSubcommand(new AsyncCommand()));
 
-      expect(
-          runner.run(["foo bad"]),
-          throwsUsageException(
-              'Could not find a command named "foo bad".',
-              """
+      expect(runner.run(["foo bad"]),
+          throwsUsageException('Could not find a command named "foo bad".', """
 Usage: test <command> [arguments]
 
 Global options:
@@ -371,11 +365,8 @@ Run "test help <command>" for more information about a command."""));
     test("a subcommand wasn't passed", () {
       runner.addCommand(new FooCommand()..addSubcommand(new AsyncCommand()));
 
-      expect(
-          runner.run(["foo"]),
-          throwsUsageException(
-              'Missing subcommand for "test foo".',
-              """
+      expect(runner.run(["foo"]),
+          throwsUsageException('Missing subcommand for "test foo".', """
 Usage: test foo <subcommand> [arguments]
 -h, --help    Print this usage information.
 
@@ -388,11 +379,8 @@ Run "test help" to see global options."""));
     test("a command that doesn't take arguments was given them", () {
       runner.addCommand(new FooCommand());
 
-      expect(
-          runner.run(["foo", "bar"]),
-          throwsUsageException(
-              'Command "foo" does not take any arguments.',
-              """
+      expect(runner.run(["foo", "bar"]),
+          throwsUsageException('Command "foo" does not take any arguments.', """
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 

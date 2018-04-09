@@ -77,7 +77,31 @@ class ArgParser {
     return parser;
   }
 
-  /// Defines a flag. Throws an [ArgumentError] if:
+  /// Defines a boolean flag.
+  ///
+  /// This adds an [Option] with the given properties to [options].
+  ///
+  /// The [abbr] argument is a single-character string that can be used as a
+  /// shorthand for this flag. For example, `abbr: "a"` will allow the user to
+  /// pass `-a` to enable the flag.
+  ///
+  /// The [help] argument is used by [usage] to describe this flag.
+  ///
+  /// The [defaultsTo] argument indicates the value this flag will have if the
+  /// user doesn't explicitly pass it in.
+  ///
+  /// The [negatable] argument indicates whether this flag's value can be set to
+  /// `false`. For example, if [name] is `flag`, the user can pass `--no-flag`
+  /// to set its value to `false`.
+  ///
+  /// The [callback] argument is invoked with the flag's value when the flag
+  /// is parsed. Note that this makes argument parsing order-dependent in ways
+  /// that are often surprising, and its use is discouraged in favor of reading
+  /// values from the [ArgResult].
+  ///
+  /// If [hide] is `true`, this option won't be included in [usage].
+  ///
+  /// Throws an [ArgumentError] if:
   ///
   /// * There is already an option named [name].
   /// * There is already an option using abbreviation [abbr].
@@ -97,12 +121,47 @@ class ArgParser {
         null,
         defaultsTo,
         callback == null ? null : (value) => callback(value as bool),
-        OptionType.FLAG,
+        OptionType.flag,
         negatable: negatable,
         hide: hide);
   }
 
-  /// Defines a value-taking option. Throws an [ArgumentError] if:
+  /// Defines an option that takes a value.
+  ///
+  /// This adds an [Option] with the given properties to [options].
+  ///
+  /// The [abbr] argument is a single-character string that can be used as a
+  /// shorthand for this option. For example, `abbr: "a"` will allow the user to
+  /// pass `-a value` or `-avalue`.
+  ///
+  /// The [help] argument is used by [usage] to describe this option.
+  ///
+  /// The [valueHelp] argument is used by [usage] as a name for the value this
+  /// option takes. For example, `valueHelp: "FOO"` will include
+  /// `--option=<FOO>` rather than just `--option` in the usage string.
+  ///
+  /// The [allowed] argument is a list of valid values for this option. If
+  /// it's non-`null` and the user passes a value that's not included in the
+  /// list, [parse] will throw a [FormatException]. The allowed values will also
+  /// be included in [usage].
+  ///
+  /// The [allowedHelp] argument is a map from values in [allowed] to
+  /// documentation for those values that will be included in [usage].
+  ///
+  /// The [defaultsTo] argument indicates the value this option will have if the
+  /// user doesn't explicitly pass it in (or `null` by default).
+  ///
+  /// The [callback] argument is invoked with the option's value when the option
+  /// is parsed. Note that this makes argument parsing order-dependent in ways
+  /// that are often surprising, and its use is discouraged in favor of reading
+  /// values from the [ArgResult].
+  ///
+  /// The [allowMultiple] and [splitCommas] options are deprecated; the
+  /// [addMultiOption] method should be used instead.
+  ///
+  /// If [hide] is `true`, this option won't be included in [usage].
+  ///
+  /// Throws an [ArgumentError] if:
   ///
   /// * There is already an option with name [name].
   /// * There is already an option using abbreviation [abbr].
@@ -115,17 +174,89 @@ class ArgParser {
       Map<String, String> allowedHelp,
       String defaultsTo,
       Function callback,
-      bool allowMultiple: false,
-      bool splitCommas,
+      @Deprecated("Use addMultiOption() instead.") bool allowMultiple: false,
+      @Deprecated("Use addMultiOption() instead.") bool splitCommas,
       bool hide: false}) {
     if (!allowMultiple && splitCommas != null) {
       throw new ArgumentError(
           'splitCommas may not be set if allowMultiple is false.');
     }
 
-    _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
-        callback, allowMultiple ? OptionType.MULTIPLE : OptionType.SINGLE,
-        splitCommas: splitCommas, hide: hide);
+    _addOption(
+        name,
+        abbr,
+        help,
+        valueHelp,
+        allowed,
+        allowedHelp,
+        allowMultiple
+            ? (defaultsTo == null ? <String>[] : [defaultsTo])
+            : defaultsTo,
+        callback,
+        allowMultiple ? OptionType.multiple : OptionType.single,
+        splitCommas: splitCommas,
+        hide: hide);
+  }
+
+  /// Defines an option that takes multiple values.
+  ///
+  /// The [abbr] argument is a single-character string that can be used as a
+  /// shorthand for this option. For example, `abbr: "a"` will allow the user to
+  /// pass `-a value` or `-avalue`.
+  ///
+  /// The [help] argument is used by [usage] to describe this option.
+  ///
+  /// The [valueHelp] argument is used by [usage] as a name for the value this
+  /// argument takes. For example, `valueHelp: "FOO"` will include
+  /// `--option=<FOO>` rather than just `--option` in the usage string.
+  ///
+  /// The [allowed] argument is a list of valid values for this argument. If
+  /// it's non-`null` and the user passes a value that's not included in the
+  /// list, [parse] will throw a [FormatException]. The allowed values will also
+  /// be included in [usage].
+  ///
+  /// The [allowedHelp] argument is a map from values in [allowed] to
+  /// documentation for those values that will be included in [usage].
+  ///
+  /// The [defaultsTo] argument indicates the values this option will have if
+  /// the user doesn't explicitly pass it in (or `[]` by default).
+  ///
+  /// The [callback] argument is invoked with the option's value when the option
+  /// is parsed. Note that this makes argument parsing order-dependent in ways
+  /// that are often surprising, and its use is discouraged in favor of reading
+  /// values from the [ArgResult].
+  ///
+  /// If [splitCommas] is `true` (the default), multiple options may be passed
+  /// by writing `--option a,b` in addition to `--option a --option b`.
+  ///
+  /// If [hide] is `true`, this option won't be included in [usage].
+  ///
+  /// Throws an [ArgumentError] if:
+  ///
+  /// * There is already an option with name [name].
+  /// * There is already an option using abbreviation [abbr].
+  void addMultiOption(String name,
+      {String abbr,
+      String help,
+      String valueHelp,
+      Iterable<String> allowed,
+      Map<String, String> allowedHelp,
+      Iterable<String> defaultsTo,
+      void callback(List<String> values),
+      bool splitCommas: true,
+      bool hide: false}) {
+    _addOption(
+        name,
+        abbr,
+        help,
+        valueHelp,
+        allowed,
+        allowedHelp,
+        defaultsTo?.toList() ?? <String>[],
+        callback == null ? null : (value) => callback(value as List<String>),
+        OptionType.multiple,
+        splitCommas: splitCommas,
+        hide: hide);
   }
 
   void _addOption(
@@ -192,13 +323,13 @@ class ArgParser {
     if (!options.containsKey(option)) {
       throw new ArgumentError('No option named $option');
     }
-    return options[option].defaultValue;
+    return options[option].defaultsTo;
   }
 
   /// Finds the option whose abbreviation is [abbr], or `null` if no option has
   /// that abbreviation.
   Option findByAbbreviation(String abbr) {
-    return options.values.firstWhere((option) => option.abbreviation == abbr,
-        orElse: () => null);
+    return options.values
+        .firstWhere((option) => option.abbr == abbr, orElse: () => null);
   }
 }

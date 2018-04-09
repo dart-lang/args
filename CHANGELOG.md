@@ -1,6 +1,27 @@
-## 1.3.1
+## 1.4.2
 
 * Narrow the SDK constraint to only allow SDK versions that support `FutureOr`.
+
+## 1.4.1
+
+* Fix the way default values for multi-valued options are printed in argument
+  usage.
+
+## 1.4.0
+
+* Deprecated `OptionType.FLAG`, `OptionType.SINGLE`, and `OptionType.MULTIPLE`
+  in favor of `OptionType.flag`, `OptionType.single`, and `OptionType.multiple`
+  which follow the style guide.
+
+* Deprecated `Option.abbreviation` and `Option.defaultValue` in favor of
+  `Option.abbr` and `Option.defaultsTo`. This makes all of `Option`'s fields
+  match the corresponding parameters to `ArgParser.addOption()`.
+
+* Deprecated the `allowMultiple` and `splitCommas` arguments to
+  `ArgParser.addOption()` in favor of a separate `ArgParser.addMultiOption()`
+  method. This allows us to provide more accurate type information, and to avoid
+  adding flags that only make sense for multi-options in places where they might
+  be usable for single-value options.
 
 ## 1.3.0
 

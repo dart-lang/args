@@ -76,7 +76,7 @@ class ArgResults {
 
     // Include the options that have defaults.
     _parser.options.forEach((name, option) {
-      if (option.defaultValue != null) result.add(name);
+      if (option.defaultsTo != null) result.add(name);
     });
 
     return result;
