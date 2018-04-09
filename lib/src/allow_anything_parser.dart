@@ -9,16 +9,22 @@ import 'parser.dart';
 
 /// An ArgParser that treats *all input* as non-option arguments.
 class AllowAnythingParser implements ArgParser {
+  @override
   Map<String, Option> get options => const {};
+  @override
   Map<String, ArgParser> get commands => const {};
+  @override
   bool get allowTrailingOptions => false;
+  @override
   bool get allowsAnything => true;
 
+  @override
   ArgParser addCommand(String name, [ArgParser parser]) {
     throw new UnsupportedError(
         "ArgParser.allowAnything().addCommands() isn't supported.");
   }
 
+  @override
   void addFlag(String name,
       {String abbr,
       String help,
@@ -30,6 +36,7 @@ class AllowAnythingParser implements ArgParser {
         "ArgParser.allowAnything().addFlag() isn't supported.");
   }
 
+  @override
   void addOption(String name,
       {String abbr,
       String help,
@@ -45,6 +52,7 @@ class AllowAnythingParser implements ArgParser {
         "ArgParser.allowAnything().addOption() isn't supported.");
   }
 
+  @override
   void addMultiOption(String name,
       {String abbr,
       String help,
@@ -59,21 +67,27 @@ class AllowAnythingParser implements ArgParser {
         "ArgParser.allowAnything().addMultiOption() isn't supported.");
   }
 
+  @override
   void addSeparator(String text) {
     throw new UnsupportedError(
         "ArgParser.allowAnything().addSeparator() isn't supported.");
   }
 
+  @override
   ArgResults parse(Iterable<String> args) =>
       new Parser(null, this, args.toList()).parse();
 
+  @override
   String getUsage() => usage;
 
+  @override
   String get usage => "";
 
+  @override
   getDefault(String option) {
     throw new ArgumentError('No option named $option');
   }
 
+  @override
   Option findByAbbreviation(String abbr) => null;
 }
