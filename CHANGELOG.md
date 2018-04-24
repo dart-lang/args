@@ -1,3 +1,7 @@
+## 1.4.3
+
+* Display the default values for options with `allowedHelp` specified.
+
 ## 1.4.2
 
 * Narrow the SDK constraint to only allow SDK versions that support `FutureOr`.
