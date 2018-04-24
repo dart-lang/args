@@ -201,6 +201,30 @@ void main() {
 
     test('the allowed help is shown', () {
       var parser = new ArgParser();
+      parser.addOption('suit', help: 'Like in cards', allowed: [
+        'spades',
+        'clubs',
+        'diamonds',
+        'hearts'
+      ], allowedHelp: {
+        'spades': 'Swords of a soldier',
+        'clubs': 'Weapons of war',
+        'diamonds': 'Money for this art',
+        'hearts': 'The shape of my heart'
+      });
+
+      validateUsage(parser, '''
+          --suit              Like in cards
+
+                [clubs]       Weapons of war
+                [diamonds]    Money for this art
+                [hearts]      The shape of my heart
+                [spades]      Swords of a soldier
+          ''');
+    });
+
+    test('the default is highlighted in the allowed help', () {
+      var parser = new ArgParser();
       parser.addOption('suit',
           help: 'Like in cards',
           defaultsTo: 'clubs',
@@ -218,12 +242,39 @@ void main() {
           });
 
       validateUsage(parser, '''
-          --suit              Like in cards
+          --suit                     Like in cards
 
-                [clubs]       Weapons of war
-                [diamonds]    Money for this art
-                [hearts]      The shape of my heart
-                [spades]      Swords of a soldier
+                [clubs] (default)    Weapons of war
+                [diamonds]           Money for this art
+                [hearts]             The shape of my heart
+                [spades]             Swords of a soldier
+          ''');
+    });
+
+    test('multiple defaults are highlighted in the allowed help', () {
+      var parser = new ArgParser();
+      parser.addMultiOption('suit', help: 'Like in cards', defaultsTo: [
+        'clubs',
+        'hearts'
+      ], allowed: [
+        'spades',
+        'clubs',
+        'diamonds',
+        'hearts'
+      ], allowedHelp: {
+        'spades': 'Swords of a soldier',
+        'clubs': 'Weapons of war',
+        'diamonds': 'Money for this art',
+        'hearts': 'The shape of my heart'
+      });
+
+      validateUsage(parser, '''
+          --suit                      Like in cards
+
+                [clubs] (default)     Weapons of war
+                [diamonds]            Money for this art
+                [hearts] (default)    The shape of my heart
+                [spades]              Swords of a soldier
           ''');
     });
 

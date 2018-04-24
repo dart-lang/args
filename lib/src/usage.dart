@@ -82,7 +82,7 @@ class Usage {
         allowedNames.sort();
         newline();
         for (var name in allowedNames) {
-          write(1, getAllowedTitle(name));
+          write(1, getAllowedTitle(option, name));
           write(2, option.allowedHelp[name]);
         }
         newline();
@@ -132,13 +132,16 @@ class Usage {
     return result;
   }
 
-  String getAllowedTitle(String allowed) {
-    return '      [$allowed]';
+  String getAllowedTitle(Option option, String allowed) {
+    var isDefault = option.defaultsTo is List
+        ? option.defaultsTo.contains(allowed)
+        : option.defaultsTo == allowed;
+    return '      [$allowed]' + (isDefault ? ' (default)' : '');
   }
 
   void calculateColumnWidths() {
-    int abbr = 0;
-    int title = 0;
+    var abbr = 0;
+    var title = 0;
     for (var option in optionsAndSeparators) {
       if (option is! Option) continue;
       if (option.hide) continue;
@@ -152,7 +155,7 @@ class Usage {
       // Make room for the allowed help.
       if (option.allowedHelp != null) {
         for (var allowed in option.allowedHelp.keys) {
-          title = max(title, getAllowedTitle(allowed).length);
+          title = max(title, getAllowedTitle(option, allowed).length);
         }
       }
     }
