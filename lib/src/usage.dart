@@ -51,7 +51,12 @@ class Usage {
   /// content.
   int newlinesNeeded = 0;
 
-  Usage(this.optionsAndSeparators);
+  /// The horizontal character position at which help text is wrapped. Help that
+  /// extends past this column will be wrapped at the nearest whitespace (or
+  /// truncated if there is no available whitespace).
+  final int maxLineLength;
+
+  Usage(this.optionsAndSeparators, {this.maxLineLength});
 
   /// Generates a string displaying usage information for the defined options.
   /// This is basically the help text shown on the command line.
@@ -171,8 +176,52 @@ class Usage {
     numHelpLines = 0;
   }
 
+  /// Wrap a single line of text into lines no longer than length.
+  /// Try to split at whitespace, but if that's not good enough to keep it
+  /// under the length, then split in the middle of a word.
+  List<String> wrap(String text, int length) {
+    assert(length > 0, 'Wrap length must be larger than zero.');
+    text = text.trim();
+    if (text.length <= length) {
+      return [text];
+    }
+    var result = <String>[];
+    int currentLineStart = 0;
+    int lastWhitespace;
+    for (int i = 0; i < text.length; ++i) {
+      if (isWhitespace(text, i)) {
+        lastWhitespace = i;
+      }
+      if ((i - currentLineStart) >= length) {
+        // Back up to the last whitespace, unless there wasn't any, in which
+        // case we just split where we are.
+        if (lastWhitespace != null) {
+          i = lastWhitespace;
+        }
+        result.add(text.substring(currentLineStart, i));
+        // Skip any intervening whitespace.
+        while (isWhitespace(text, i) && i < text.length) i++;
+        currentLineStart = i;
+        lastWhitespace = null;
+      }
+    }
+    result.add(text.substring(currentLineStart));
+    return result;
+  }
+
   void write(int column, String text) {
+    const int minColumnWidth = 10;
     var lines = text.split('\n');
+    if (column == columnWidths.length && maxLineLength != null) {
+      var wrappedLines = <String>[];
+      var start = 0;
+      columnWidths.sublist(0, column).forEach((int width) => start += width);
+      for (var line in lines) {
+        wrappedLines
+            .addAll(wrap(line, max(maxLineLength - start, minColumnWidth)));
+      }
+      lines = wrappedLines;
+    }
 
     // Strip leading and trailing empty lines.
     while (lines.length > 0 && lines[0].trim() == '') {
@@ -260,4 +309,21 @@ String padRight(String source, int length) {
   }
 
   return result.toString();
+}
+
+bool isWhitespace(String text, int index) {
+  final int rune = text.codeUnitAt(index);
+  return ((rune >= 0x0009 && rune <= 0x000D) ||
+      rune == 0x0020 ||
+      rune == 0x0085 ||
+      rune == 0x00A0 ||
+      rune == 0x1680 ||
+      rune == 0x180E ||
+      (rune >= 0x2000 && rune <= 0x200A) ||
+      rune == 0x2028 ||
+      rune == 0x2029 ||
+      rune == 0x202F ||
+      rune == 0x205F ||
+      rune == 0x3000 ||
+      rune == 0xFEFF);
 }
