@@ -1,3 +1,7 @@
+## 1.4.4
+
+* Set max SDK version to `<3.0.0`, and adjust other dependencies.
+
 ## 1.4.3
 
 * Display the default values for options with `allowedHelp` specified.
