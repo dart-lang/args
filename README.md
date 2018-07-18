@@ -181,13 +181,13 @@ var results = parser.parse(['--mode', 'on', '--mode', 'off']);
 print(results['mode']); // prints 'off'
 ```
 
-If you need multiple values, set the `allowMultiple` parameter. In that case the
+Multiple values can be parsed with `addMultiOption()`. With this method, an
 option can occur multiple times, and the `parse()` method returns a list of
 values:
 
 ```dart
 var parser = new ArgParser();
-parser.addOption('mode', allowMultiple: true);
+parser.addMultiOption('mode');
 var results = parser.parse(['--mode', 'on', '--mode', 'off']);
 print(results['mode']); // prints '[on, off]'
 ```
