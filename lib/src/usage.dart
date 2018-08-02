@@ -176,11 +176,14 @@ class Usage {
     numHelpLines = 0;
   }
 
-  /// Wrap a single line of text into lines no longer than length.
-  /// Try to split at whitespace, but if that's not good enough to keep it
-  /// under the length, then split in the middle of a word.
-  List<String> wrap(String text, int length) {
-    assert(length > 0, 'Wrap length must be larger than zero.');
+  // Wrap a single line of text into lines no longer than maxLineLength,
+  // starting at the "start" column.
+  // Try to split at whitespace, but if that's not good enough to keep it
+  // under the maxLineLength, then split in the middle of a word.
+  List<String> _wrap(String text, int start) {
+    assert(start >= 0);
+    const int minColumnWidth = 10;
+    final int length = max(maxLineLength - start, minColumnWidth);
     text = text.trim();
     if (text.length <= length) {
       return [text];
@@ -210,15 +213,15 @@ class Usage {
   }
 
   void write(int column, String text) {
-    const int minColumnWidth = 10;
     var lines = text.split('\n');
+    // If we are writing the last column, word wrap it to fit.
     if (column == columnWidths.length && maxLineLength != null) {
       var wrappedLines = <String>[];
-      var start = 0;
-      columnWidths.sublist(0, column).forEach((int width) => start += width);
+      int start = columnWidths
+          .sublist(0, column)
+          .reduce((int start, int width) => start += width);
       for (var line in lines) {
-        wrappedLines
-            .addAll(wrap(line, max(maxLineLength - start, minColumnWidth)));
+        wrappedLines.addAll(_wrap(line, start));
       }
       lines = wrappedLines;
     }
@@ -313,17 +316,17 @@ String padRight(String source, int length) {
 
 bool isWhitespace(String text, int index) {
   final int rune = text.codeUnitAt(index);
-  return ((rune >= 0x0009 && rune <= 0x000D) ||
+  return rune >= 0x0009 && rune <= 0x000D ||
       rune == 0x0020 ||
       rune == 0x0085 ||
       rune == 0x00A0 ||
       rune == 0x1680 ||
       rune == 0x180E ||
-      (rune >= 0x2000 && rune <= 0x200A) ||
+      rune >= 0x2000 && rune <= 0x200A ||
       rune == 0x2028 ||
       rune == 0x2029 ||
       rune == 0x202F ||
       rune == 0x205F ||
       rune == 0x3000 ||
-      rune == 0xFEFF);
+      rune == 0xFEFF;
 }
