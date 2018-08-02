@@ -183,6 +183,7 @@ class Usage {
   /// Tries to split at whitespace, but if that's not good enough to keep it
   /// under the limit, then splits in the middle of a word.
   List<String> _wrap(String text, int start) {
+    assert(lineLength != null, "Should wrap when given a length.");
     assert(start >= 0);
 
     text = text.trim();
@@ -316,7 +317,6 @@ bool _isWhitespace(String text, int index) {
   return rune >= 0x0009 && rune <= 0x000D ||
       rune == 0x0020 ||
       rune == 0x0085 ||
-      rune == 0x00A0 ||
       rune == 0x1680 ||
       rune == 0x180E ||
       rune >= 0x2000 && rune <= 0x200A ||

@@ -1,4 +1,4 @@
-## 1.4.5
+## 1.5.0
 
 * Add `usageLineLength` to control word wrapping usage text.
 
