@@ -194,7 +194,7 @@ class Usage {
     var currentLineStart = 0;
     int lastWhitespace;
     for (var i = 0; i < text.length; ++i) {
-      if (isWhitespace(text, i)) lastWhitespace = i;
+      if (_isWhitespace(text, i)) lastWhitespace = i;
 
       if (i - currentLineStart >= length) {
         // Back up to the last whitespace, unless there wasn't any, in which
@@ -204,7 +204,7 @@ class Usage {
         result.add(text.substring(currentLineStart, i));
 
         // Skip any intervening whitespace.
-        while (isWhitespace(text, i) && i < text.length) i++;
+        while (_isWhitespace(text, i) && i < text.length) i++;
 
         currentLineStart = i;
         lastWhitespace = null;
@@ -307,8 +307,12 @@ class Usage {
   }
 }
 
-bool isWhitespace(String text, int index) {
-  final int rune = text.codeUnitAt(index);
+/// Returns true if the code unit at [index] in [text] is a whitespace
+/// character.
+///
+/// Based on: https://en.wikipedia.org/wiki/Whitespace_character#Unicode
+bool _isWhitespace(String text, int index) {
+  var rune = text.codeUnitAt(index);
   return rune >= 0x0009 && rune <= 0x000D ||
       rune == 0x0020 ||
       rune == 0x0085 ||
