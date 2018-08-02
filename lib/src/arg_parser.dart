@@ -30,6 +30,18 @@ class ArgParser {
   /// arguments.
   final bool allowTrailingOptions;
 
+  /// An optional maximum line length for [usage] messages.
+  ///
+  /// If specified, then help messages in the usage are wrapped at the given
+  /// column, after taking into account the width of the options. Will refuse to
+  /// wrap help text to less than 10 characters of help text per line if there
+  /// isn't enough space on the line. It preserves embedded newlines, and
+  /// attempts to wrap at whitespace breaks (although it will split words if
+  /// there is no whitespace at which to split).
+  ///
+  /// If null (the default), help messages are not wrapped.
+  final int usageLineLength;
+
   /// Whether or not this parser treats unrecognized options as non-option
   /// arguments.
   bool get allowsAnything => false;
@@ -40,9 +52,10 @@ class ArgParser {
   /// flags and options that appear after positional arguments. If it's `false`,
   /// the parser stops parsing as soon as it finds an argument that is neither
   /// an option nor a command.
-  factory ArgParser({bool allowTrailingOptions: true}) =>
+  factory ArgParser({bool allowTrailingOptions: true, int usageLineLength}) =>
       new ArgParser._(<String, Option>{}, <String, ArgParser>{},
-          allowTrailingOptions: allowTrailingOptions);
+          allowTrailingOptions: allowTrailingOptions,
+          usageLineLength: usageLineLength);
 
   /// Creates a new ArgParser that treats *all input* as non-option arguments.
   ///
@@ -53,7 +66,7 @@ class ArgParser {
   factory ArgParser.allowAnything() = AllowAnythingParser;
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
-      {bool allowTrailingOptions: true})
+      {bool allowTrailingOptions: true, this.usageLineLength})
       : this._options = options,
         this.options = new UnmodifiableMapView(options),
         this._commands = commands,
@@ -315,7 +328,10 @@ class ArgParser {
   /// Generates a string displaying usage information for the defined options.
   ///
   /// This is basically the help text shown on the command line.
-  String get usage => new Usage(_optionsAndSeparators).generate();
+  String get usage {
+    return new Usage(_optionsAndSeparators, lineLength: usageLineLength)
+        .generate();
+  }
 
   /// Get the default value for an option. Useful after parsing to test if the
   /// user specified something other than the default.

@@ -1,3 +1,7 @@
+## 1.5.0
+
+* Add `usageLineLength` to control word wrapping usage text.
+
 ## 1.4.4
 
 * Set max SDK version to `<3.0.0`, and adjust other dependencies.

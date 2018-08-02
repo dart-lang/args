@@ -13,6 +13,7 @@ class AllowAnythingParser implements ArgParser {
   Map<String, ArgParser> get commands => const {};
   bool get allowTrailingOptions => false;
   bool get allowsAnything => true;
+  int get usageLineLength => null;
 
   ArgParser addCommand(String name, [ArgParser parser]) {
     throw new UnsupportedError(
