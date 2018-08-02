@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:math';
+import 'dart:math' as math;
 
 import '../args.dart';
 
@@ -18,7 +18,8 @@ import '../args.dart';
 /// It builds the usage text up one column at a time and handles padding with
 /// spaces and wrapping to the next line to keep the cells correctly lined up.
 class Usage {
-  static const NUM_COLUMNS = 3; // Abbreviation, long name, help.
+  /// Abbreviation, long name, help.
+  static const _columnCount = 3;
 
   /// A list of the [Option]s intermingled with [String] separators.
   final List optionsAndSeparators;
@@ -54,9 +55,9 @@ class Usage {
   /// The horizontal character position at which help text is wrapped. Help that
   /// extends past this column will be wrapped at the nearest whitespace (or
   /// truncated if there is no available whitespace).
-  final int maxLineLength;
+  final int lineLength;
 
-  Usage(this.optionsAndSeparators, {this.maxLineLength});
+  Usage(this.optionsAndSeparators, {this.lineLength});
 
   /// Generates a string displaying usage information for the defined options.
   /// This is basically the help text shown on the command line.
@@ -152,15 +153,15 @@ class Usage {
       if (option.hide) continue;
 
       // Make room in the first column if there are abbreviations.
-      abbr = max(abbr, getAbbreviation(option).length);
+      abbr = math.max(abbr, getAbbreviation(option).length);
 
       // Make room for the option.
-      title = max(title, getLongOption(option).length);
+      title = math.max(title, getLongOption(option).length);
 
       // Make room for the allowed help.
       if (option.allowedHelp != null) {
         for (var allowed in option.allowedHelp.keys) {
-          title = max(title, getAllowedTitle(option, allowed).length);
+          title = math.max(title, getAllowedTitle(option, allowed).length);
         }
       }
     }
@@ -176,38 +177,40 @@ class Usage {
     numHelpLines = 0;
   }
 
-  // Wrap a single line of text into lines no longer than maxLineLength,
-  // starting at the "start" column.
-  // Try to split at whitespace, but if that's not good enough to keep it
-  // under the maxLineLength, then split in the middle of a word.
+  /// Wraps a single line of text into lines no longer than [lineLength],
+  /// starting at the [start] column.
+  ///
+  /// Tries to split at whitespace, but if that's not good enough to keep it
+  /// under the limit, then splits in the middle of a word.
   List<String> _wrap(String text, int start) {
     assert(start >= 0);
-    const int minColumnWidth = 10;
-    final int length = max(maxLineLength - start, minColumnWidth);
+
     text = text.trim();
-    if (text.length <= length) {
-      return [text];
-    }
+
+    var length = math.max(lineLength - start, 10);
+    if (text.length <= length) return [text];
+
     var result = <String>[];
-    int currentLineStart = 0;
+    var currentLineStart = 0;
     int lastWhitespace;
-    for (int i = 0; i < text.length; ++i) {
-      if (isWhitespace(text, i)) {
-        lastWhitespace = i;
-      }
-      if ((i - currentLineStart) >= length) {
+    for (var i = 0; i < text.length; ++i) {
+      if (isWhitespace(text, i)) lastWhitespace = i;
+
+      if (i - currentLineStart >= length) {
         // Back up to the last whitespace, unless there wasn't any, in which
         // case we just split where we are.
-        if (lastWhitespace != null) {
-          i = lastWhitespace;
-        }
+        if (lastWhitespace != null) i = lastWhitespace;
+
         result.add(text.substring(currentLineStart, i));
+
         // Skip any intervening whitespace.
         while (isWhitespace(text, i) && i < text.length) i++;
+
         currentLineStart = i;
         lastWhitespace = null;
       }
     }
+
     result.add(text.substring(currentLineStart));
     return result;
   }
@@ -215,14 +218,16 @@ class Usage {
   void write(int column, String text) {
     var lines = text.split('\n');
     // If we are writing the last column, word wrap it to fit.
-    if (column == columnWidths.length && maxLineLength != null) {
+    if (column == columnWidths.length && lineLength != null) {
       var wrappedLines = <String>[];
-      int start = columnWidths
+      var start = columnWidths
           .sublist(0, column)
-          .reduce((int start, int width) => start += width);
+          .reduce((start, width) => start += width);
+
       for (var line in lines) {
         wrappedLines.addAll(_wrap(line, start));
       }
+
       lines = wrappedLines;
     }
 
@@ -250,31 +255,31 @@ class Usage {
     // Advance until we are at the right column (which may mean wrapping around
     // to the next line.
     while (currentColumn != column) {
-      if (currentColumn < NUM_COLUMNS - 1) {
-        buffer.write(padRight('', columnWidths[currentColumn]));
+      if (currentColumn < _columnCount - 1) {
+        buffer.write(' ' * columnWidths[currentColumn]);
       } else {
         buffer.write('\n');
       }
-      currentColumn = (currentColumn + 1) % NUM_COLUMNS;
+      currentColumn = (currentColumn + 1) % _columnCount;
     }
 
     if (column < columnWidths.length) {
       // Fixed-size column, so pad it.
-      buffer.write(padRight(text, columnWidths[column]));
+      buffer.write(text.padRight(columnWidths[column]));
     } else {
       // The last column, so just write it.
       buffer.write(text);
     }
 
     // Advance to the next column.
-    currentColumn = (currentColumn + 1) % NUM_COLUMNS;
+    currentColumn = (currentColumn + 1) % _columnCount;
 
     // If we reached the last column, we need to wrap to the next line.
-    if (column == NUM_COLUMNS - 1) newlinesNeeded++;
+    if (column == _columnCount - 1) newlinesNeeded++;
 
     // Keep track of how many consecutive lines we've written in the last
     // column.
-    if (column == NUM_COLUMNS - 1) {
+    if (column == _columnCount - 1) {
       numHelpLines++;
     } else {
       numHelpLines = 0;
@@ -300,18 +305,6 @@ class Usage {
     allowedBuffer.write(']');
     return allowedBuffer.toString();
   }
-}
-
-/// Pads [source] to [length] by adding spaces at the end.
-String padRight(String source, int length) {
-  final result = new StringBuffer();
-  result.write(source);
-
-  while (result.length < length) {
-    result.write(' ');
-  }
-
-  return result.toString();
 }
 
 bool isWhitespace(String text, int index) {

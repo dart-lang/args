@@ -314,8 +314,8 @@ void main() {
           ''');
     });
 
-    test("help strings are not wrapped if maxLineLength is null", () {
-      var parser = new ArgParser(maxLineLength: null);
+    test("help strings are not wrapped if usageLineLength is null", () {
+      var parser = new ArgParser(usageLineLength: null);
       parser.addFlag('long',
           help: 'The flag with a really long help text that will not '
               'be wrapped.');
@@ -324,9 +324,9 @@ void main() {
           ''');
     });
 
-    test("help strings are wrapped properly when maxLineLength is specified",
+    test("help strings are wrapped properly when usageLineLength is specified",
         () {
-      var parser = new ArgParser(maxLineLength: 60);
+      var parser = new ArgParser(usageLineLength: 60);
       parser.addFlag('long',
           help: 'The flag with a really long help text that will be wrapped.');
       parser.addFlag('longNewline',
@@ -358,9 +358,9 @@ void main() {
     });
 
     test(
-        "help strings are wrapped with at 10 chars when maxHelpLineLength is "
+        "help strings are wrapped with at 10 chars when usageLineLength is "
         "smaller than available space", () {
-      var parser = new ArgParser(maxLineLength: 1);
+      var parser = new ArgParser(usageLineLength: 1);
       parser.addFlag('long',
           help: 'The flag with a really long help text that will be wrapped.');
       parser.addFlag('longNewline',
@@ -371,9 +371,11 @@ void main() {
           help:
               'The-flag-with-no-whitespace-that-will-be-wrapped-by-splitting-a-word.');
       parser.addFlag('longWhitespace',
-          help: '           The flag with a really long help text and whitespace at the start.');
+          help:
+              '           The flag with a really long help text and whitespace at the start.');
       parser.addFlag('longTrailspace',
-          help: 'The flag with a really long help text and whitespace at the end.             ');
+          help:
+              'The flag with a really long help text and whitespace at the end.             ');
       parser.addFlag('small1', help: ' a ');
       parser.addFlag('small2', help: ' a');
       parser.addFlag('small3', help: 'a ');

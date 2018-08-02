@@ -40,7 +40,7 @@ class ArgParser {
   /// there is no whitespace at which to split).
   ///
   /// If null (the default), help messages are not wrapped.
-  final int maxLineLength;
+  final int usageLineLength;
 
   /// Whether or not this parser treats unrecognized options as non-option
   /// arguments.
@@ -52,10 +52,10 @@ class ArgParser {
   /// flags and options that appear after positional arguments. If it's `false`,
   /// the parser stops parsing as soon as it finds an argument that is neither
   /// an option nor a command.
-  factory ArgParser({bool allowTrailingOptions: true, int maxLineLength}) =>
+  factory ArgParser({bool allowTrailingOptions: true, int usageLineLength}) =>
       new ArgParser._(<String, Option>{}, <String, ArgParser>{},
           allowTrailingOptions: allowTrailingOptions,
-          maxLineLength: maxLineLength);
+          usageLineLength: usageLineLength);
 
   /// Creates a new ArgParser that treats *all input* as non-option arguments.
   ///
@@ -66,7 +66,7 @@ class ArgParser {
   factory ArgParser.allowAnything() = AllowAnythingParser;
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
-      {bool allowTrailingOptions: true, this.maxLineLength})
+      {bool allowTrailingOptions: true, this.usageLineLength})
       : this._options = options,
         this.options = new UnmodifiableMapView(options),
         this._commands = commands,
@@ -329,7 +329,7 @@ class ArgParser {
   ///
   /// This is basically the help text shown on the command line.
   String get usage {
-    return new Usage(_optionsAndSeparators, maxLineLength: maxLineLength)
+    return new Usage(_optionsAndSeparators, lineLength: usageLineLength)
         .generate();
   }
 
