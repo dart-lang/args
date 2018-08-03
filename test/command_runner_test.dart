@@ -5,7 +5,7 @@
 import 'package:args/command_runner.dart';
 import 'package:test/test.dart';
 
-import 'utils.dart';
+import 'test_utils.dart';
 
 const _DEFAULT_USAGE = """
 Usage: test <command> [arguments]
@@ -327,6 +327,59 @@ Also, footer!"""));
           runner.run(["--bad"]),
           throwsUsageException('Could not find an option named "bad".',
               "$_DEFAULT_USAGE\nAlso, footer!"));
+    });
+  });
+
+  group("with a footer and wrapping", () {
+    setUp(() {
+      runner = new CommandRunnerWithFooterAndWrapping(
+          "test", "A test command runner.");
+    });
+    test("includes the footer in the usage string", () {
+      expect(runner.usage, equals("""
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage
+              information.
+
+Available commands:
+  help   Display help information for
+         test.
+
+Run "test help <command>" for more
+information about a command.
+LONG footer! This is a long footer, so
+we can check wrapping on long footer
+messages.
+
+And make sure that they preserve
+newlines properly."""));
+    });
+
+    test("includes the footer in usage errors", () {
+      expect(runner.run(["--bad"]),
+          throwsUsageException('Could not find an option named "bad".', """
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage
+              information.
+
+Available commands:
+  help   Display help information for
+         test.
+
+Run "test help <command>" for more
+information about a command.
+LONG footer! This is a long footer, so
+we can check wrapping on long footer
+messages.
+
+And make sure that they preserve
+newlines properly."""));
     });
   });
 

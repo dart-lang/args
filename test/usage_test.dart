@@ -335,25 +335,37 @@ void main() {
       parser.addFlag('solid',
           help:
               'The-flag-with-no-whitespace-that-will-be-wrapped-by-splitting-a-word.');
+      parser.addFlag('longWhitespace',
+          help:
+              '           The flag with a really long help text and whitespace at the start.');
+      parser.addFlag('longTrailspace',
+          help:
+              'The flag with a really long help text and whitespace at the end.             ');
       parser.addFlag('small1', help: ' a ');
       parser.addFlag('small2', help: ' a');
       parser.addFlag('small3', help: 'a ');
       validateUsage(parser, '''
-          --[no-]long           The flag with a really long help text
-                                that will be wrapped.
-
-          --[no-]longNewline    The flag with a really long help text
-                                and newlines
-                                
-                                that will still be wrapped because it
-                                is really long.
-
-          --[no-]solid          The-flag-with-no-whitespace-that-will-
-                                be-wrapped-by-splitting-a-word.
-
-          --[no-]small1         a
-          --[no-]small2         a
-          --[no-]small3         a
+          --[no-]long              The flag with a really long help
+                                   text that will be wrapped.
+          
+          --[no-]longNewline       The flag with a really long help
+                                   text and newlines
+                                   
+                                   that will still be wrapped because
+                                   it is really long.
+          
+          --[no-]solid             The-flag-with-no-whitespace-that-wi
+                                   ll-be-wrapped-by-splitting-a-word.
+          
+          --[no-]longWhitespace    The flag with a really long help
+                                   text and whitespace at the start.
+          
+          --[no-]longTrailspace    The flag with a really long help
+                                   text and whitespace at the end.
+          
+          --[no-]small1            a
+          --[no-]small2            a
+          --[no-]small3            a
           ''');
     });
 
@@ -370,67 +382,43 @@ void main() {
       parser.addFlag('solid',
           help:
               'The-flag-with-no-whitespace-that-will-be-wrapped-by-splitting-a-word.');
-      parser.addFlag('longWhitespace',
-          help:
-              '           The flag with a really long help text and whitespace at the start.');
-      parser.addFlag('longTrailspace',
-          help:
-              'The flag with a really long help text and whitespace at the end.             ');
       parser.addFlag('small1', help: ' a ');
       parser.addFlag('small2', help: ' a');
       parser.addFlag('small3', help: 'a ');
       validateUsage(parser, '''
-          --[no-]long              The flag
-                                   with a
-                                   really
-                                   long help
-                                   text that
-                                   will be
-                                   wrapped.
+          --[no-]long           The flag
+                                with a
+                                really
+                                long help
+                                text that
+                                will be
+                                wrapped.
           
-          --[no-]longNewline       The flag
-                                   with a
-                                   really
-                                   long help
-                                   text and
-                                   newlines
-                                   
-                                   that will
-                                   still be
-                                   wrapped
-                                   because it
-                                   is really
-                                   long.
+          --[no-]longNewline    The flag
+                                with a
+                                really
+                                long help
+                                text and
+                                newlines
+                                
+                                that will
+                                still be
+                                wrapped
+                                because it
+                                is really
+                                long.
           
-          --[no-]solid             The-flag-w
-                                   ith-no-whi
-                                   tespace-th
-                                   at-will-be
-                                   -wrapped-b
-                                   y-splittin
-                                   g-a-word.
+          --[no-]solid          The-flag-w
+                                ith-no-whi
+                                tespace-th
+                                at-will-be
+                                -wrapped-b
+                                y-splittin
+                                g-a-word.
           
-          --[no-]longWhitespace    The flag
-                                   with a
-                                   really
-                                   long help
-                                   text and
-                                   whitespace
-                                   at the
-                                   start.
-          
-          --[no-]longTrailspace    The flag
-                                   with a
-                                   really
-                                   long help
-                                   text and
-                                   whitespace
-                                   at the
-                                   end.
-          
-          --[no-]small1            a
-          --[no-]small2            a
-          --[no-]small3            a
+          --[no-]small1         a
+          --[no-]small2         a
+          --[no-]small3         a
           ''');
     });
 

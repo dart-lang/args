@@ -16,6 +16,20 @@ class CommandRunnerWithFooter extends CommandRunner {
       : super(executableName, description);
 }
 
+class CommandRunnerWithFooterAndWrapping extends CommandRunner {
+  @override
+  String get usageFooter => "LONG footer! "
+      "This is a long footer, so we can check wrapping on long footer messages.\n\n"
+      "And make sure that they preserve newlines properly.";
+
+  @override
+  ArgParser get argParser => _argParser;
+  final _argParser = new ArgParser(usageLineLength: 40);
+
+  CommandRunnerWithFooterAndWrapping(String executableName, String description)
+      : super(executableName, description);
+}
+
 class FooCommand extends Command {
   var hasRun = false;
 
@@ -70,6 +84,55 @@ class MultilineCommand extends Command {
 
   @override
   final description = "Multi\nline.";
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
+class WrappingCommand extends Command {
+  var hasRun = false;
+
+  @override
+  ArgParser get argParser => _argParser;
+  final _argParser = new ArgParser(usageLineLength: 40);
+
+  @override
+  final name = "wrapping";
+
+  @override
+  final description =
+      "This command overrides the argParser so that it will wrap long lines.";
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
+class LongCommand extends Command {
+  var hasRun = false;
+
+  @override
+  ArgParser get argParser => _argParser;
+  final _argParser = new ArgParser(usageLineLength: 40);
+
+  @override
+  final name = "long";
+
+  @override
+  final description = "This command has a long description that needs to be "
+      "wrapped sometimes.\nIt has embedded newlines,\n"
+      "     and indented lines that also need to be wrapped and have their "
+      "indentation preserved.\n" +
+      ("0123456789" * 10);
 
   @override
   final takesArguments = false;

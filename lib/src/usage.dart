@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import '../args.dart';
+import 'utils.dart';
 
 /// Takes an [ArgParser] and generates a string of usage (i.e. help) text for
 /// its defined options.
@@ -177,45 +178,6 @@ class Usage {
     numHelpLines = 0;
   }
 
-  /// Wraps a single line of text into lines no longer than [lineLength],
-  /// starting at the [start] column.
-  ///
-  /// Tries to split at whitespace, but if that's not good enough to keep it
-  /// under the limit, then splits in the middle of a word.
-  List<String> _wrap(String text, int start) {
-    assert(lineLength != null, "Should wrap when given a length.");
-    assert(start >= 0);
-
-    text = text.trim();
-
-    var length = math.max(lineLength - start, 10);
-    if (text.length <= length) return [text];
-
-    var result = <String>[];
-    var currentLineStart = 0;
-    int lastWhitespace;
-    for (var i = 0; i < text.length; ++i) {
-      if (_isWhitespace(text, i)) lastWhitespace = i;
-
-      if (i - currentLineStart >= length) {
-        // Back up to the last whitespace, unless there wasn't any, in which
-        // case we just split where we are.
-        if (lastWhitespace != null) i = lastWhitespace;
-
-        result.add(text.substring(currentLineStart, i));
-
-        // Skip any intervening whitespace.
-        while (_isWhitespace(text, i) && i < text.length) i++;
-
-        currentLineStart = i;
-        lastWhitespace = null;
-      }
-    }
-
-    result.add(text.substring(currentLineStart));
-    return result;
-  }
-
   void write(int column, String text) {
     var lines = text.split('\n');
     // If we are writing the last column, word wrap it to fit.
@@ -226,7 +188,8 @@ class Usage {
           .reduce((start, width) => start += width);
 
       for (var line in lines) {
-        wrappedLines.addAll(_wrap(line, start));
+        wrappedLines
+            .addAll(wrapTextAsLines(line, start: start, length: lineLength));
       }
 
       lines = wrappedLines;
@@ -306,24 +269,4 @@ class Usage {
     allowedBuffer.write(']');
     return allowedBuffer.toString();
   }
-}
-
-/// Returns true if the code unit at [index] in [text] is a whitespace
-/// character.
-///
-/// Based on: https://en.wikipedia.org/wiki/Whitespace_character#Unicode
-bool _isWhitespace(String text, int index) {
-  var rune = text.codeUnitAt(index);
-  return rune >= 0x0009 && rune <= 0x000D ||
-      rune == 0x0020 ||
-      rune == 0x0085 ||
-      rune == 0x1680 ||
-      rune == 0x180E ||
-      rune >= 0x2000 && rune <= 0x200A ||
-      rune == 0x2028 ||
-      rune == 0x2029 ||
-      rune == 0x202F ||
-      rune == 0x205F ||
-      rune == 0x3000 ||
-      rune == 0xFEFF;
 }
