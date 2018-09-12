@@ -1,3 +1,7 @@
+## 1.5.1-dev
+
+* Added more comprehensive word wrapping when `usageLineLength` is set.
+
 ## 1.5.0
 
 * Add `usageLineLength` to control word wrapping usage text.

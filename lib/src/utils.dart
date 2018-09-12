@@ -13,9 +13,9 @@ String padRight(String source, int length) =>
 /// under the limit, then it splits in the middle of a word.
 ///
 /// Preserves indentation (leading whitespace) for each line (delimited by '\n')
-/// in the input, and will indent wrapped lines the same amount.
+/// in the input, and indents wrapped lines the same amount.
 ///
-/// If [hangingIndent] is supplied, then that many spaces will be added to each
+/// If [hangingIndent] is supplied, then that many spaces are added to each
 /// line, except for the first line. This is useful for flowing text with a
 /// heading prefix (e.g. "Usage: "):
 ///
@@ -46,34 +46,26 @@ String wrapText(String text, {int length, int hangingIndent}) {
       // When we have a hanging indent, we want to wrap the first line at one
       // width, and the rest at another (offset by hangingIndent), so we wrap
       // them twice and recombine.
-      final firstLineWrap = wrapTextAsLines(
-        trimmedText,
-        length: length - leadingWhitespace.length,
-      );
-      notIndented = <String>[firstLineWrap.removeAt(0)];
+      var firstLineWrap = wrapTextAsLines(trimmedText,
+          length: length - leadingWhitespace.length);
+      notIndented = [firstLineWrap.removeAt(0)];
       trimmedText = trimmedText.substring(notIndented[0].length).trimLeft();
       if (firstLineWrap.isNotEmpty) {
-        notIndented.addAll(wrapTextAsLines(
-          trimmedText,
-          length: length - leadingWhitespace.length - hangingIndent,
-        ));
+        notIndented.addAll(wrapTextAsLines(trimmedText,
+            length: length - leadingWhitespace.length - hangingIndent));
       }
     } else {
-      notIndented = wrapTextAsLines(
-        trimmedText,
-        length: length - leadingWhitespace.length,
-      );
+      notIndented = wrapTextAsLines(trimmedText,
+          length: length - leadingWhitespace.length);
     }
     String hangingIndentString;
-    result.addAll(notIndented.map<String>(
-      (String line) {
-        // Don't return any lines with just whitespace on them.
-        if (line.isEmpty) return "";
-        var result = "${hangingIndentString ?? ""}$leadingWhitespace$line";
-        hangingIndentString ??= " " * hangingIndent;
-        return result;
-      },
-    ));
+    result.addAll(notIndented.map<String>((String line) {
+      // Don't return any lines with just whitespace on them.
+      if (line.isEmpty) return '';
+      var result = '${hangingIndentString ?? ''}$leadingWhitespace$line';
+      hangingIndentString ??= ' ' * hangingIndent;
+      return result;
+    }));
   }
   return result.join('\n');
 }
@@ -96,7 +88,7 @@ List<String> wrapTextAsLines(String text, {int start = 0, int length}) {
   ///
   /// Based on: https://en.wikipedia.org/wiki/Whitespace_character#Unicode
   bool isWhitespace(String text, int index) {
-    final rune = text.codeUnitAt(index);
+    var rune = text.codeUnitAt(index);
     return rune >= 0x0009 && rune <= 0x000D ||
         rune == 0x0020 ||
         rune == 0x0085 ||
@@ -113,8 +105,8 @@ List<String> wrapTextAsLines(String text, {int start = 0, int length}) {
 
   if (length == null) return text.split('\n');
 
-  final result = <String>[];
-  final effectiveLength = math.max(length - start, 10);
+  var result = <String>[];
+  var effectiveLength = math.max(length - start, 10);
   for (var line in text.split('\n')) {
     line = line.trim();
     if (line.length <= effectiveLength) {

@@ -49,21 +49,20 @@ class CommandRunner<T> {
 
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
-    const usagePrefix = "Usage:";
-    var usage = '''
-$usagePrefix ${_wrap(invocation, hangingIndent: usagePrefix.length)}
-
-${_wrap('Global options:')}
-${argParser.usage}
-
-${_getCommandUsage(_commands, lineLength: argParser.usageLineLength)}
-
-${_wrap('Run "$executableName help <command>" for more information about a command.')}''';
-
+    var usagePrefix = "Usage:";
+    var buffer = new StringBuffer();
+    buffer.writeln(
+        '$usagePrefix ${_wrap(invocation, hangingIndent: usagePrefix.length)}\n');
+    buffer.writeln(_wrap('Global options:'));
+    buffer.writeln('${argParser.usage}\n');
+    buffer.writeln(
+        '${_getCommandUsage(_commands, lineLength: argParser.usageLineLength)}\n');
+    buffer.write(_wrap(
+        'Run "$executableName help <command>" for more information about a command.'));
     if (usageFooter != null) {
-      usage += "\n${_wrap(usageFooter)}";
+      buffer.write('\n${_wrap(usageFooter)}');
     }
-    return usage;
+    return buffer.toString();
   }
 
   /// An unmodifiable view of all top-level commands defined for this runner.
@@ -298,8 +297,8 @@ abstract class Command<T> {
 
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
-    final length = argParser.usageLineLength;
-    const usagePrefix = "Usage: ";
+    var length = argParser.usageLineLength;
+    var usagePrefix = "Usage: ";
     var buffer = new StringBuffer()
       ..writeln(
           usagePrefix + _wrap(invocation, hangingIndent: usagePrefix.length))
@@ -419,8 +418,8 @@ String _getCommandUsage(Map<String, Command> commands,
 
   var buffer =
       new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
+  var columnStart = length + 5;
   for (var name in names) {
-    var columnStart = length + 5;
     var lines = wrapTextAsLines(commands[name].summary,
         start: columnStart, length: lineLength);
     buffer.writeln();
