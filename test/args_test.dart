@@ -4,7 +4,7 @@
 
 import 'package:test/test.dart';
 import 'package:args/args.dart';
-import 'utils.dart';
+import 'test_utils.dart';
 
 void main() {
   group('ArgParser.addFlag()', () {

@@ -39,7 +39,7 @@ class CommandRunner<T> {
   ///
   /// This includes usage for the global arguments as well as a list of
   /// top-level commands.
-  String get usage => "$description\n\n$_usageWithoutDescription";
+  String get usage => _wrap("$description\n\n") + _usageWithoutDescription;
 
   /// An optional footer for [usage].
   ///
@@ -49,18 +49,20 @@ class CommandRunner<T> {
 
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
-    var usage = '''
-Usage: $invocation
-
-Global options:
-${argParser.usage}
-
-${_getCommandUsage(_commands)}
-
-Run "$executableName help <command>" for more information about a command.''';
-
-    if (usageFooter != null) usage += "\n$usageFooter";
-    return usage;
+    var usagePrefix = "Usage:";
+    var buffer = new StringBuffer();
+    buffer.writeln(
+        '$usagePrefix ${_wrap(invocation, hangingIndent: usagePrefix.length)}\n');
+    buffer.writeln(_wrap('Global options:'));
+    buffer.writeln('${argParser.usage}\n');
+    buffer.writeln(
+        '${_getCommandUsage(_commands, lineLength: argParser.usageLineLength)}\n');
+    buffer.write(_wrap(
+        'Run "$executableName help <command>" for more information about a command.'));
+    if (usageFooter != null) {
+      buffer.write('\n${_wrap(usageFooter)}');
+    }
+    return buffer.toString();
   }
 
   /// An unmodifiable view of all top-level commands defined for this runner.
@@ -193,6 +195,9 @@ Run "$executableName help <command>" for more information about a command.''';
 
     return (await command.run()) as T;
   }
+
+  String _wrap(String text, {int hangingIndent}) => wrapText(text,
+      length: argParser.usageLineLength, hangingIndent: hangingIndent);
 }
 
 /// A single command.
@@ -277,7 +282,7 @@ abstract class Command<T> {
   ///
   /// This includes usage for the command's arguments as well as a list of
   /// subcommands, if there are any.
-  String get usage => "$description\n\n$_usageWithoutDescription";
+  String get usage => _wrap("$description\n\n") + _usageWithoutDescription;
 
   /// An optional footer for [usage].
   ///
@@ -285,23 +290,36 @@ abstract class Command<T> {
   /// added to the end of [usage].
   String get usageFooter => null;
 
+  String _wrap(String text, {int hangingIndent}) {
+    return wrapText(text,
+        length: argParser.usageLineLength, hangingIndent: hangingIndent);
+  }
+
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
+    var length = argParser.usageLineLength;
+    var usagePrefix = "Usage: ";
     var buffer = new StringBuffer()
-      ..writeln('Usage: $invocation')
+      ..writeln(
+          usagePrefix + _wrap(invocation, hangingIndent: usagePrefix.length))
       ..writeln(argParser.usage);
 
     if (_subcommands.isNotEmpty) {
       buffer.writeln();
-      buffer.writeln(_getCommandUsage(_subcommands, isSubcommand: true));
+      buffer.writeln(_getCommandUsage(
+        _subcommands,
+        isSubcommand: true,
+        lineLength: length,
+      ));
     }
 
     buffer.writeln();
-    buffer.write('Run "${runner.executableName} help" to see global options.');
+    buffer.write(
+        _wrap('Run "${runner.executableName} help" to see global options.'));
 
     if (usageFooter != null) {
       buffer.writeln();
-      buffer.write(usageFooter);
+      buffer.write(_wrap(usageFooter));
     }
 
     return buffer.toString();
@@ -355,7 +373,8 @@ abstract class Command<T> {
   /// The return value is wrapped in a `Future` if necessary and returned by
   /// [CommandRunner.runCommand].
   FutureOr<T> run() {
-    throw new UnimplementedError("Leaf command $this must implement run().");
+    throw new UnimplementedError(
+        _wrap("Leaf command $this must implement run()."));
   }
 
   /// Adds [Command] as a subcommand of this.
@@ -376,7 +395,7 @@ abstract class Command<T> {
 
   /// Throws a [UsageException] with [message].
   void usageException(String message) =>
-      throw new UsageException(message, _usageWithoutDescription);
+      throw new UsageException(_wrap(message), _usageWithoutDescription);
 }
 
 /// Returns a string representation of [commands] fit for use in a usage string.
@@ -384,7 +403,7 @@ abstract class Command<T> {
 /// [isSubcommand] indicates whether the commands should be called "commands" or
 /// "subcommands".
 String _getCommandUsage(Map<String, Command> commands,
-    {bool isSubcommand: false}) {
+    {bool isSubcommand: false, int lineLength}) {
   // Don't include aliases.
   var names =
       commands.keys.where((name) => !commands[name].aliases.contains(name));
@@ -399,14 +418,16 @@ String _getCommandUsage(Map<String, Command> commands,
 
   var buffer =
       new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
+  var columnStart = length + 5;
   for (var name in names) {
-    var lines = commands[name].summary.split("\n");
+    var lines = wrapTextAsLines(commands[name].summary,
+        start: columnStart, length: lineLength);
     buffer.writeln();
     buffer.write('  ${padRight(name, length)}   ${lines.first}');
 
     for (var line in lines.skip(1)) {
       buffer.writeln();
-      buffer.write(' ' * (length + 5));
+      buffer.write(' ' * columnStart);
       buffer.write(line);
     }
   }

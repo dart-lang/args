@@ -4,7 +4,7 @@
 
 import 'package:args/command_runner.dart';
 import 'package:test/test.dart';
-import 'utils.dart';
+import 'test_utils.dart';
 
 void main() {
   var foo;
@@ -86,6 +86,58 @@ Available subcommands:
   aliased   Set a value.
 
 Run "test help" to see global options."""));
+    });
+
+    test("wraps long command descriptions with subcommands", () {
+      var wrapping = new WrappingCommand();
+
+      // Make sure [Command.runner] is set up.
+      new CommandRunner("longtest", "A long-lined test command runner.")
+          .addCommand(wrapping);
+
+      wrapping.addSubcommand(new LongCommand());
+      expect(wrapping.usage, equals("""
+This command overrides the argParser so
+that it will wrap long lines.
+
+Usage: longtest wrapping <subcommand>
+       [arguments]
+-h, --help    Print this usage
+              information.
+
+Available subcommands:
+  long   This command has a long
+         description that needs to be
+         wrapped sometimes.
+
+Run "longtest help" to see global
+options."""));
+    });
+
+    test("wraps long command descriptions", () {
+      var longCommand = new LongCommand();
+
+      // Make sure [Command.runner] is set up.
+      new CommandRunner("longtest", "A long-lined test command runner.")
+          .addCommand(longCommand);
+
+      expect(longCommand.usage, equals("""
+This command has a long description that
+needs to be wrapped sometimes.
+It has embedded newlines,
+     and indented lines that also need
+     to be wrapped and have their
+     indentation preserved.
+0123456789012345678901234567890123456789
+0123456789012345678901234567890123456789
+01234567890123456789
+
+Usage: longtest long [arguments]
+-h, --help    Print this usage
+              information.
+
+Run "longtest help" to see global
+options."""));
     });
   });
 
