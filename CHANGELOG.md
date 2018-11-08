@@ -1,4 +1,4 @@
-## 1.5.1-dev
+## 1.5.1
 
 * Added more comprehensive word wrapping when `usageLineLength` is set.
 
