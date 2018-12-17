@@ -50,7 +50,7 @@ class CommandRunner<T> {
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
     var usagePrefix = "Usage:";
-    var buffer = new StringBuffer();
+    var buffer = StringBuffer();
     buffer.writeln(
         '$usagePrefix ${_wrap(invocation, hangingIndent: usagePrefix.length)}\n');
     buffer.writeln(_wrap('Global options:'));
@@ -66,7 +66,7 @@ class CommandRunner<T> {
   }
 
   /// An unmodifiable view of all top-level commands defined for this runner.
-  Map<String, Command<T>> get commands => new UnmodifiableMapView(_commands);
+  Map<String, Command<T>> get commands => UnmodifiableMapView(_commands);
   final _commands = <String, Command<T>>{};
 
   /// The top-level argument parser.
@@ -75,12 +75,12 @@ class CommandRunner<T> {
   /// available via [Command.globalResults]. Commands should be registered with
   /// [addCommand] rather than directly on the parser.
   ArgParser get argParser => _argParser;
-  final _argParser = new ArgParser();
+  final _argParser = ArgParser();
 
   CommandRunner(this.executableName, this.description) {
     argParser.addFlag('help',
         abbr: 'h', negatable: false, help: 'Print this usage information.');
-    addCommand(new HelpCommand<T>());
+    addCommand(HelpCommand<T>());
   }
 
   /// Prints the usage information for this runner.
@@ -91,7 +91,7 @@ class CommandRunner<T> {
 
   /// Throws a [UsageException] with [message].
   void usageException(String message) =>
-      throw new UsageException(message, _usageWithoutDescription);
+      throw UsageException(message, _usageWithoutDescription);
 
   /// Adds [Command] as a top-level command to this runner.
   void addCommand(Command<T> command) {
@@ -108,7 +108,7 @@ class CommandRunner<T> {
   /// This always returns a [Future] in case the command is asynchronous. The
   /// [Future] will throw a [UsageException] if [args] was invalid.
   Future<T> run(Iterable<String> args) =>
-      new Future.sync(() => runCommand(parse(args)));
+      Future.sync(() => runCommand(parse(args)));
 
   /// Parses [args] and returns the result, converting an [ArgParserException]
   /// to a [UsageException].
@@ -276,7 +276,7 @@ abstract class Command<T> {
   /// This can be overridden to change the arguments passed to the `ArgParser`
   /// constructor.
   ArgParser get argParser => _argParser;
-  final _argParser = new ArgParser();
+  final _argParser = ArgParser();
 
   /// Generates a string displaying usage information for this command.
   ///
@@ -299,7 +299,7 @@ abstract class Command<T> {
   String get _usageWithoutDescription {
     var length = argParser.usageLineLength;
     var usagePrefix = "Usage: ";
-    var buffer = new StringBuffer()
+    var buffer = StringBuffer()
       ..writeln(
           usagePrefix + _wrap(invocation, hangingIndent: usagePrefix.length))
       ..writeln(argParser.usage);
@@ -326,8 +326,7 @@ abstract class Command<T> {
   }
 
   /// An unmodifiable view of all sublevel commands of this command.
-  Map<String, Command<T>> get subcommands =>
-      new UnmodifiableMapView(_subcommands);
+  Map<String, Command<T>> get subcommands => UnmodifiableMapView(_subcommands);
   final _subcommands = <String, Command<T>>{};
 
   /// Whether or not this command should be hidden from help listings.
@@ -373,8 +372,7 @@ abstract class Command<T> {
   /// The return value is wrapped in a `Future` if necessary and returned by
   /// [CommandRunner.runCommand].
   FutureOr<T> run() {
-    throw new UnimplementedError(
-        _wrap("Leaf command $this must implement run()."));
+    throw UnimplementedError(_wrap("Leaf command $this must implement run()."));
   }
 
   /// Adds [Command] as a subcommand of this.
@@ -395,7 +393,7 @@ abstract class Command<T> {
 
   /// Throws a [UsageException] with [message].
   void usageException(String message) =>
-      throw new UsageException(_wrap(message), _usageWithoutDescription);
+      throw UsageException(_wrap(message), _usageWithoutDescription);
 }
 
 /// Returns a string representation of [commands] fit for use in a usage string.
@@ -403,7 +401,7 @@ abstract class Command<T> {
 /// [isSubcommand] indicates whether the commands should be called "commands" or
 /// "subcommands".
 String _getCommandUsage(Map<String, Command> commands,
-    {bool isSubcommand: false, int lineLength}) {
+    {bool isSubcommand = false, int lineLength}) {
   // Don't include aliases.
   var names =
       commands.keys.where((name) => !commands[name].aliases.contains(name));
@@ -416,8 +414,7 @@ String _getCommandUsage(Map<String, Command> commands,
   names = names.toList()..sort();
   var length = names.map((name) => name.length).reduce(math.max);
 
-  var buffer =
-      new StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
+  var buffer = StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
   var columnStart = length + 5;
   for (var name in names) {
     var lines = wrapTextAsLines(commands[name].summary,

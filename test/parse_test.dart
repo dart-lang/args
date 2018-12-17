@@ -2,14 +2,15 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:test/test.dart';
 import 'package:args/args.dart';
+import 'package:test/test.dart';
+
 import 'test_utils.dart';
 
 void main() {
   group('ArgParser.parse()', () {
     test('does not destructively modify the argument list', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('verbose');
 
       var args = ['--verbose'];
@@ -20,7 +21,7 @@ void main() {
 
     group('flags', () {
       test('are true if present', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('verbose');
 
         var args = parser.parse(['--verbose']);
@@ -28,7 +29,7 @@ void main() {
       });
 
       test('default if missing', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('a', defaultsTo: true);
         parser.addFlag('b', defaultsTo: false);
 
@@ -38,7 +39,7 @@ void main() {
       });
 
       test('are false if missing with no default', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('verbose');
 
         var args = parser.parse([]);
@@ -46,14 +47,14 @@ void main() {
       });
 
       test('throws if given a value', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('verbose');
 
         throwsFormat(parser, ['--verbose=true']);
       });
 
       test('are case-sensitive', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('verbose');
         parser.addFlag('Verbose');
         var results = parser.parse(['--verbose']);
@@ -64,7 +65,7 @@ void main() {
 
     group('flags negated with "no-"', () {
       test('set the flag to false', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('verbose');
 
         var args = parser.parse(['--no-verbose']);
@@ -72,7 +73,7 @@ void main() {
       });
 
       test('set the flag to true if the flag actually starts with "no-"', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('no-body');
 
         var args = parser.parse(['--no-body']);
@@ -80,7 +81,7 @@ void main() {
       });
 
       test('are not preferred over a colliding one without', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('no-strum');
         parser.addFlag('strum');
 
@@ -90,7 +91,7 @@ void main() {
       });
 
       test('fail for non-negatable flags', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('strum', negatable: false);
 
         throwsFormat(parser, ['--no-strum']);
@@ -100,7 +101,7 @@ void main() {
     group('callbacks', () {
       test('for present flags are invoked with the value', () {
         var a;
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('a', callback: (value) => a = value);
 
         parser.parse(['--a']);
@@ -109,7 +110,7 @@ void main() {
 
       test('for absent flags are invoked with the default value', () {
         var a;
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('a', defaultsTo: false, callback: (value) => a = value);
 
         parser.parse([]);
@@ -118,7 +119,7 @@ void main() {
 
       test('are invoked even if the flag is not present', () {
         var a = true;
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('a', callback: (value) => a = value);
 
         parser.parse([]);
@@ -127,7 +128,7 @@ void main() {
 
       test('for present options are invoked with the value', () {
         var a;
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('a', callback: (value) => a = value);
 
         parser.parse(['--a=v']);
@@ -136,7 +137,7 @@ void main() {
 
       test('for absent options are invoked with the default value', () {
         var a;
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('a', defaultsTo: 'v', callback: (value) => a = value);
 
         parser.parse([]);
@@ -145,7 +146,7 @@ void main() {
 
       test('are invoked even if the option is not present', () {
         var a = 'not called';
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('a', callback: (value) => a = value);
 
         parser.parse([]);
@@ -156,25 +157,27 @@ void main() {
         test('for multiple present, options are invoked with value as a list',
             () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addOption('a',
-              allowMultiple: true, callback: (value) => a = value);
+              allowMultiple: true, // ignore: deprecated_member_use
+              callback: (value) => a = value);
 
           parser.parse(['--a=v', '--a=x']);
           expect(a, equals(['v', 'x']));
 
           // This reified type is important in strong mode so that people can
           // safely write "as List<String>".
-          expect(a, new isInstanceOf<List<String>>());
+          expect(a, TypeMatcher<List<String>>());
         });
 
         test(
             'for single present, options are invoked with value as a single '
             'element list', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addOption('a',
-              allowMultiple: true, callback: (value) => a = value);
+              allowMultiple: true, // ignore: deprecated_member_use
+              callback: (value) => a = value);
 
           parser.parse(['--a=v']);
           expect(a, equals(['v']));
@@ -183,9 +186,9 @@ void main() {
         test('for absent, options are invoked with default value as a list',
             () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addOption('a',
-              allowMultiple: true,
+              allowMultiple: true, // ignore: deprecated_member_use
               defaultsTo: 'v',
               callback: (value) => a = value);
 
@@ -195,9 +198,10 @@ void main() {
 
         test('for absent, options are invoked with value as an empty list', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addOption('a',
-              allowMultiple: true, callback: (value) => a = value);
+              allowMultiple: true, // ignore: deprecated_member_use
+              callback: (value) => a = value);
 
           parser.parse([]);
           expect(a, isEmpty);
@@ -205,9 +209,10 @@ void main() {
 
         test('parses comma-separated strings', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addOption('a',
-              allowMultiple: true, callback: (value) => a = value);
+              allowMultiple: true, // ignore: deprecated_member_use
+              callback: (value) => a = value);
 
           parser.parse(['--a=v,w', '--a=x']);
           expect(a, equals(['v', 'w', 'x']));
@@ -216,10 +221,10 @@ void main() {
         test("doesn't parse comma-separated strings with splitCommas: false",
             () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addOption('a',
-              allowMultiple: true,
-              splitCommas: false,
+              allowMultiple: true, // ignore: deprecated_member_use
+              splitCommas: false, // ignore: deprecated_member_use
               callback: (value) => a = value);
 
           parser.parse(['--a=v,w', '--a=x']);
@@ -228,9 +233,10 @@ void main() {
 
         test('parses empty strings', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addOption('a',
-              allowMultiple: true, callback: (value) => a = value);
+              allowMultiple: true, // ignore: deprecated_member_use
+              callback: (value) => a = value);
 
           parser.parse(['--a=,v', '--a=w,', '--a=,', '--a=x,,y', '--a', '']);
           expect(a, equals(['', 'v', 'w', '', '', '', 'x', '', 'y', '']));
@@ -238,9 +244,9 @@ void main() {
 
         test('with allowed parses comma-separated strings', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addOption('a',
-              allowMultiple: true,
+              allowMultiple: true, // ignore: deprecated_member_use
               allowed: ['v', 'w', 'x'],
               callback: (value) => a = value);
 
@@ -253,7 +259,7 @@ void main() {
         test('for multiple present, options are invoked with value as a list',
             () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
           parser.parse(['--a=v', '--a=x']);
@@ -261,14 +267,14 @@ void main() {
 
           // This reified type is important in strong mode so that people can
           // safely write "as List<String>".
-          expect(a, new isInstanceOf<List<String>>());
+          expect(a, TypeMatcher<List<String>>());
         });
 
         test(
             'for single present, options are invoked with value as a single '
             'element list', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
           parser.parse(['--a=v']);
@@ -277,7 +283,7 @@ void main() {
 
         test('for absent, options are invoked with default value', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('a',
               defaultsTo: ['v', 'w'], callback: (value) => a = value);
 
@@ -287,7 +293,7 @@ void main() {
 
         test('for absent, options are invoked with value as an empty list', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
           parser.parse([]);
@@ -296,7 +302,7 @@ void main() {
 
         test('parses comma-separated strings', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
           parser.parse(['--a=v,w', '--a=x']);
@@ -306,7 +312,7 @@ void main() {
         test("doesn't parse comma-separated strings with splitCommas: false",
             () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('a',
               splitCommas: false, callback: (value) => a = value);
 
@@ -316,7 +322,7 @@ void main() {
 
         test('parses empty strings', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
           parser.parse(['--a=,v', '--a=w,', '--a=,', '--a=x,,y', '--a', '']);
@@ -325,7 +331,7 @@ void main() {
 
         test('with allowed parses comma-separated strings', () {
           var a;
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('a',
               allowed: ['v', 'w', 'x'], callback: (value) => a = value);
 
@@ -337,7 +343,7 @@ void main() {
 
     group('abbreviations', () {
       test('are parsed with a preceding "-"', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('arg', abbr: 'a');
 
         var args = parser.parse(['-a']);
@@ -345,7 +351,7 @@ void main() {
       });
 
       test('can use multiple after a single "-"', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('first', abbr: 'f');
         parser.addFlag('second', abbr: 's');
         parser.addFlag('third', abbr: 't');
@@ -357,7 +363,7 @@ void main() {
       });
 
       test('can have multiple "-" args', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('first', abbr: 'f');
         parser.addFlag('second', abbr: 's');
         parser.addFlag('third', abbr: 't');
@@ -369,7 +375,7 @@ void main() {
       });
 
       test('can take arguments without a space separating', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('file', abbr: 'f');
 
         var args = parser.parse(['-flip']);
@@ -377,7 +383,7 @@ void main() {
       });
 
       test('can take arguments with a space separating', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('file', abbr: 'f');
 
         var args = parser.parse(['-f', 'name']);
@@ -385,7 +391,7 @@ void main() {
       });
 
       test('allow non-option characters in the value', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('apple', abbr: 'a');
 
         var args = parser.parse(['-ab?!c']);
@@ -393,19 +399,19 @@ void main() {
       });
 
       test('throw if unknown', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         throwsFormat(parser, ['-f']);
       });
 
       test('throw if the value is missing', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('file', abbr: 'f');
 
         throwsFormat(parser, ['-f']);
       });
 
       test('does not throw if the value looks like an option', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('file', abbr: 'f');
         parser.addOption('other');
 
@@ -416,7 +422,7 @@ void main() {
       });
 
       test('throw if the value is not allowed', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode', abbr: 'm', allowed: ['debug', 'release']);
 
         throwsFormat(parser, ['-mprofile']);
@@ -424,15 +430,18 @@ void main() {
 
       group('throw if a comma-separated value is not allowed', () {
         test("with allowMultiple", () {
-          var parser = new ArgParser();
-          parser.addOption('mode',
-              abbr: 'm', allowMultiple: true, allowed: ['debug', 'release']);
+          var parser = ArgParser();
+          parser.addOption(
+            'mode',
+            abbr: 'm', allowMultiple: true, // ignore: deprecated_member_use
+            allowed: ['debug', 'release'],
+          );
 
           throwsFormat(parser, ['-mdebug,profile']);
         });
 
         test("with addMultiOption", () {
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser
               .addMultiOption('mode', abbr: 'm', allowed: ['debug', 'release']);
 
@@ -441,7 +450,7 @@ void main() {
       });
 
       test('throw if any but the first is not a flag', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('apple', abbr: 'a');
         parser.addOption('banana', abbr: 'b'); // Takes an argument.
         parser.addFlag('cherry', abbr: 'c');
@@ -450,7 +459,7 @@ void main() {
       });
 
       test('throw if it has a value but the option is a flag', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('apple', abbr: 'a');
         parser.addFlag('banana', abbr: 'b');
 
@@ -459,7 +468,7 @@ void main() {
       });
 
       test('are case-sensitive', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('file', abbr: 'f');
         parser.addFlag('force', abbr: 'F');
         var results = parser.parse(['-f']);
@@ -470,47 +479,47 @@ void main() {
 
     group('options', () {
       test('are parsed if present', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode');
         var args = parser.parse(['--mode=release']);
         expect(args['mode'], equals('release'));
       });
 
       test('are null if not present', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode');
         var args = parser.parse([]);
         expect(args['mode'], isNull);
       });
 
       test('default if missing', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode', defaultsTo: 'debug');
         var args = parser.parse([]);
         expect(args['mode'], equals('debug'));
       });
 
       test('allow the value to be separated by whitespace', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode');
         var args = parser.parse(['--mode', 'release']);
         expect(args['mode'], equals('release'));
       });
 
       test('throw if unknown', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         throwsFormat(parser, ['--unknown']);
         throwsFormat(parser, ['--nobody']); // Starts with "no".
       });
 
       test('throw if the arg does not include a value', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode');
         throwsFormat(parser, ['--mode']);
       });
 
       test('do not throw if the value looks like an option', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode');
         parser.addOption('other');
 
@@ -522,20 +531,20 @@ void main() {
       });
 
       test('do not throw if the value is in the allowed set', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode', allowed: ['debug', 'release']);
         var args = parser.parse(['--mode=debug']);
         expect(args['mode'], equals('debug'));
       });
 
       test('throw if the value is not in the allowed set', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('mode', allowed: ['debug', 'release']);
         throwsFormat(parser, ['--mode=profile']);
       });
 
       test('returns last provided value', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('define');
         var args = parser.parse(['--define=1', '--define=2']);
         expect(args['define'], equals('2'));
@@ -543,8 +552,10 @@ void main() {
 
       group('returns a List', () {
         test('with allowMultiple', () {
-          var parser = new ArgParser();
-          parser.addOption('define', allowMultiple: true);
+          var parser = ArgParser();
+          parser.addOption(
+            'define', allowMultiple: true, // ignore: deprecated_member_use
+          );
           var args = parser.parse(['--define=1']);
           expect(args['define'], equals(['1']));
           args = parser.parse(['--define=1', '--define=2']);
@@ -552,7 +563,7 @@ void main() {
         });
 
         test('with addMultiOption', () {
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('define');
           var args = parser.parse(['--define=1']);
           expect(args['define'], equals(['1']));
@@ -563,14 +574,18 @@ void main() {
 
       group('returns the default value if not explicitly set', () {
         test('with allowMultiple', () {
-          var parser = new ArgParser();
-          parser.addOption('define', defaultsTo: '0', allowMultiple: true);
+          var parser = ArgParser();
+          parser.addOption(
+            'define',
+            defaultsTo: '0',
+            allowMultiple: true, // ignore: deprecated_member_use
+          );
           var args = parser.parse(['']);
           expect(args['define'], equals(['0']));
         });
 
         test('with addMultiOption', () {
-          var parser = new ArgParser();
+          var parser = ArgParser();
           parser.addMultiOption('define', defaultsTo: ['0']);
           var args = parser.parse(['']);
           expect(args['define'], equals(['0']));
@@ -578,7 +593,7 @@ void main() {
       });
 
       test('are case-sensitive', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addOption('verbose', defaultsTo: 'no');
         parser.addOption('Verbose', defaultsTo: 'no');
         var results = parser.parse(['--verbose', 'chatty']);
@@ -589,7 +604,7 @@ void main() {
 
     group('remaining args', () {
       test('stops parsing args when a non-option-like arg is encountered', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('woof');
         parser.addOption('meow');
         parser.addOption('tweet', defaultsTo: 'bird');
@@ -602,7 +617,7 @@ void main() {
       });
 
       test('consumes "--" and stops', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('woof', defaultsTo: false);
         parser.addOption('meow', defaultsTo: 'kitty');
 
@@ -615,7 +630,7 @@ void main() {
       test(
           'with allowTrailingOptions: false, leaves "--" if not the first '
           'non-option', () {
-        var parser = new ArgParser(allowTrailingOptions: false);
+        var parser = ArgParser(allowTrailingOptions: false);
         parser.addFlag('woof');
 
         var results = parser.parse(['--woof', 'stop', '--', 'arg']);

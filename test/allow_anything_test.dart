@@ -2,15 +2,14 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:test/test.dart';
-
 import 'package:args/args.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('new ArgParser.allowAnything()', () {
     ArgParser parser;
     setUp(() {
-      parser = new ArgParser.allowAnything();
+      parser = ArgParser.allowAnything();
     });
 
     test('exposes empty values', () {
@@ -19,7 +18,7 @@ void main() {
       expect(parser.allowTrailingOptions, isFalse);
       expect(parser.allowsAnything, isTrue);
       expect(parser.usage, isEmpty);
-      expect(parser.getUsage(), isEmpty);
+      expect(parser.getUsage(), isEmpty); // ignore: deprecated_member_use
       expect(parser.findByAbbreviation("a"), isNull);
     });
 
@@ -44,7 +43,7 @@ void main() {
     });
 
     test('works as a subcommand', () {
-      var commandParser = new ArgParser()..addCommand('command', parser);
+      var commandParser = ArgParser()..addCommand('command', parser);
       var results =
           commandParser.parse(['command', '--foo', '-abc', '--', 'bar']);
       expect(results.command.options, isEmpty);

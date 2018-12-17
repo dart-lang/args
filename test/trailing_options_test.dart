@@ -7,14 +7,14 @@ import 'package:args/args.dart';
 
 void main() {
   test('allowTrailingOptions defaults to true', () {
-    var parser = new ArgParser();
+    var parser = ArgParser();
     expect(parser.allowTrailingOptions, isTrue);
   });
 
   group('when trailing options are allowed', () {
     var parser;
     setUp(() {
-      parser = new ArgParser(allowTrailingOptions: true);
+      parser = ArgParser(allowTrailingOptions: true);
     });
 
     void expectThrows(List<String> args) {
@@ -81,10 +81,10 @@ void main() {
   });
 
   test("uses the innermost command's trailing options behavior", () {
-    var parser = new ArgParser(allowTrailingOptions: true);
+    var parser = ArgParser(allowTrailingOptions: true);
     parser.addFlag('flag', abbr: 'f');
     var command =
-        parser.addCommand('cmd', new ArgParser(allowTrailingOptions: false));
+        parser.addCommand('cmd', ArgParser(allowTrailingOptions: false));
     command.addFlag('verbose', abbr: 'v');
 
     var results = parser.parse(['a', '-f', 'b']);

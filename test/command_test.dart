@@ -9,10 +9,10 @@ import 'test_utils.dart';
 void main() {
   var foo;
   setUp(() {
-    foo = new FooCommand();
+    foo = FooCommand();
 
     // Make sure [Command.runner] is set up.
-    new CommandRunner("test", "A test command runner.").addCommand(foo);
+    CommandRunner("test", "A test command runner.").addCommand(foo);
   });
 
   group(".invocation has a sane default", () {
@@ -21,12 +21,12 @@ void main() {
     });
 
     test("with subcommands", () {
-      foo.addSubcommand(new AsyncCommand());
+      foo.addSubcommand(AsyncCommand());
       expect(foo.invocation, equals("test foo <subcommand> [arguments]"));
     });
 
     test("for a subcommand", () {
-      var async = new AsyncCommand();
+      var async = AsyncCommand();
       foo.addSubcommand(async);
 
       expect(async.invocation, equals("test foo async [arguments]"));
@@ -58,8 +58,8 @@ Run "test help" to see global options."""));
     });
 
     test("doesn't print hidden subcommands", () {
-      foo.addSubcommand(new AsyncCommand());
-      foo.addSubcommand(new HiddenCommand());
+      foo.addSubcommand(AsyncCommand());
+      foo.addSubcommand(HiddenCommand());
 
       expect(foo.usage, equals("""
 Set a value.
@@ -74,7 +74,7 @@ Run "test help" to see global options."""));
     });
 
     test("doesn't print subcommand aliases", () {
-      foo.addSubcommand(new AliasedCommand());
+      foo.addSubcommand(AliasedCommand());
 
       expect(foo.usage, equals("""
 Set a value.
@@ -89,13 +89,13 @@ Run "test help" to see global options."""));
     });
 
     test("wraps long command descriptions with subcommands", () {
-      var wrapping = new WrappingCommand();
+      var wrapping = WrappingCommand();
 
       // Make sure [Command.runner] is set up.
-      new CommandRunner("longtest", "A long-lined test command runner.")
+      CommandRunner("longtest", "A long-lined test command runner.")
           .addCommand(wrapping);
 
-      wrapping.addSubcommand(new LongCommand());
+      wrapping.addSubcommand(LongCommand());
       expect(wrapping.usage, equals("""
 This command overrides the argParser so
 that it will wrap long lines.
@@ -115,10 +115,10 @@ options."""));
     });
 
     test("wraps long command descriptions", () {
-      var longCommand = new LongCommand();
+      var longCommand = LongCommand();
 
       // Make sure [Command.runner] is set up.
-      new CommandRunner("longtest", "A long-lined test command runner.")
+      CommandRunner("longtest", "A long-lined test command runner.")
           .addCommand(longCommand);
 
       expect(longCommand.usage, equals("""
@@ -151,7 +151,7 @@ Run "test help" to see global options."""));
   });
 
   test("considers a command hidden if all its subcommands are hidden", () {
-    foo.addSubcommand(new HiddenCommand());
+    foo.addSubcommand(HiddenCommand());
     expect(foo.hidden, isTrue);
   });
 }

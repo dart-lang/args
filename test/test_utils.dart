@@ -24,7 +24,7 @@ class CommandRunnerWithFooterAndWrapping extends CommandRunner {
 
   @override
   ArgParser get argParser => _argParser;
-  final _argParser = new ArgParser(usageLineLength: 40);
+  final _argParser = ArgParser(usageLineLength: 40);
 
   CommandRunnerWithFooterAndWrapping(String executableName, String description)
       : super(executableName, description);
@@ -99,7 +99,7 @@ class WrappingCommand extends Command {
 
   @override
   ArgParser get argParser => _argParser;
-  final _argParser = new ArgParser(usageLineLength: 40);
+  final _argParser = ArgParser(usageLineLength: 40);
 
   @override
   final name = "wrapping";
@@ -122,7 +122,7 @@ class LongCommand extends Command {
 
   @override
   ArgParser get argParser => _argParser;
-  final _argParser = new ArgParser(usageLineLength: 40);
+  final _argParser = ArgParser(usageLineLength: 40);
 
   @override
   final name = "long";
@@ -203,10 +203,10 @@ class AsyncCommand extends Command {
   final takesArguments = false;
 
   @override
-  Future run() => new Future.value().then((_) => hasRun = true);
+  Future run() => Future.value().then((_) => hasRun = true);
 }
 
-void throwsIllegalArg(function, {String reason: null}) {
+void throwsIllegalArg(function, {String reason}) {
   expect(function, throwsArgumentError, reason: reason);
 }
 
@@ -216,7 +216,7 @@ void throwsFormat(ArgParser parser, List<String> args) {
 
 Matcher throwsUsageException(message, usage) {
   return throwsA(predicate((error) {
-    expect(error, new isInstanceOf<UsageException>());
+    expect(error, TypeMatcher<UsageException>());
     expect(error.message, message);
     expect(error.usage, usage);
     return true;

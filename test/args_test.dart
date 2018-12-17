@@ -2,26 +2,27 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:test/test.dart';
 import 'package:args/args.dart';
+import 'package:test/test.dart';
+
 import 'test_utils.dart';
 
 void main() {
   group('ArgParser.addFlag()', () {
     test('throws ArgumentError if the flag already exists', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('foo');
       throwsIllegalArg(() => parser.addFlag('foo'));
     });
 
     test('throws ArgumentError if the option already exists', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('foo');
       throwsIllegalArg(() => parser.addFlag('foo'));
     });
 
     test('throws ArgumentError if the abbreviation exists', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('foo', abbr: 'f');
       throwsIllegalArg(() => parser.addFlag('flummox', abbr: 'f'));
     });
@@ -29,23 +30,23 @@ void main() {
     test(
         'throws ArgumentError if the abbreviation is longer '
         'than one character', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       throwsIllegalArg(() => parser.addFlag('flummox', abbr: 'flu'));
     });
 
     test('throws ArgumentError if a flag name is invalid', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
 
-      for (var name in _INVALID_OPTIONS) {
+      for (var name in _invalidOptions) {
         var reason = '${Error.safeToString(name)} is not valid';
         throwsIllegalArg(() => parser.addFlag(name), reason: reason);
       }
     });
 
     test('accepts valid flag names', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
 
-      for (var name in _VALID_OPTIONS) {
+      for (var name in _validOptions) {
         var reason = '${Error.safeToString(name)} is valid';
         expect(() => parser.addFlag(name), returnsNormally, reason: reason);
       }
@@ -54,19 +55,19 @@ void main() {
 
   group('ArgParser.addOption()', () {
     test('throws ArgumentError if the flag already exists', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('foo');
       throwsIllegalArg(() => parser.addOption('foo'));
     });
 
     test('throws ArgumentError if the option already exists', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('foo');
       throwsIllegalArg(() => parser.addOption('foo'));
     });
 
     test('throws ArgumentError if the abbreviation exists', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('foo', abbr: 'f');
       throwsIllegalArg(() => parser.addOption('flummox', abbr: 'f'));
     });
@@ -74,36 +75,36 @@ void main() {
     test(
         'throws ArgumentError if the abbreviation is longer '
         'than one character', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       throwsIllegalArg(() => parser.addOption('flummox', abbr: 'flu'));
     });
 
     test('throws ArgumentError if the abbreviation is empty', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       throwsIllegalArg(() => parser.addOption('flummox', abbr: ''));
     });
 
     test('throws ArgumentError if the abbreviation is an invalid value', () {
-      var parser = new ArgParser();
-      for (var name in _INVALID_OPTIONS.where((v) => v != null)) {
+      var parser = ArgParser();
+      for (var name in _invalidOptions.where((v) => v != null)) {
         throwsIllegalArg(() => parser.addOption('flummox', abbr: name));
       }
     });
 
     test('throws ArgumentError if the abbreviation is a dash', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       throwsIllegalArg(() => parser.addOption('flummox', abbr: '-'));
     });
 
     test('allows explict null value for "abbr"', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       expect(() => parser.addOption('flummox', abbr: null), returnsNormally);
     });
 
     test('throws ArgumentError if an option name is invalid', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
 
-      for (var name in _INVALID_OPTIONS) {
+      for (var name in _invalidOptions) {
         var reason = '${Error.safeToString(name)} is not valid';
         throwsIllegalArg(() => parser.addOption(name), reason: reason);
       }
@@ -112,15 +113,20 @@ void main() {
     test(
         'throws ArgumentError if splitCommas is passed with allowMultiple: '
         'false', () {
-      var parser = new ArgParser();
-      throwsIllegalArg(() => parser.addOption('flummox', splitCommas: true));
-      throwsIllegalArg(() => parser.addOption('flummox', splitCommas: false));
+      var parser = ArgParser();
+      throwsIllegalArg(() => parser.addOption(
+            'flummox', splitCommas: true, // ignore: deprecated_member_use
+          ));
+      throwsIllegalArg(() => parser.addOption(
+            'flummox',
+            splitCommas: false, // ignore: deprecated_member_use
+          ));
     });
 
     test('accepts valid option names', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
 
-      for (var name in _VALID_OPTIONS) {
+      for (var name in _validOptions) {
         var reason = '${Error.safeToString(name)} is valid';
         expect(() => parser.addOption(name), returnsNormally, reason: reason);
       }
@@ -129,13 +135,13 @@ void main() {
 
   group('ArgParser.getDefault()', () {
     test('returns the default value for an option', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('mode', defaultsTo: 'debug');
       expect(parser.getDefault('mode'), 'debug');
     });
 
     test('throws if the option is unknown', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('mode', defaultsTo: 'debug');
       throwsIllegalArg(() => parser.getDefault('undefined'));
     });
@@ -143,12 +149,12 @@ void main() {
 
   group('ArgParser.commands', () {
     test('returns an empty map if there are no commands', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       expect(parser.commands, isEmpty);
     });
 
     test('returns the commands that were added', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addCommand('hide');
       parser.addCommand('seek');
       expect(parser.commands, hasLength(2));
@@ -157,7 +163,7 @@ void main() {
     });
 
     test('iterates over the commands in the order they were added', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addCommand('a');
       parser.addCommand('d');
       parser.addCommand('b');
@@ -168,12 +174,12 @@ void main() {
 
   group('ArgParser.options', () {
     test('returns an empty map if there are no options', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       expect(parser.options, isEmpty);
     });
 
     test('returns the options that were added', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('hide');
       parser.addOption('seek');
       expect(parser.options, hasLength(2));
@@ -182,7 +188,7 @@ void main() {
     });
 
     test('iterates over the options in the order they were added', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('a');
       parser.addOption('d');
       parser.addFlag('b');
@@ -194,7 +200,7 @@ void main() {
   group('ArgResults', () {
     group('options', () {
       test('returns the provided options', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('woof');
         parser.addOption('meow');
 
@@ -208,7 +214,7 @@ void main() {
       });
 
       test('includes defaulted options', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('woof', defaultsTo: false);
         parser.addOption('meow', defaultsTo: 'kitty');
 
@@ -227,17 +233,17 @@ void main() {
     });
 
     test('[] throws if the name is not an option', () {
-      var results = new ArgParser().parse([]);
+      var results = ArgParser().parse([]);
       throwsIllegalArg(() => results['unknown']);
     });
 
     test('rest cannot be modified', () {
-      var results = new ArgParser().parse([]);
+      var results = ArgParser().parse([]);
       expect(() => results.rest.add('oops'), throwsUnsupportedError);
     });
 
     test('.arguments returns the original argument list', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('foo');
 
       var results = parser.parse(['--foo']);
@@ -246,12 +252,12 @@ void main() {
 
     group('.wasParsed()', () {
       test('throws if the name is not an option', () {
-        var results = new ArgParser().parse([]);
+        var results = ArgParser().parse([]);
         throwsIllegalArg(() => results.wasParsed('unknown'));
       });
 
       test('returns true for parsed options', () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('fast');
         parser.addFlag('verbose');
         parser.addOption('mode');
@@ -269,14 +275,20 @@ void main() {
 
   group('Option', () {
     test('.getOrDefault() returns a type-specific default value', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('flag-no', defaultsTo: null);
       parser.addFlag('flag-def', defaultsTo: true);
       parser.addOption('single-no');
       parser.addOption('single-def', defaultsTo: 'def');
-      parser.addOption('allow-multi-no', allowMultiple: true);
-      parser.addOption('allow-multi-def',
-          allowMultiple: true, defaultsTo: 'def');
+      parser.addOption(
+        'allow-multi-no',
+        allowMultiple: true, // ignore: deprecated_member_use
+      );
+      parser.addOption(
+        'allow-multi-def',
+        allowMultiple: true, // ignore: deprecated_member_use
+        defaultsTo: 'def',
+      );
       parser.addMultiOption('multi-no');
       parser.addMultiOption('multi-def', defaultsTo: ['def']);
 
@@ -303,7 +315,7 @@ void main() {
   });
 }
 
-const _INVALID_OPTIONS = const [
+const _invalidOptions = [
   ' ',
   '',
   '-',
@@ -319,7 +331,7 @@ const _INVALID_OPTIONS = const [
   'forward/slash'
 ];
 
-const _VALID_OPTIONS = const [
+const _validOptions = [
   'a', // One character.
   'contains-dash',
   'contains_underscore',

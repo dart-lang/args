@@ -7,9 +7,9 @@ import 'arg_parser_exception.dart';
 import 'arg_results.dart';
 import 'option.dart';
 
-final _soloOpt = new RegExp(r'^-([a-zA-Z0-9])$');
-final _abbrOpt = new RegExp(r'^-([a-zA-Z0-9]+)(.*)$');
-final _longOpt = new RegExp(r'^--([a-zA-Z\-_0-9]+)(=(.*))?$');
+final _soloOpt = RegExp(r'^-([a-zA-Z0-9])$');
+final _abbrOpt = RegExp(r'^-([a-zA-Z0-9]+)(.*)$');
+final _longOpt = RegExp(r'^--([a-zA-Z\-_0-9]+)(=(.*))?$');
 
 /// The actual argument parsing class.
 ///
@@ -55,7 +55,7 @@ class Parser {
     ArgResults commandResults;
 
     // Parse the args.
-    while (args.length > 0) {
+    while (args.isNotEmpty) {
       if (current == '--') {
         // Reached the argument terminator, so stop here.
         args.removeAt(0);
@@ -68,13 +68,13 @@ class Parser {
       if (command != null) {
         validate(rest.isEmpty, 'Cannot specify arguments before a command.');
         var commandName = args.removeAt(0);
-        var commandParser = new Parser(commandName, command, args, this, rest);
+        var commandParser = Parser(commandName, command, args, this, rest);
 
         try {
           commandResults = commandParser.parse();
         } on ArgParserException catch (error) {
           if (commandName == null) rethrow;
-          throw new ArgParserException(
+          throw ArgParserException(
               error.message, [commandName]..addAll(error.commands));
         }
 
@@ -113,7 +113,7 @@ class Parser {
   /// Validates that there is a valid value there.
   void readNextArgAsValue(Option option) {
     // Take the option argument from the next command line arg.
-    validate(args.length > 0, 'Missing argument for "${option.name}".');
+    validate(args.isNotEmpty, 'Missing argument for "${option.name}".');
 
     setOption(results, option, current);
     args.removeAt(0);
@@ -258,7 +258,7 @@ class Parser {
   ///
   /// Throws an [ArgParserException] if [condition] is `false`.
   void validate(bool condition, String message) {
-    if (!condition) throw new ArgParserException(message);
+    if (!condition) throw ArgParserException(message);
   }
 
   /// Validates and stores [value] as the value for [option], which must not be
