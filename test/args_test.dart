@@ -114,13 +114,17 @@ void main() {
         'throws ArgumentError if splitCommas is passed with allowMultiple: '
         'false', () {
       var parser = ArgParser();
-      throwsIllegalArg(() => parser.addOption(
-            'flummox', splitCommas: true, // ignore: deprecated_member_use
-          ));
-      throwsIllegalArg(() => parser.addOption(
-            'flummox',
-            splitCommas: false, // ignore: deprecated_member_use
-          ));
+      throwsIllegalArg(() {
+        parser.addOption(
+          'flummox', splitCommas: true, // ignore: deprecated_member_use
+        );
+      });
+      throwsIllegalArg(() {
+        parser.addOption(
+          'flummox',
+          splitCommas: false, // ignore: deprecated_member_use
+        );
+      });
     });
 
     test('accepts valid option names', () {
