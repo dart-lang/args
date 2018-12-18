@@ -1,11 +1,13 @@
 language: dart
-sudo: false
+
 dart:
+  - 2.0.0
   - stable
   - dev
+
 dart_task:
   - test: -p vm
-  - dartanalyzer
+  - dartanalyzer: --fatal-infos --fatal-warnings .
 
 matrix:
   include:

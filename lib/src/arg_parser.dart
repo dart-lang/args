@@ -2,6 +2,10 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// TODO(nweiz): Remove this ignore when sdk#30084 is fixed or when args no
+// longer refers to its own deprecated members.
+// ignore_for_file: deprecated_member_use
+
 import 'dart:collection';
 
 import 'allow_anything_parser.dart';
@@ -52,8 +56,8 @@ class ArgParser {
   /// flags and options that appear after positional arguments. If it's `false`,
   /// the parser stops parsing as soon as it finds an argument that is neither
   /// an option nor a command.
-  factory ArgParser({bool allowTrailingOptions: true, int usageLineLength}) =>
-      new ArgParser._(<String, Option>{}, <String, ArgParser>{},
+  factory ArgParser({bool allowTrailingOptions = true, int usageLineLength}) =>
+      ArgParser._(<String, Option>{}, <String, ArgParser>{},
           allowTrailingOptions: allowTrailingOptions,
           usageLineLength: usageLineLength);
 
@@ -66,11 +70,11 @@ class ArgParser {
   factory ArgParser.allowAnything() = AllowAnythingParser;
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
-      {bool allowTrailingOptions: true, this.usageLineLength})
+      {bool allowTrailingOptions = true, this.usageLineLength})
       : this._options = options,
-        this.options = new UnmodifiableMapView(options),
+        this.options = UnmodifiableMapView(options),
         this._commands = commands,
-        this.commands = new UnmodifiableMapView(commands),
+        this.commands = UnmodifiableMapView(commands),
         this.allowTrailingOptions =
             allowTrailingOptions != null ? allowTrailingOptions : false;
 
@@ -82,10 +86,10 @@ class ArgParser {
   ArgParser addCommand(String name, [ArgParser parser]) {
     // Make sure the name isn't in use.
     if (_commands.containsKey(name)) {
-      throw new ArgumentError('Duplicate command "$name".');
+      throw ArgumentError('Duplicate command "$name".');
     }
 
-    if (parser == null) parser = new ArgParser();
+    if (parser == null) parser = ArgParser();
     _commands[name] = parser;
     return parser;
   }
@@ -121,10 +125,10 @@ class ArgParser {
   void addFlag(String name,
       {String abbr,
       String help,
-      bool defaultsTo: false,
-      bool negatable: true,
+      bool defaultsTo = false,
+      bool negatable = true,
       void callback(bool value),
-      bool hide: false}) {
+      bool hide = false}) {
     _addOption(
         name,
         abbr,
@@ -187,11 +191,11 @@ class ArgParser {
       Map<String, String> allowedHelp,
       String defaultsTo,
       Function callback,
-      @Deprecated("Use addMultiOption() instead.") bool allowMultiple: false,
+      @Deprecated("Use addMultiOption() instead.") bool allowMultiple = false,
       @Deprecated("Use addMultiOption() instead.") bool splitCommas,
-      bool hide: false}) {
+      bool hide = false}) {
     if (!allowMultiple && splitCommas != null) {
-      throw new ArgumentError(
+      throw ArgumentError(
           'splitCommas may not be set if allowMultiple is false.');
     }
 
@@ -256,8 +260,8 @@ class ArgParser {
       Map<String, String> allowedHelp,
       Iterable<String> defaultsTo,
       void callback(List<String> values),
-      bool splitCommas: true,
-      bool hide: false}) {
+      bool splitCommas = true,
+      bool hide = false}) {
     _addOption(
         name,
         abbr,
@@ -282,19 +286,19 @@ class ArgParser {
       defaultsTo,
       Function callback,
       OptionType type,
-      {bool negatable: false,
+      {bool negatable = false,
       bool splitCommas,
-      bool hide: false}) {
+      bool hide = false}) {
     // Make sure the name isn't in use.
     if (_options.containsKey(name)) {
-      throw new ArgumentError('Duplicate option "$name".');
+      throw ArgumentError('Duplicate option "$name".');
     }
 
     // Make sure the abbreviation isn't too long or in use.
     if (abbr != null) {
       var existing = findByAbbreviation(abbr);
       if (existing != null) {
-        throw new ArgumentError(
+        throw ArgumentError(
             'Abbreviation "$abbr" is already used by "${existing.name}".');
       }
     }
@@ -317,7 +321,7 @@ class ArgParser {
   /// Parses [args], a list of command-line arguments, matches them against the
   /// flags and options defined by this parser, and returns the result.
   ArgResults parse(Iterable<String> args) =>
-      new Parser(null, this, args.toList()).parse();
+      Parser(null, this, args.toList()).parse();
 
   /// Generates a string displaying usage information for the defined options.
   ///
@@ -329,15 +333,14 @@ class ArgParser {
   ///
   /// This is basically the help text shown on the command line.
   String get usage {
-    return new Usage(_optionsAndSeparators, lineLength: usageLineLength)
-        .generate();
+    return Usage(_optionsAndSeparators, lineLength: usageLineLength).generate();
   }
 
   /// Get the default value for an option. Useful after parsing to test if the
   /// user specified something other than the default.
   getDefault(String option) {
     if (!options.containsKey(option)) {
-      throw new ArgumentError('No option named $option');
+      throw ArgumentError('No option named $option');
     }
     return options[option].defaultsTo;
   }

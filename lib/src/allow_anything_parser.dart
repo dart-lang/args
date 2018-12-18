@@ -16,18 +16,18 @@ class AllowAnythingParser implements ArgParser {
   int get usageLineLength => null;
 
   ArgParser addCommand(String name, [ArgParser parser]) {
-    throw new UnsupportedError(
+    throw UnsupportedError(
         "ArgParser.allowAnything().addCommands() isn't supported.");
   }
 
   void addFlag(String name,
       {String abbr,
       String help,
-      bool defaultsTo: false,
-      bool negatable: true,
+      bool defaultsTo = false,
+      bool negatable = true,
       void callback(bool value),
-      bool hide: false}) {
-    throw new UnsupportedError(
+      bool hide = false}) {
+    throw UnsupportedError(
         "ArgParser.allowAnything().addFlag() isn't supported.");
   }
 
@@ -39,10 +39,10 @@ class AllowAnythingParser implements ArgParser {
       Map<String, String> allowedHelp,
       String defaultsTo,
       Function callback,
-      bool allowMultiple: false,
+      bool allowMultiple = false,
       bool splitCommas,
-      bool hide: false}) {
-    throw new UnsupportedError(
+      bool hide = false}) {
+    throw UnsupportedError(
         "ArgParser.allowAnything().addOption() isn't supported.");
   }
 
@@ -54,26 +54,26 @@ class AllowAnythingParser implements ArgParser {
       Map<String, String> allowedHelp,
       Iterable<String> defaultsTo,
       void callback(List<String> values),
-      bool splitCommas: true,
-      bool hide: false}) {
-    throw new UnsupportedError(
+      bool splitCommas = true,
+      bool hide = false}) {
+    throw UnsupportedError(
         "ArgParser.allowAnything().addMultiOption() isn't supported.");
   }
 
   void addSeparator(String text) {
-    throw new UnsupportedError(
+    throw UnsupportedError(
         "ArgParser.allowAnything().addSeparator() isn't supported.");
   }
 
   ArgResults parse(Iterable<String> args) =>
-      new Parser(null, this, args.toList()).parse();
+      Parser(null, this, args.toList()).parse();
 
   String getUsage() => usage;
 
   String get usage => "";
 
   getDefault(String option) {
-    throw new ArgumentError('No option named $option');
+    throw ArgumentError('No option named $option');
   }
 
   Option findByAbbreviation(String abbr) => null;

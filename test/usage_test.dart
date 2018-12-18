@@ -2,13 +2,13 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:test/test.dart';
 import 'package:args/args.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('ArgParser.usage', () {
     test('negatable flags show "no-" in title', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('mode', help: 'The mode');
 
       validateUsage(parser, '''
@@ -17,7 +17,7 @@ void main() {
     });
 
     test('non-negatable flags don\'t show "no-" in title', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('mode', negatable: false, help: 'The mode');
 
       validateUsage(parser, '''
@@ -26,7 +26,7 @@ void main() {
     });
 
     test('if there are no abbreviations, there is no column for them', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('mode', help: 'The mode');
 
       validateUsage(parser, '''
@@ -35,7 +35,7 @@ void main() {
     });
 
     test('options are lined up past abbreviations', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('mode', abbr: 'm', help: 'The mode');
       parser.addOption('long', help: 'Lacks an abbreviation');
 
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('help text is lined up past the longest option', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('mode', abbr: 'm', help: 'Lined up with below');
       parser.addOption('a-really-long-name', help: 'Its help text');
 
@@ -57,7 +57,7 @@ void main() {
     });
 
     test('leading empty lines are ignored in help text', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('mode', help: '\n\n\n\nAfter newlines');
 
       validateUsage(parser, '''
@@ -66,7 +66,7 @@ void main() {
     });
 
     test('trailing empty lines are ignored in help text', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('mode', help: 'Before newlines\n\n\n\n');
 
       validateUsage(parser, '''
@@ -75,7 +75,7 @@ void main() {
     });
 
     test('options are documented in the order they were added', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('zebra', help: 'First');
       parser.addFlag('monkey', help: 'Second');
       parser.addFlag('wombat', help: 'Third');
@@ -88,7 +88,7 @@ void main() {
     });
 
     test('the default value for a flag is shown if on', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('affirm', help: 'Should be on', defaultsTo: true);
       parser.addFlag('negate', help: 'Should be off', defaultsTo: false);
       parser.addFlag('null', help: 'Should be null', defaultsTo: null);
@@ -103,13 +103,17 @@ void main() {
     });
 
     test('the default value for an option with no allowed list is shown', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('single',
           help: 'Can be anything', defaultsTo: 'whatevs');
       parser.addMultiOption('multiple',
           help: 'Can be anything', defaultsTo: ['whatevs']);
-      parser.addOption('allow-multi',
-          help: 'Can be anything', defaultsTo: 'whatevs', allowMultiple: true);
+      parser.addOption(
+        'allow-multi',
+        help: 'Can be anything',
+        defaultsTo: 'whatevs',
+        allowMultiple: true, // ignore: deprecated_member_use
+      );
 
       validateUsage(parser, '''
           --single         Can be anything
@@ -125,7 +129,7 @@ void main() {
 
     test('multiple default values for an option with no allowed list are shown',
         () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addMultiOption('any',
           help: 'Can be anything', defaultsTo: ['some', 'stuff']);
 
@@ -137,12 +141,15 @@ void main() {
 
     test('no default values are shown for a multi option with an empty default',
         () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addMultiOption('implicit', help: 'Implicit default');
       parser
           .addMultiOption('explicit', help: 'Explicit default', defaultsTo: []);
-      parser.addOption('allow-multi',
-          help: 'Implicit with allowMultiple', allowMultiple: true);
+      parser.addOption(
+        'allow-multi',
+        help: 'Implicit with allowMultiple',
+        allowMultiple: true, // ignore: deprecated_member_use
+      );
 
       validateUsage(parser, '''
           --implicit       Implicit default
@@ -152,7 +159,7 @@ void main() {
     });
 
     test('the value help is shown', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('out',
           abbr: 'o', help: 'Where to write file', valueHelp: 'path');
 
@@ -162,7 +169,7 @@ void main() {
     });
 
     test('the allowed list is shown', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('suit',
           help: 'Like in cards',
           allowed: ['spades', 'clubs', 'hearts', 'diamonds']);
@@ -174,7 +181,7 @@ void main() {
     });
 
     test('the default is highlighted in the allowed list', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('suit',
           help: 'Like in cards',
           defaultsTo: 'clubs',
@@ -187,7 +194,7 @@ void main() {
     });
 
     test('multiple defaults are highlighted in the allowed list', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addMultiOption('suit',
           help: 'Like in cards',
           defaultsTo: ['clubs', 'diamonds'],
@@ -200,7 +207,7 @@ void main() {
     });
 
     test('the allowed help is shown', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('suit', help: 'Like in cards', allowed: [
         'spades',
         'clubs',
@@ -224,7 +231,7 @@ void main() {
     });
 
     test('the default is highlighted in the allowed help', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('suit',
           help: 'Like in cards',
           defaultsTo: 'clubs',
@@ -252,7 +259,7 @@ void main() {
     });
 
     test('multiple defaults are highlighted in the allowed help', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addMultiOption('suit', help: 'Like in cards', defaultsTo: [
         'clubs',
         'hearts'
@@ -279,7 +286,7 @@ void main() {
     });
 
     test("hidden options don't appear in the help", () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addOption('first', help: 'The first option');
       parser.addOption('second', hide: true);
       parser.addOption('third', help: 'The third option');
@@ -291,7 +298,7 @@ void main() {
     });
 
     test("hidden flags don't appear in the help", () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('first', help: 'The first flag');
       parser.addFlag('second', hide: true);
       parser.addFlag('third', help: 'The third flag');
@@ -303,7 +310,7 @@ void main() {
     });
 
     test("hidden options don't affect spacing", () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('first', help: 'The first flag');
       parser.addFlag('second-very-long-option', hide: true);
       parser.addFlag('third', help: 'The third flag');
@@ -315,7 +322,7 @@ void main() {
     });
 
     test("help strings are not wrapped if usageLineLength is null", () {
-      var parser = new ArgParser(usageLineLength: null);
+      var parser = ArgParser(usageLineLength: null);
       parser.addFlag('long',
           help: 'The flag with a really long help text that will not '
               'be wrapped.');
@@ -326,7 +333,7 @@ void main() {
 
     test("help strings are wrapped properly when usageLineLength is specified",
         () {
-      var parser = new ArgParser(usageLineLength: 60);
+      var parser = ArgParser(usageLineLength: 60);
       parser.addFlag('long',
           help: 'The flag with a really long help text that will be wrapped.');
       parser.addFlag('longNewline',
@@ -372,7 +379,7 @@ void main() {
     test(
         "help strings are wrapped with at 10 chars when usageLineLength is "
         "smaller than available space", () {
-      var parser = new ArgParser(usageLineLength: 1);
+      var parser = ArgParser(usageLineLength: 1);
       parser.addFlag('long',
           help: 'The flag with a really long help text that will be wrapped.');
       parser.addFlag('longNewline',
@@ -424,7 +431,7 @@ void main() {
 
     group("separators", () {
       test("separates options where it's placed", () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('zebra', help: 'First');
         parser.addSeparator('Primate:');
         parser.addFlag('monkey', help: 'Second');
@@ -443,7 +450,7 @@ void main() {
       });
 
       test("doesn't add extra newlines after a multiline option", () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('zebra', help: 'Multi\nline');
         parser.addSeparator('Primate:');
         parser.addFlag('monkey', help: 'Second');
@@ -458,7 +465,7 @@ void main() {
       });
 
       test("doesn't add newlines if it's the first component", () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addSeparator('Equine:');
         parser.addFlag('zebra', help: 'First');
 
@@ -469,7 +476,7 @@ void main() {
       });
 
       test("doesn't add trailing newlines if it's the last component", () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addFlag('zebra', help: 'First');
         parser.addSeparator('Primate:');
 
@@ -481,7 +488,7 @@ void main() {
       });
 
       test("adds a newline after another separator", () {
-        var parser = new ArgParser();
+        var parser = ArgParser();
         parser.addSeparator('First');
         parser.addSeparator('Second');
 
@@ -505,7 +512,7 @@ String unindentString(String text) {
   var lines = text.split('\n');
 
   // Count the indentation of the last line.
-  var whitespace = new RegExp('^ *');
+  var whitespace = RegExp('^ *');
   var indent = whitespace.firstMatch(lines[lines.length - 1])[0].length;
 
   // Drop the last line. It only exists for specifying indentation.
@@ -517,15 +524,13 @@ String unindentString(String text) {
     if (line.length <= indent) {
       // It's short, so it must be nothing but whitespace.
       if (line.trim() != '') {
-        throw new ArgumentError(
-            'Line "$line" does not have enough indentation.');
+        throw ArgumentError('Line "$line" does not have enough indentation.');
       }
 
       lines[i] = '';
     } else {
       if (line.substring(0, indent).trim() != '') {
-        throw new ArgumentError(
-            'Line "$line" does not have enough indentation.');
+        throw ArgumentError('Line "$line" does not have enough indentation.');
       }
 
       lines[i] = line.substring(indent);

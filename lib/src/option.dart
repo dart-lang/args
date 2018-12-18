@@ -18,9 +18,9 @@ Option newOption(
     OptionType type,
     {bool negatable,
     bool splitCommas,
-    bool hide: false}) {
-  return new Option._(name, abbr, help, valueHelp, allowed, allowedHelp,
-      defaultsTo, callback, type,
+    bool hide = false}) {
+  return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
+      callback, type,
       negatable: negatable, splitCommas: splitCommas, hide: hide);
 }
 
@@ -100,35 +100,35 @@ class Option {
       OptionType type,
       {this.negatable,
       bool splitCommas,
-      this.hide: false})
-      : this.allowed = allowed == null ? null : new List.unmodifiable(allowed),
+      this.hide = false})
+      : this.allowed = allowed == null ? null : List.unmodifiable(allowed),
         this.allowedHelp =
-            allowedHelp == null ? null : new Map.unmodifiable(allowedHelp),
+            allowedHelp == null ? null : Map.unmodifiable(allowedHelp),
         this.type = type,
         // If the user doesn't specify [splitCommas], it defaults to true for
         // multiple options.
         this.splitCommas =
             splitCommas == null ? type == OptionType.multiple : splitCommas {
     if (name.isEmpty) {
-      throw new ArgumentError('Name cannot be empty.');
+      throw ArgumentError('Name cannot be empty.');
     } else if (name.startsWith('-')) {
-      throw new ArgumentError('Name $name cannot start with "-".');
+      throw ArgumentError('Name $name cannot start with "-".');
     }
 
     // Ensure name does not contain any invalid characters.
     if (_invalidChars.hasMatch(name)) {
-      throw new ArgumentError('Name "$name" contains invalid characters.');
+      throw ArgumentError('Name "$name" contains invalid characters.');
     }
 
     if (abbr != null) {
       if (abbr.length != 1) {
-        throw new ArgumentError('Abbreviation must be null or have length 1.');
+        throw ArgumentError('Abbreviation must be null or have length 1.');
       } else if (abbr == '-') {
-        throw new ArgumentError('Abbreviation cannot be "-".');
+        throw ArgumentError('Abbreviation cannot be "-".');
       }
 
       if (_invalidChars.hasMatch(abbr)) {
-        throw new ArgumentError('Abbreviation is an invalid character.');
+        throw ArgumentError('Abbreviation is an invalid character.');
       }
     }
   }
@@ -145,7 +145,7 @@ class Option {
     return defaultsTo;
   }
 
-  static final _invalidChars = new RegExp(r'''[ \t\r\n"'\\/]''');
+  static final _invalidChars = RegExp(r'''[ \t\r\n"'\\/]''');
 }
 
 /// What kinds of values an option accepts.
@@ -153,10 +153,10 @@ class OptionType {
   /// An option that can only be `true` or `false`.
   ///
   /// The presence of the option name itself in the argument list means `true`.
-  static const flag = const OptionType._("OptionType.flag");
+  static const flag = OptionType._("OptionType.flag");
 
   @Deprecated("Use OptionType.flag instead.")
-  static const FLAG = flag;
+  static const FLAG = flag; // ignore: constant_identifier_names
 
   /// An option that takes a single value.
   ///
@@ -167,10 +167,10 @@ class OptionType {
   ///     --mode=debug
   ///
   /// If the option is passed more than once, the last one wins.
-  static const single = const OptionType._("OptionType.single");
+  static const single = OptionType._("OptionType.single");
 
   @Deprecated("Use OptionType.single instead.")
-  static const SINGLE = single;
+  static const SINGLE = single; // ignore: constant_identifier_names
 
   /// An option that allows multiple values.
   ///
@@ -180,10 +180,10 @@ class OptionType {
   ///
   /// In the parsed `ArgResults`, a multiple-valued option will always return
   /// a list, even if one or no values were passed.
-  static const multiple = const OptionType._("OptionType.multiple");
+  static const multiple = OptionType._("OptionType.multiple");
 
   @Deprecated("Use OptionType.multiple instead.")
-  static const MULTIPLE = multiple;
+  static const MULTIPLE = multiple; // ignore: constant_identifier_names
 
   final String name;
 

@@ -9,22 +9,22 @@ import 'test_utils.dart';
 void main() {
   group('ArgParser.addCommand()', () {
     test('creates a new ArgParser if none is given', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       var command = parser.addCommand('install');
       expect(parser.commands['install'], equals(command));
       expect(command is ArgParser, isTrue);
     });
 
     test('uses the command parser if given one', () {
-      var parser = new ArgParser();
-      var command = new ArgParser();
+      var parser = ArgParser();
+      var command = ArgParser();
       var result = parser.addCommand('install', command);
       expect(parser.commands['install'], equals(command));
       expect(result, equals(command));
     });
 
     test('throws on a duplicate command name', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addCommand('install');
       throwsIllegalArg(() => parser.addCommand('install'));
     });
@@ -32,7 +32,7 @@ void main() {
 
   group('ArgParser.parse()', () {
     test('parses a command', () {
-      var parser = new ArgParser()..addCommand('install');
+      var parser = ArgParser()..addCommand('install');
 
       var args = parser.parse(['install']);
 
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('parses a command option', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       var command = parser.addCommand('install');
       command.addOption('path');
 
@@ -50,7 +50,7 @@ void main() {
     });
 
     test('parses a parent solo option before the command', () {
-      var parser = new ArgParser()
+      var parser = ArgParser()
         ..addOption('mode', abbr: 'm')
         ..addCommand('install');
 
@@ -60,7 +60,7 @@ void main() {
     });
 
     test('parses a parent solo option after the command', () {
-      var parser = new ArgParser()
+      var parser = ArgParser()
         ..addOption('mode', abbr: 'm')
         ..addCommand('install');
 
@@ -70,7 +70,7 @@ void main() {
     });
 
     test('parses a parent option before the command', () {
-      var parser = new ArgParser()
+      var parser = ArgParser()
         ..addFlag('verbose')
         ..addCommand('install');
 
@@ -80,7 +80,7 @@ void main() {
     });
 
     test('parses a parent option after the command', () {
-      var parser = new ArgParser()
+      var parser = ArgParser()
         ..addFlag('verbose')
         ..addCommand('install');
 
@@ -90,7 +90,7 @@ void main() {
     });
 
     test('parses a parent negated option before the command', () {
-      var parser = new ArgParser()
+      var parser = ArgParser()
         ..addFlag('verbose', defaultsTo: true)
         ..addCommand('install');
 
@@ -100,7 +100,7 @@ void main() {
     });
 
     test('parses a parent negated option after the command', () {
-      var parser = new ArgParser()
+      var parser = ArgParser()
         ..addFlag('verbose', defaultsTo: true)
         ..addCommand('install');
 
@@ -110,7 +110,7 @@ void main() {
     });
 
     test('parses a parent abbreviation before the command', () {
-      var parser = new ArgParser()
+      var parser = ArgParser()
         ..addFlag('debug', abbr: 'd')
         ..addFlag('verbose', abbr: 'v')
         ..addCommand('install');
@@ -122,7 +122,7 @@ void main() {
     });
 
     test('parses a parent abbreviation after the command', () {
-      var parser = new ArgParser()
+      var parser = ArgParser()
         ..addFlag('debug', abbr: 'd')
         ..addFlag('verbose', abbr: 'v')
         ..addCommand('install');
@@ -134,7 +134,7 @@ void main() {
     });
 
     test('does not parse a solo command option before the command', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       var command = parser.addCommand('install');
       command.addOption('path', abbr: 'p');
 
@@ -142,7 +142,7 @@ void main() {
     });
 
     test('does not parse a command option before the command', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       var command = parser.addCommand('install');
       command.addOption('path');
 
@@ -150,7 +150,7 @@ void main() {
     });
 
     test('does not parse a command abbreviation before the command', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       var command = parser.addCommand('install');
       command.addFlag('debug', abbr: 'd');
       command.addFlag('verbose', abbr: 'v');
@@ -159,7 +159,7 @@ void main() {
     });
 
     test('assigns collapsed options to the proper command', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('apple', abbr: 'a');
       var command = parser.addCommand('cmd');
       command.addFlag('banana', abbr: 'b');
@@ -175,7 +175,7 @@ void main() {
     });
 
     test('option is given to innermost command that can take it', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addFlag('verbose');
       parser.addCommand('cmd')
         ..addFlag('verbose')
@@ -189,7 +189,7 @@ void main() {
     });
 
     test('remaining arguments are given to the innermost command', () {
-      var parser = new ArgParser();
+      var parser = ArgParser();
       parser.addCommand('cmd')..addCommand('subcmd');
 
       var args = parser.parse(['cmd', 'subcmd', 'other', 'stuff']);

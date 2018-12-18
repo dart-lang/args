@@ -17,7 +17,7 @@ ArgResults newArgResults(
     ArgResults command,
     List<String> rest,
     List<String> arguments) {
-  return new ArgResults._(parser, parsed, name, command, rest, arguments);
+  return ArgResults._(parser, parsed, name, command, rest, arguments);
 }
 
 /// The results of parsing a series of command line arguments using
@@ -55,13 +55,13 @@ class ArgResults {
   /// Creates a new [ArgResults].
   ArgResults._(this._parser, this._parsed, this.name, this.command,
       List<String> rest, List<String> arguments)
-      : this.rest = new UnmodifiableListView(rest),
-        this.arguments = new UnmodifiableListView(arguments);
+      : this.rest = UnmodifiableListView(rest),
+        this.arguments = UnmodifiableListView(arguments);
 
   /// Gets the parsed command-line option named [name].
   operator [](String name) {
     if (!_parser.options.containsKey(name)) {
-      throw new ArgumentError('Could not find an option named "$name".');
+      throw ArgumentError('Could not find an option named "$name".');
     }
 
     return _parser.options[name].getOrDefault(_parsed[name]);
@@ -72,7 +72,7 @@ class ArgResults {
   /// This includes the options whose values were parsed or that have defaults.
   /// Options that weren't present and have no default will be omitted.
   Iterable<String> get options {
-    var result = new Set<String>.from(_parsed.keys);
+    var result = Set<String>.from(_parsed.keys);
 
     // Include the options that have defaults.
     _parser.options.forEach((name, option) {
@@ -90,7 +90,7 @@ class ArgResults {
   bool wasParsed(String name) {
     var option = _parser.options[name];
     if (option == null) {
-      throw new ArgumentError('Could not find an option named "$name".');
+      throw ArgumentError('Could not find an option named "$name".');
     }
 
     return _parsed.containsKey(name);
