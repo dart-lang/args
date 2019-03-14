@@ -135,6 +135,25 @@ Available commands:
 
 Run "test help <command>" for more information about a command."""));
     });
+
+    test("respects usageLineLength", () {
+      runner = CommandRunner("name", "desc", usageLineLength: 35);
+      expect(runner.usage, equals("""
+desc
+
+Usage: name <command> [arguments]
+
+Global options:
+-h, --help    Print this usage
+              information.
+
+Available commands:
+  help   Display help information
+         for name.
+
+Run "name help <command>" for more
+information about a command."""));
+    });
   });
 
   test("usageException splits up the message and usage", () {
