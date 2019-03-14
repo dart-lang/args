@@ -1,3 +1,7 @@
+## 1.5.2
+
+* Added support for `usageLineLength` in `CommandRunner`
+
 ## 1.5.1
 
 * Added more comprehensive word wrapping when `usageLineLength` is set.
