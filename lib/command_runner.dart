@@ -75,9 +75,10 @@ class CommandRunner<T> {
   /// available via [Command.globalResults]. Commands should be registered with
   /// [addCommand] rather than directly on the parser.
   ArgParser get argParser => _argParser;
-  final _argParser = ArgParser();
+  final ArgParser _argParser;
 
-  CommandRunner(this.executableName, this.description) {
+  CommandRunner(this.executableName, this.description, {int usageLineLength})
+      : _argParser = ArgParser(usageLineLength: usageLineLength) {
     argParser.addFlag('help',
         abbr: 'h', negatable: false, help: 'Print this usage information.');
     addCommand(HelpCommand<T>());
