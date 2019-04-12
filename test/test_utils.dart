@@ -129,9 +129,9 @@ class LongCommand extends Command {
 
   @override
   final description = "This command has a long description that needs to be "
-      "wrapped sometimes.\nIt has embedded newlines,\n"
-      "     and indented lines that also need to be wrapped and have their "
-      "indentation preserved.\n" +
+          "wrapped sometimes.\nIt has embedded newlines,\n"
+          "     and indented lines that also need to be wrapped and have their "
+          "indentation preserved.\n" +
       ("0123456789" * 10);
 
   @override

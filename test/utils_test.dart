@@ -8,11 +8,11 @@ import 'package:test/test.dart';
 const _lineLength = 40;
 const _longLine = "This is a long line that needs to be wrapped.";
 final _longLineWithNewlines = "This is a long line with newlines that\n"
-    "needs to be wrapped.\n\n" +
+        "needs to be wrapped.\n\n" +
     "0123456789" * 5;
 final _indentedLongLineWithNewlines =
     "    This is an indented long line with newlines that\n"
-        "needs to be wrapped.\n\tAnd preserves tabs.\n      \n  " +
+            "needs to be wrapped.\n\tAnd preserves tabs.\n      \n  " +
         "0123456789" * 5;
 const _shortLine = "Short line.";
 const _indentedLongLine = "    This is an indented long line that needs to be "
