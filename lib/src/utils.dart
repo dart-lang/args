@@ -127,7 +127,9 @@ List<String> wrapTextAsLines(String text, {int start = 0, int length}) {
         result.add(line.substring(currentLineStart, i).trim());
 
         // Skip any intervening whitespace.
-        while (isWhitespace(line, i) && i < line.length) i++;
+        while (isWhitespace(line, i) && i < line.length) {
+          i++;
+        }
 
         currentLineStart = i;
         lastWhitespace = null;
