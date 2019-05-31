@@ -55,8 +55,6 @@ allowed set of values. When you do, the parser throws an
 [`ArgParserException`][ArgParserException] if the value for an option is not in
 the allowed set. Here's an example of specifying allowed values:
 
-[ArgParserException]: https://www.dartdocs.org/documentation/args/latest/args/ArgParserException-class.html
-
 ```dart
 parser.addOption('mode', allowed: ['debug', 'release']);
 ```
@@ -387,16 +385,17 @@ The resulting string looks something like this:
 
 [posix]: http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap12.html#tag_12_02
 [gnu]: http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
-[ArgParser]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser
-[ArgResults]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgResults
-[CommandRunner]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.CommandRunner
-[Command]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.Command
-[UsageException]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.UsageException
-[addOption]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_addOption
-[addFlag]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_addFlag
-[parse]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_parse
-[rest]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgResults@id_rest
-[addCommand]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_addCommand
-[getUsage]: http://www.dartdocs.org/documentation/args/latest/index.html#args/args.ArgParser@id_getUsage
-[addSubcommand]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.Command@id_addSubcommand
-[run]: http://www.dartdocs.org/documentation/args/latest/index.html#args/command_runner.Command@id_run
+[ArgParser]: https://pub.dev/documentation/args/latest/args/ArgParser/ArgParser.html
+[ArgParserException]: https://pub.dev/documentation/args/latest/args/ArgParserException-class.html
+[ArgResults]: https://pub.dev/documentation/args/latest/args/ArgResults-class.html
+[CommandRunner]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner-class.html
+[Command]: https://pub.dev/documentation/args/latest/command_runner/Command-class.html
+[UsageException]: https://pub.dev/documentation/args/latest/command_runner/UsageException-class.html
+[addOption]: https://pub.dev/documentation/args/latest/args/ArgParser/addOption.html
+[addFlag]: https://pub.dev/documentation/args/latest/args/ArgParser/addFlag.html
+[parse]: https://pub.dev/documentation/args/latest/args/ArgParser/parse.html
+[rest]: https://pub.dev/documentation/args/latest/args/ArgResults/rest.html
+[addCommand]: https://pub.dev/documentation/args/latest/args/ArgParser/addCommand.html
+[usage]: https://pub.dev/documentation/args/latest/args/ArgParser/usage.html
+[addSubcommand]: https://pub.dev/documentation/args/latest/command_runner/Command/addSubcommand.html
+[run]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner/run.html
