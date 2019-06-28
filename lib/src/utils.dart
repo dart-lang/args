@@ -1,6 +1,10 @@
 // Copyright (c) 2014, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math' as math;
 
 /// Pads [source] to [length] by adding spaces at the end.
@@ -138,4 +142,71 @@ List<String> wrapTextAsLines(String text, {int start = 0, int length}) {
     result.add(line.substring(currentLineStart).trim());
   }
   return result;
+}
+
+// When an IOSink that prints to the terminal is desired, normally [stdout] is
+// used. However, package:args's testing strategy is based on the zone override
+// for print() installed by package:test. Thus, we wrap calls to print() in an
+// IOSink implementation for use in this case.
+class PrintIOSink implements IOSink {
+  PrintIOSink();
+
+  final StringBuffer _buffer = StringBuffer();
+
+  @override
+  void write(Object obj) => _buffer.write(obj);
+
+  @override
+  void writeAll(Iterable objects, [String separator = ""]) =>
+      _buffer.writeAll(objects, separator);
+
+  @override
+  void writeCharCode(int charCode) => _buffer.writeCharCode(charCode);
+
+  @override
+  void writeln([Object obj = ""]) => _buffer.writeln(obj);
+
+  @override
+  Future get done => null;
+
+  @override
+  Future close() async {
+    if (_buffer.isNotEmpty) {
+      print(_buffer);
+      _buffer.clear();
+    }
+  }
+
+  @override
+  Future flush() async {
+    if (_buffer.isNotEmpty) {
+      print(_buffer);
+      _buffer.clear();
+    }
+  }
+
+  @override
+  Encoding get encoding {
+    throw UnimplementedError('PrintIOSink ignores encoding');
+  }
+
+  @override
+  set encoding(Encoding e) {
+    throw UnimplementedError('PrintIOSink ignores encoding');
+  }
+
+  @override
+  void add(List<int> data) {
+    throw UnimplementedError('add() is not supported by this IOSink.');
+  }
+
+  @override
+  void addError(Object error, [StackTrace stackTrace]) {
+    throw UnimplementedError('addError() is not supported by this IOSink.');
+  }
+
+  @override
+  Future addStream(Stream<List<int>> stream) {
+    throw UnimplementedError('addStream() is not supported by this IOSink.');
+  }
 }

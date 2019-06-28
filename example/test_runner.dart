@@ -10,10 +10,31 @@ library example;
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:args/command_runner.dart';
 
-main() {
-  var parser = ArgParser();
+class FooCommand extends Command<void> {
+  FooCommand() {
+    argParser.addFlag('all',
+        abbr: 'a',
+        defaultsTo: false,
+        negatable: false,
+        help: 'Fooicizes all frobinators.');
+  }
 
+  @override
+  String get name => 'foo';
+
+  @override
+  String get description => 'Fooicizes the frobinator';
+}
+
+main(List<String> args) {
+  var commandRunner =
+      CommandRunner<void>('test_runner', 'An Example of package:args usage');
+
+  commandRunner.addCommand(FooCommand());
+
+  var parser = commandRunner.argParser;
   parser.addSeparator('===== Platform');
 
   parser.addOption('compiler',
@@ -165,5 +186,5 @@ is 'dart file.dart' and you specify special command
   parser.addOption('drt', help: 'Path to content shell executable');
   parser.addOption('dartium', help: 'Path to Dartium Chrome executable');
 
-  print(parser.usage);
+  commandRunner.run(args);
 }

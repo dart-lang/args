@@ -299,9 +299,48 @@ Run "test help" to see global options.
 Display help information for test.
 
 Usage: test help [command]
+-h, --help               Print this usage information.
+-a, --all                Output help for every command and subcommand.
+-o, --output=<OUTPUT>    When --split is given, the output directory. When --split is not given, the output file.
+-s, --split              Split help output by subcommand into files written to --output.
+
+Run "test help" to see global options.
+"""));
+      });
+
+      test("with --all, prints all help text", () {
+        runner.addCommand(FooCommand());
+        expect(() => runner.run(["help", "--all"]), prints("""
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+  foo    Set a value.
+  help   Display help information for test.
+
+Run "test help <command>" for more information about a command.
+Command: help
+Display help information for test.
+
+Usage: test help [command]
+-h, --help               Print this usage information.
+-a, --all                Output help for every command and subcommand.
+-o, --output=<OUTPUT>    When --split is given, the output directory. When --split is not given, the output file.
+-s, --split              Split help output by subcommand into files written to --output.
+
+Run "test help" to see global options.
+Command: foo
+Set a value.
+
+Usage: test foo [arguments]
 -h, --help    Print this usage information.
 
 Run "test help" to see global options.
+
 """));
       });
     });
