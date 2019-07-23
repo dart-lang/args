@@ -113,8 +113,8 @@ class CommandRunner<T> {
     }
   }
 
-  /// Adds [DynamicCommand] a top-level command in case 
-  /// there are no suitable registered commands 
+  /// Adds [DynamicCommand] a top-level command in case
+  /// there are no suitable registered commands
   void setDynamicCommand(DynamicCommand<T> command) {
     _dynamicCommand = command;
     _dynamicCommand._runner = this;
@@ -458,9 +458,9 @@ String _getCommandUsage(Map<String, Command> commands,
 }
 
 /// Wrapper for [Command]
-/// 
-/// Allows synthetically to catch sent commands in case 
-/// there are no suitable registered commands 
+///
+/// Allows synthetically to catch sent commands in case
+/// there are no suitable registered commands
 abstract class DynamicCommand<T> extends Command<T> {
   @override
   String name;
