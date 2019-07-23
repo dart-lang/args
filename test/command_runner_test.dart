@@ -233,6 +233,18 @@ information about a command."""));
           completes);
     });
 
+    test("runs a dynamic command", () {
+      final command = DynamicCommandExample();
+      runner.setDynamicCommand(command);
+
+      expect(
+          runner.run(["bad"]).then((_) {
+            expect(command.name, "bad");
+            expect(command.hasRun, isTrue);
+          }),
+          completes);
+    });
+
     group("with --help", () {
       test("with no command prints the usage", () {
         expect(() => runner.run(["--help"]), prints("""
@@ -415,6 +427,22 @@ newlines properly."""));
           runner.run(["bad"]),
           throwsUsageException(
               'Could not find a command named "bad".', _defaultUsage));
+    });
+
+    test("dynamic command not broke args", () {
+      final command = DynamicCommandExample();
+      runner.setDynamicCommand(command);
+      expect(runner.run(["foo", "--bad", "-b"]),
+          throwsUsageException('Could not find an option named "bad".', """
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+  help   Display help information for test.
+
+Run "test help <command>" for more information about a command."""));
     });
 
     test("a subcommand doesn't exist", () {

@@ -68,6 +68,7 @@ class CommandRunner<T> {
   /// An unmodifiable view of all top-level commands defined for this runner.
   Map<String, Command<T>> get commands => UnmodifiableMapView(_commands);
   final _commands = <String, Command<T>>{};
+  DynamicCommand<T> _dynamicCommand;
 
   /// The top-level argument parser.
   ///
@@ -102,6 +103,21 @@ class CommandRunner<T> {
       argParser.addCommand(name, command.argParser);
     }
     command._runner = this;
+  }
+
+  /// Facilitate the registration of a large number of commands
+  /// is an a simple wrapper for [addCommand]
+  void addCommands(Iterable<Command<T>> commands) {
+    for (final command in commands) {
+      addCommand(command);
+    }
+  }
+
+  /// Adds [DynamicCommand] a top-level command in case 
+  /// there are no suitable registered commands 
+  void setDynamicCommand(DynamicCommand<T> command) {
+    _dynamicCommand = command;
+    _dynamicCommand._runner = this;
   }
 
   /// Parses [args] and invokes [Command.run] on the chosen command.
@@ -160,6 +176,14 @@ class CommandRunner<T> {
           command.usageException('Missing subcommand for "$commandString".');
         } else {
           if (command == null) {
+            if (_dynamicCommand != null) {
+              _dynamicCommand.name = topLevelResults.rest.first;
+              command = _dynamicCommand;
+              command._globalResults = topLevelResults;
+              command._argResults = argResults;
+              commands = command._subcommands;
+              return (await command.run()) as T;
+            }
             usageException(
                 'Could not find a command named "${argResults.rest[0]}".');
           }
@@ -431,4 +455,13 @@ String _getCommandUsage(Map<String, Command> commands,
   }
 
   return buffer.toString();
+}
+
+/// Wrapper for [Command]
+/// 
+/// Allows synthetically to catch sent commands in case 
+/// there are no suitable registered commands 
+abstract class DynamicCommand<T> extends Command<T> {
+  @override
+  String name;
 }
