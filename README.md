@@ -7,7 +7,7 @@ in both server-side and client-side apps.
 
 First create an [ArgParser][]:
 
-    var parser = new ArgParser();
+    var parser = ArgParser();
 
 Then define a set of options on that parser using [addOption()][addOption] and
 [addFlag()][addFlag]. Here's the minimal way to create an option named "name":
@@ -95,7 +95,7 @@ instance of [ArgResults][], a map-like object that contains the values of the
 parsed options.
 
 ```dart
-var parser = new ArgParser();
+var parser = ArgParser();
 parser.addOption('mode');
 parser.addFlag('verbose', defaultsTo: true);
 var results = parser.parse(['--mode', 'debug', 'something', 'else']);
@@ -173,7 +173,7 @@ By default, an option has only a single value, with later option values
 overriding earlier ones; for example:
 
 ```dart
-var parser = new ArgParser();
+var parser = ArgParser();
 parser.addOption('mode');
 var results = parser.parse(['--mode', 'on', '--mode', 'off']);
 print(results['mode']); // prints 'off'
@@ -184,7 +184,7 @@ option can occur multiple times, and the `parse()` method returns a list of
 values:
 
 ```dart
-var parser = new ArgParser();
+var parser = ArgParser();
 parser.addMultiOption('mode');
 var results = parser.parse(['--mode', 'on', '--mode', 'off']);
 print(results['mode']); // prints '[on, off]'
@@ -193,7 +193,7 @@ print(results['mode']); // prints '[on, off]'
 By default, values for a multi-valued option may also be separated with commas:
 
 ```dart
-var parser = new ArgParser();
+var parser = ArgParser();
 parser.addOption('mode', allowMultiple: true);
 var results = parser.parse(['--mode', 'on,off']);
 print(results['mode']); // prints '[on, off]'
@@ -216,7 +216,7 @@ option passed to the command. You can add a command using the [addCommand][]
 method:
 
 ```dart
-var parser = new ArgParser();
+var parser = ArgParser();
 var command = parser.addCommand('commit');
 ```
 
@@ -225,8 +225,8 @@ specific to that command. If you already have an [ArgParser][] for the command's
 options, you can pass it in:
 
 ```dart
-var parser = new ArgParser();
-var command = new ArgParser();
+var parser = ArgParser();
+var command = ArgParser();
 parser.addCommand('commit', command);
 ```
 
@@ -251,7 +251,7 @@ example, given the above parser, `"git -a commit"` is *not* valid. The parser
 tries to find the right-most command that accepts an option. For example:
 
 ```dart
-var parser = new ArgParser();
+var parser = ArgParser();
 parser.addFlag('all', abbr: 'a');
 var command = parser.addCommand('commit');
 command.addFlag('all', abbr: 'a');
@@ -273,9 +273,9 @@ support for dispatching to [Command][]s based on command-line arguments, as well
 as handling `--help` flags and invalid arguments. For example:
 
 ```dart
-var runner = new CommandRunner("git", "Distributed version control.")
-  ..addCommand(new CommitCommand())
-  ..addCommand(new StashCommand())
+var runner = CommandRunner("git", "Distributed version control.")
+  ..addCommand(CommitCommand())
+  ..addCommand(StashCommand())
   ..run(['commit', '-a']); // Calls [CommitCommand.run()]
 ```
 
@@ -312,8 +312,8 @@ class StashCommand extends Command {
   final String description = "Stash changes in the working directory.";
 
   StashCommand() {
-    addSubcommand(new StashSaveCommand());
-    addSubcommand(new StashListCommand());
+    addSubcommand(StashSaveCommand());
+    addSubcommand(StashListCommand());
   }
 }
 ```
