@@ -222,3 +222,18 @@ Matcher throwsUsageException(message, usage) {
     return true;
   }));
 }
+
+class DynamicCommandExample extends DynamicCommand {
+  var hasRun = false;
+
+  @override
+  final description = "A dynamic command";
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
