@@ -3,7 +3,18 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:args/args.dart';
+import 'package:args/command_runner.dart';
 import 'package:test/test.dart';
+
+class TestSubCommand extends Command {
+  final name = 'subcommand';
+  final description = 'A Test subcommand';
+  final argParser = ArgParser.allowAnything();
+
+  TestSubCommand() {
+    // argParser.addFlag('foo');
+  }
+}
 
 void main() {
   group('new ArgParser.allowAnything()', () {
@@ -50,6 +61,22 @@ void main() {
       expect(results.command.rest, equals(['--foo', '-abc', '--', 'bar']));
       expect(results.command.arguments, equals(['--foo', '-abc', '--', 'bar']));
       expect(results.command.name, equals('command'));
+    });
+
+    test('works as a subcommand in a CommandRunner', () async {
+      var commandRunner = CommandRunner('command', 'Description of command');
+      commandRunner..addCommand(TestSubCommand());
+
+      await commandRunner.run([
+        'command',
+        'subcommand',
+        '--foo',
+        '-abc',
+        '--',
+        'bar'
+      ]).catchError((err) {
+        expect(err, TypeMatcher<UsageException>());
+      });
     });
   });
 }
