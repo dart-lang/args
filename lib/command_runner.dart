@@ -364,8 +364,10 @@ abstract class Command<T> {
   List<String> get aliases => const [];
 
   Command() {
-    argParser.addFlag('help',
-        abbr: 'h', negatable: false, help: 'Print this usage information.');
+    if (!argParser.allowsAnything) {
+      argParser.addFlag('help',
+          abbr: 'h', negatable: false, help: 'Print this usage information.');
+    }
   }
 
   /// Runs this command.

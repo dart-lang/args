@@ -28,7 +28,7 @@ class AllowAnythingParser implements ArgParser {
       void callback(bool value),
       bool hide = false}) {
     throw UnsupportedError(
-        "ArgParser.allowAnything().addFlag() isn't supported.");
+        "ArgParser.allowAnything().addFlag($name) isn't supported.");
   }
 
   void addOption(String name,
