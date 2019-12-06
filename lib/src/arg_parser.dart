@@ -325,7 +325,7 @@ class ArgParser {
   /// Generates a string displaying usage information for the defined options.
   ///
   /// This is basically the help text shown on the command line.
-  @Deprecated("Replaced with get usage. getUsage() will be removed in args 1.0")
+  @Deprecated('Replaced with get usage. getUsage() will be removed in args 1.0')
   String getUsage() => usage;
 
   /// Generates a string displaying usage information for the defined options.

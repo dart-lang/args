@@ -275,7 +275,7 @@ class Parser {
     var list = results.putIfAbsent(option.name, () => <String>[]);
 
     if (option.splitCommas) {
-      for (var element in value.split(",")) {
+      for (var element in value.split(',')) {
         _validateAllowed(option, element);
         list.add(element);
       }

@@ -153,7 +153,7 @@ void main() {
         expect(a, isNull);
       });
 
-      group("with allowMultiple", () {
+      group('with allowMultiple', () {
         test('for multiple present, options are invoked with value as a list',
             () {
           var a;
@@ -255,7 +255,7 @@ void main() {
         });
       });
 
-      group("with addMultiOption", () {
+      group('with addMultiOption', () {
         test('for multiple present, options are invoked with value as a list',
             () {
           var a;
@@ -429,7 +429,7 @@ void main() {
       });
 
       group('throw if a comma-separated value is not allowed', () {
-        test("with allowMultiple", () {
+        test('with allowMultiple', () {
           var parser = ArgParser();
           parser.addOption(
             'mode',
@@ -440,7 +440,7 @@ void main() {
           throwsFormat(parser, ['-mdebug,profile']);
         });
 
-        test("with addMultiOption", () {
+        test('with addMultiOption', () {
           var parser = ArgParser();
           parser
               .addMultiOption('mode', abbr: 'm', allowed: ['debug', 'release']);
