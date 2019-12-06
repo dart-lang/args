@@ -19,14 +19,14 @@ void main() {
       expect(parser.allowsAnything, isTrue);
       expect(parser.usage, isEmpty);
       expect(parser.getUsage(), isEmpty); // ignore: deprecated_member_use
-      expect(parser.findByAbbreviation("a"), isNull);
+      expect(parser.findByAbbreviation('a'), isNull);
     });
 
     test('mutation methods throw errors', () {
-      expect(() => parser.addCommand("command"), throwsUnsupportedError);
-      expect(() => parser.addFlag("flag"), throwsUnsupportedError);
-      expect(() => parser.addOption("option"), throwsUnsupportedError);
-      expect(() => parser.addSeparator("==="), throwsUnsupportedError);
+      expect(() => parser.addCommand('command'), throwsUnsupportedError);
+      expect(() => parser.addFlag('flag'), throwsUnsupportedError);
+      expect(() => parser.addOption('option'), throwsUnsupportedError);
+      expect(() => parser.addSeparator('==='), throwsUnsupportedError);
     });
 
     test('getDefault() throws an error', () {

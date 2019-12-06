@@ -75,7 +75,7 @@ class Parser {
         } on ArgParserException catch (error) {
           if (commandName == null) rethrow;
           throw ArgParserException(
-              error.message, [commandName]..addAll(error.commands));
+              error.message, [commandName, ...error.commands]);
         }
 
         // All remaining arguments were passed to command so clear them here.

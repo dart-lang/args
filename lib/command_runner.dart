@@ -33,13 +33,13 @@ class CommandRunner<T> {
   ///
   /// Defaults to "$executableName <command> `arguments`". Subclasses can
   /// override this for a more specific template.
-  String get invocation => "$executableName <command> [arguments]";
+  String get invocation => '$executableName <command> [arguments]';
 
   /// Generates a string displaying usage information for the executable.
   ///
   /// This includes usage for the global arguments as well as a list of
   /// top-level commands.
-  String get usage => _wrap("$description\n\n") + _usageWithoutDescription;
+  String get usage => _wrap('$description\n\n') + _usageWithoutDescription;
 
   /// An optional footer for [usage].
   ///
@@ -49,7 +49,7 @@ class CommandRunner<T> {
 
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
-    var usagePrefix = "Usage:";
+    var usagePrefix = 'Usage:';
     var buffer = StringBuffer();
     buffer.writeln(
         '$usagePrefix ${_wrap(invocation, hangingIndent: usagePrefix.length)}\n');
@@ -96,7 +96,7 @@ class CommandRunner<T> {
 
   /// Adds [Command] as a top-level command to this runner.
   void addCommand(Command<T> command) {
-    var names = [command.name]..addAll(command.aliases);
+    var names = [command.name, ...command.aliases];
     for (var name in names) {
       _commands[name] = command;
       argParser.addCommand(name, command.argParser);
@@ -175,7 +175,7 @@ class CommandRunner<T> {
       command._globalResults = topLevelResults;
       command._argResults = argResults;
       commands = command._subcommands;
-      commandString += " ${argResults.name}";
+      commandString += ' ${argResults.name}';
 
       if (argResults['help']) {
         command.printUsage();
@@ -220,7 +220,7 @@ abstract class Command<T> {
   /// [CommandRunner.usage].
   ///
   /// This defaults to the first line of [description].
-  String get summary => description.split("\n").first;
+  String get summary => description.split('\n').first;
 
   /// A single-line template for how to invoke this command (e.g. `"pub get
   /// `package`"`).
@@ -231,10 +231,10 @@ abstract class Command<T> {
     }
     parents.add(runner.executableName);
 
-    var invocation = parents.reversed.join(" ");
+    var invocation = parents.reversed.join(' ');
     return _subcommands.isNotEmpty
-        ? "$invocation <subcommand> [arguments]"
-        : "$invocation [arguments]";
+        ? '$invocation <subcommand> [arguments]'
+        : '$invocation [arguments]';
   }
 
   /// The command's parent command, if this is a subcommand.
@@ -283,7 +283,7 @@ abstract class Command<T> {
   ///
   /// This includes usage for the command's arguments as well as a list of
   /// subcommands, if there are any.
-  String get usage => _wrap("$description\n\n") + _usageWithoutDescription;
+  String get usage => _wrap('$description\n\n') + _usageWithoutDescription;
 
   /// An optional footer for [usage].
   ///
@@ -299,7 +299,7 @@ abstract class Command<T> {
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
     var length = argParser.usageLineLength;
-    var usagePrefix = "Usage: ";
+    var usagePrefix = 'Usage: ';
     var buffer = StringBuffer()
       ..writeln(
           usagePrefix + _wrap(invocation, hangingIndent: usagePrefix.length))
@@ -373,12 +373,12 @@ abstract class Command<T> {
   /// The return value is wrapped in a `Future` if necessary and returned by
   /// [CommandRunner.runCommand].
   FutureOr<T> run() {
-    throw UnimplementedError(_wrap("Leaf command $this must implement run()."));
+    throw UnimplementedError(_wrap('Leaf command $this must implement run().'));
   }
 
   /// Adds [Command] as a subcommand of this.
   void addSubcommand(Command<T> command) {
-    var names = [command.name]..addAll(command.aliases);
+    var names = [command.name, ...command.aliases];
     for (var name in names) {
       _subcommands[name] = command;
       argParser.addCommand(name, command.argParser);

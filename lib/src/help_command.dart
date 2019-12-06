@@ -9,14 +9,14 @@ import '../command_runner.dart';
 /// This command displays help information for the various subcommands.
 class HelpCommand<T> extends Command<T> {
   @override
-  final name = "help";
+  final name = 'help';
 
   @override
   String get description =>
-      "Display help information for ${runner.executableName}.";
+      'Display help information for ${runner.executableName}.';
 
   @override
-  String get invocation => "${runner.executableName} help [command]";
+  String get invocation => '${runner.executableName} help [command]';
 
   @override
   T run() {
@@ -49,7 +49,7 @@ class HelpCommand<T> extends Command<T> {
 
       command = commands[name];
       commands = command.subcommands;
-      commandString += " $name";
+      commandString += ' $name';
     }
 
     command.printUsage();

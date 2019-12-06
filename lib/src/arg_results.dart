@@ -55,11 +55,11 @@ class ArgResults {
   /// Creates a new [ArgResults].
   ArgResults._(this._parser, this._parsed, this.name, this.command,
       List<String> rest, List<String> arguments)
-      : this.rest = UnmodifiableListView(rest),
-        this.arguments = UnmodifiableListView(arguments);
+      : rest = UnmodifiableListView(rest),
+        arguments = UnmodifiableListView(arguments);
 
   /// Gets the parsed command-line option named [name].
-  operator [](String name) {
+  dynamic operator [](String name) {
     if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');
     }
