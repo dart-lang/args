@@ -75,7 +75,7 @@ class Parser {
         } on ArgParserException catch (error) {
           if (commandName == null) rethrow;
           throw ArgParserException(
-              error.message, [commandName]..addAll(error.commands));
+              error.message, [commandName, ...error.commands]);
         }
 
         // All remaining arguments were passed to command so clear them here.
@@ -275,7 +275,7 @@ class Parser {
     var list = results.putIfAbsent(option.name, () => <String>[]);
 
     if (option.splitCommas) {
-      for (var element in value.split(",")) {
+      for (var element in value.split(',')) {
         _validateAllowed(option, element);
         list.add(element);
       }

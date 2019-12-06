@@ -9,28 +9,36 @@ import 'parser.dart';
 
 /// An ArgParser that treats *all input* as non-option arguments.
 class AllowAnythingParser implements ArgParser {
+  @override
   Map<String, Option> get options => const {};
+  @override
   Map<String, ArgParser> get commands => const {};
+  @override
   bool get allowTrailingOptions => false;
+  @override
   bool get allowsAnything => true;
+  @override
   int get usageLineLength => null;
 
+  @override
   ArgParser addCommand(String name, [ArgParser parser]) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addCommands() isn't supported.");
   }
 
+  @override
   void addFlag(String name,
       {String abbr,
       String help,
       bool defaultsTo = false,
       bool negatable = true,
-      void callback(bool value),
+      void Function(bool) callback,
       bool hide = false}) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addFlag() isn't supported.");
   }
 
+  @override
   void addOption(String name,
       {String abbr,
       String help,
@@ -46,6 +54,7 @@ class AllowAnythingParser implements ArgParser {
         "ArgParser.allowAnything().addOption() isn't supported.");
   }
 
+  @override
   void addMultiOption(String name,
       {String abbr,
       String help,
@@ -53,28 +62,34 @@ class AllowAnythingParser implements ArgParser {
       Iterable<String> allowed,
       Map<String, String> allowedHelp,
       Iterable<String> defaultsTo,
-      void callback(List<String> values),
+      void Function(List<String>) callback,
       bool splitCommas = true,
       bool hide = false}) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addMultiOption() isn't supported.");
   }
 
+  @override
   void addSeparator(String text) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addSeparator() isn't supported.");
   }
 
+  @override
   ArgResults parse(Iterable<String> args) =>
       Parser(null, this, args.toList()).parse();
 
+  @override
   String getUsage() => usage;
 
-  String get usage => "";
+  @override
+  String get usage => '';
 
-  getDefault(String option) {
+  @override
+  dynamic getDefault(String option) {
     throw ArgumentError('No option named $option');
   }
 
+  @override
   Option findByAbbreviation(String abbr) => null;
 }

@@ -9,5 +9,5 @@ class UsageException implements Exception {
   UsageException(this.message, this.usage);
 
   @override
-  String toString() => "$message\n\n$usage";
+  String toString() => '$message\n\n$usage';
 }

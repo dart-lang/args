@@ -70,7 +70,7 @@ class Usage {
     for (var optionOrSeparator in optionsAndSeparators) {
       if (optionOrSeparator is String) {
         // Ensure that there's always a blank line before a separator.
-        if (buffer.isNotEmpty) buffer.write("\n\n");
+        if (buffer.isNotEmpty) buffer.write('\n\n');
         buffer.write(optionOrSeparator);
         newlinesNeeded = 1;
         continue;
@@ -134,7 +134,7 @@ class Usage {
       result = '--${option.name}';
     }
 
-    if (option.valueHelp != null) result += "=<${option.valueHelp}>";
+    if (option.valueHelp != null) result += '=<${option.valueHelp}>';
 
     return result;
   }

@@ -321,7 +321,7 @@ void main() {
           ''');
     });
 
-    test("help strings are not wrapped if usageLineLength is null", () {
+    test('help strings are not wrapped if usageLineLength is null', () {
       var parser = ArgParser(usageLineLength: null);
       parser.addFlag('long',
           help: 'The flag with a really long help text that will not '
@@ -331,7 +331,7 @@ void main() {
           ''');
     });
 
-    test("help strings are wrapped properly when usageLineLength is specified",
+    test('help strings are wrapped properly when usageLineLength is specified',
         () {
       var parser = ArgParser(usageLineLength: 60);
       parser.addFlag('long',
@@ -377,8 +377,8 @@ void main() {
     });
 
     test(
-        "help strings are wrapped with at 10 chars when usageLineLength is "
-        "smaller than available space", () {
+        'help strings are wrapped with at 10 chars when usageLineLength is '
+        'smaller than available space', () {
       var parser = ArgParser(usageLineLength: 1);
       parser.addFlag('long',
           help: 'The flag with a really long help text that will be wrapped.');
@@ -429,7 +429,7 @@ void main() {
           ''');
     });
 
-    group("separators", () {
+    group('separators', () {
       test("separates options where it's placed", () {
         var parser = ArgParser();
         parser.addFlag('zebra', help: 'First');
@@ -487,7 +487,7 @@ void main() {
             ''');
       });
 
-      test("adds a newline after another separator", () {
+      test('adds a newline after another separator', () {
         var parser = ArgParser();
         parser.addSeparator('First');
         parser.addSeparator('Second');

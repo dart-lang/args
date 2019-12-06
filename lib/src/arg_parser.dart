@@ -71,12 +71,11 @@ class ArgParser {
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
       {bool allowTrailingOptions = true, this.usageLineLength})
-      : this._options = options,
-        this.options = UnmodifiableMapView(options),
-        this._commands = commands,
-        this.commands = UnmodifiableMapView(commands),
-        this.allowTrailingOptions =
-            allowTrailingOptions != null ? allowTrailingOptions : false;
+      : _options = options,
+        options = UnmodifiableMapView(options),
+        _commands = commands,
+        commands = UnmodifiableMapView(commands),
+        allowTrailingOptions = allowTrailingOptions ?? false;
 
   /// Defines a command.
   ///
@@ -89,7 +88,7 @@ class ArgParser {
       throw ArgumentError('Duplicate command "$name".');
     }
 
-    if (parser == null) parser = ArgParser();
+    parser ??= ArgParser();
     _commands[name] = parser;
     return parser;
   }
@@ -127,7 +126,7 @@ class ArgParser {
       String help,
       bool defaultsTo = false,
       bool negatable = true,
-      void callback(bool value),
+      void Function(bool) callback,
       bool hide = false}) {
     _addOption(
         name,
@@ -191,8 +190,8 @@ class ArgParser {
       Map<String, String> allowedHelp,
       String defaultsTo,
       Function callback,
-      @Deprecated("Use addMultiOption() instead.") bool allowMultiple = false,
-      @Deprecated("Use addMultiOption() instead.") bool splitCommas,
+      @Deprecated('Use addMultiOption() instead.') bool allowMultiple = false,
+      @Deprecated('Use addMultiOption() instead.') bool splitCommas,
       bool hide = false}) {
     if (!allowMultiple && splitCommas != null) {
       throw ArgumentError(
@@ -259,7 +258,7 @@ class ArgParser {
       Iterable<String> allowed,
       Map<String, String> allowedHelp,
       Iterable<String> defaultsTo,
-      void callback(List<String> values),
+      void Function(List<String>) callback,
       bool splitCommas = true,
       bool hide = false}) {
     _addOption(
@@ -326,7 +325,7 @@ class ArgParser {
   /// Generates a string displaying usage information for the defined options.
   ///
   /// This is basically the help text shown on the command line.
-  @Deprecated("Replaced with get usage. getUsage() will be removed in args 1.0")
+  @Deprecated('Replaced with get usage. getUsage() will be removed in args 1.0')
   String getUsage() => usage;
 
   /// Generates a string displaying usage information for the defined options.
@@ -338,7 +337,7 @@ class ArgParser {
 
   /// Get the default value for an option. Useful after parsing to test if the
   /// user specified something other than the default.
-  getDefault(String option) {
+  dynamic getDefault(String option) {
     if (!options.containsKey(option)) {
       throw ArgumentError('No option named $option');
     }

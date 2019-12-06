@@ -19,7 +19,7 @@ void main() {
 
     void expectThrows(List<String> args) {
       expect(() => parser.parse(args), throwsFormatException,
-          reason: "with allowTrailingOptions: true");
+          reason: 'with allowTrailingOptions: true');
     }
 
     test('collects non-options in rest', () {

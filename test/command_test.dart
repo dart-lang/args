@@ -12,56 +12,56 @@ void main() {
     foo = FooCommand();
 
     // Make sure [Command.runner] is set up.
-    CommandRunner("test", "A test command runner.").addCommand(foo);
+    CommandRunner('test', 'A test command runner.').addCommand(foo);
   });
 
-  group(".invocation has a sane default", () {
-    test("without subcommands", () {
-      expect(foo.invocation, equals("test foo [arguments]"));
+  group('.invocation has a sane default', () {
+    test('without subcommands', () {
+      expect(foo.invocation, equals('test foo [arguments]'));
     });
 
-    test("with subcommands", () {
+    test('with subcommands', () {
       foo.addSubcommand(AsyncCommand());
-      expect(foo.invocation, equals("test foo <subcommand> [arguments]"));
+      expect(foo.invocation, equals('test foo <subcommand> [arguments]'));
     });
 
-    test("for a subcommand", () {
+    test('for a subcommand', () {
       var async = AsyncCommand();
       foo.addSubcommand(async);
 
-      expect(async.invocation, equals("test foo async [arguments]"));
+      expect(async.invocation, equals('test foo async [arguments]'));
     });
   });
 
-  group(".usage", () {
-    test("returns the usage string", () {
-      expect(foo.usage, equals("""
+  group('.usage', () {
+    test('returns the usage string', () {
+      expect(foo.usage, equals('''
 Set a value.
 
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 
-Run "test help" to see global options."""));
+Run "test help" to see global options.'''));
     });
 
-    test("contains custom options", () {
-      foo.argParser.addFlag("flag", help: "Do something.");
+    test('contains custom options', () {
+      foo.argParser.addFlag('flag', help: 'Do something.');
 
-      expect(foo.usage, equals("""
+      expect(foo.usage, equals('''
 Set a value.
 
 Usage: test foo [arguments]
 -h, --help         Print this usage information.
     --[no-]flag    Do something.
 
-Run "test help" to see global options."""));
+Run "test help" to see global options.'''));
     });
 
     test("doesn't print hidden subcommands", () {
       foo.addSubcommand(AsyncCommand());
       foo.addSubcommand(HiddenCommand());
 
-      expect(foo.usage, equals("""
+      expect(foo.usage, equals('''
 Set a value.
 
 Usage: test foo <subcommand> [arguments]
@@ -70,13 +70,13 @@ Usage: test foo <subcommand> [arguments]
 Available subcommands:
   async   Set a value asynchronously.
 
-Run "test help" to see global options."""));
+Run "test help" to see global options.'''));
     });
 
     test("doesn't print subcommand aliases", () {
       foo.addSubcommand(AliasedCommand());
 
-      expect(foo.usage, equals("""
+      expect(foo.usage, equals('''
 Set a value.
 
 Usage: test foo <subcommand> [arguments]
@@ -85,18 +85,18 @@ Usage: test foo <subcommand> [arguments]
 Available subcommands:
   aliased   Set a value.
 
-Run "test help" to see global options."""));
+Run "test help" to see global options.'''));
     });
 
-    test("wraps long command descriptions with subcommands", () {
+    test('wraps long command descriptions with subcommands', () {
       var wrapping = WrappingCommand();
 
       // Make sure [Command.runner] is set up.
-      CommandRunner("longtest", "A long-lined test command runner.")
+      CommandRunner('longtest', 'A long-lined test command runner.')
           .addCommand(wrapping);
 
       wrapping.addSubcommand(LongCommand());
-      expect(wrapping.usage, equals("""
+      expect(wrapping.usage, equals('''
 This command overrides the argParser so
 that it will wrap long lines.
 
@@ -111,17 +111,17 @@ Available subcommands:
          wrapped sometimes.
 
 Run "longtest help" to see global
-options."""));
+options.'''));
     });
 
-    test("wraps long command descriptions", () {
+    test('wraps long command descriptions', () {
       var longCommand = LongCommand();
 
       // Make sure [Command.runner] is set up.
-      CommandRunner("longtest", "A long-lined test command runner.")
+      CommandRunner('longtest', 'A long-lined test command runner.')
           .addCommand(longCommand);
 
-      expect(longCommand.usage, equals("""
+      expect(longCommand.usage, equals('''
 This command has a long description that
 needs to be wrapped sometimes.
 It has embedded newlines,
@@ -137,20 +137,20 @@ Usage: longtest long [arguments]
               information.
 
 Run "longtest help" to see global
-options."""));
+options.'''));
     });
   });
 
-  test("usageException splits up the message and usage", () {
+  test('usageException splits up the message and usage', () {
     expect(
-        () => foo.usageException("message"), throwsUsageException("message", """
+        () => foo.usageException('message'), throwsUsageException('message', '''
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 
-Run "test help" to see global options."""));
+Run "test help" to see global options.'''));
   });
 
-  test("considers a command hidden if all its subcommands are hidden", () {
+  test('considers a command hidden if all its subcommands are hidden', () {
     foo.addSubcommand(HiddenCommand());
     expect(foo.hidden, isTrue);
   });

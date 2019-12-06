@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 
 class CommandRunnerWithFooter extends CommandRunner {
   @override
-  String get usageFooter => "Also, footer!";
+  String get usageFooter => 'Also, footer!';
 
   CommandRunnerWithFooter(String executableName, String description)
       : super(executableName, description);
@@ -18,9 +18,10 @@ class CommandRunnerWithFooter extends CommandRunner {
 
 class CommandRunnerWithFooterAndWrapping extends CommandRunner {
   @override
-  String get usageFooter => "LONG footer! "
-      "This is a long footer, so we can check wrapping on long footer messages.\n\n"
-      "And make sure that they preserve newlines properly.";
+  String get usageFooter => 'LONG footer! '
+      'This is a long footer, so we can check wrapping on long footer messages.'
+      '\n\n'
+      'And make sure that they preserve newlines properly.';
 
   @override
   ArgParser get argParser => _argParser;
@@ -34,10 +35,10 @@ class FooCommand extends Command {
   var hasRun = false;
 
   @override
-  final name = "foo";
+  final name = 'foo';
 
   @override
-  final description = "Set a value.";
+  final description = 'Set a value.';
 
   @override
   final takesArguments = false;
@@ -50,10 +51,10 @@ class FooCommand extends Command {
 
 class ValueCommand extends Command<int> {
   @override
-  final name = "foo";
+  final name = 'foo';
 
   @override
-  final description = "Return a value.";
+  final description = 'Return a value.';
 
   @override
   final takesArguments = false;
@@ -64,26 +65,26 @@ class ValueCommand extends Command<int> {
 
 class AsyncValueCommand extends Command<String> {
   @override
-  final name = "foo";
+  final name = 'foo';
 
   @override
-  final description = "Return a future.";
+  final description = 'Return a future.';
 
   @override
   final takesArguments = false;
 
   @override
-  Future<String> run() async => "hi";
+  Future<String> run() async => 'hi';
 }
 
 class MultilineCommand extends Command {
   var hasRun = false;
 
   @override
-  final name = "multiline";
+  final name = 'multiline';
 
   @override
-  final description = "Multi\nline.";
+  final description = 'Multi\nline.';
 
   @override
   final takesArguments = false;
@@ -102,11 +103,11 @@ class WrappingCommand extends Command {
   final _argParser = ArgParser(usageLineLength: 40);
 
   @override
-  final name = "wrapping";
+  final name = 'wrapping';
 
   @override
   final description =
-      "This command overrides the argParser so that it will wrap long lines.";
+      'This command overrides the argParser so that it will wrap long lines.';
 
   @override
   final takesArguments = false;
@@ -125,14 +126,14 @@ class LongCommand extends Command {
   final _argParser = ArgParser(usageLineLength: 40);
 
   @override
-  final name = "long";
+  final name = 'long';
 
   @override
-  final description = "This command has a long description that needs to be "
-          "wrapped sometimes.\nIt has embedded newlines,\n"
-          "     and indented lines that also need to be wrapped and have their "
-          "indentation preserved.\n" +
-      ("0123456789" * 10);
+  final description = 'This command has a long description that needs to be '
+          'wrapped sometimes.\nIt has embedded newlines,\n'
+          '     and indented lines that also need to be wrapped and have their '
+          'indentation preserved.\n' +
+      ('0123456789' * 10);
 
   @override
   final takesArguments = false;
@@ -152,10 +153,10 @@ class HiddenCommand extends Command {
   var hasRun = false;
 
   @override
-  final name = "hidden";
+  final name = 'hidden';
 
   @override
-  final description = "Set a value.";
+  final description = 'Set a value.';
 
   @override
   final hidden = true;
@@ -173,16 +174,16 @@ class AliasedCommand extends Command {
   var hasRun = false;
 
   @override
-  final name = "aliased";
+  final name = 'aliased';
 
   @override
-  final description = "Set a value.";
+  final description = 'Set a value.';
 
   @override
   final takesArguments = false;
 
   @override
-  final aliases = const ["alias", "als"];
+  final aliases = const ['alias', 'als'];
 
   @override
   void run() {
@@ -194,10 +195,10 @@ class AsyncCommand extends Command {
   var hasRun = false;
 
   @override
-  final name = "async";
+  final name = 'async';
 
   @override
-  final description = "Set a value asynchronously.";
+  final description = 'Set a value asynchronously.';
 
   @override
   final takesArguments = false;

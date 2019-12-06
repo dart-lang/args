@@ -37,7 +37,7 @@ class Option {
   /// `-avalue`.
   final String abbr;
 
-  @Deprecated("Use abbr instead.")
+  @Deprecated('Use abbr instead.')
   String get abbreviation => abbr;
 
   /// A description of this option.
@@ -53,10 +53,10 @@ class Option {
   final Map<String, String> allowedHelp;
 
   /// The value this option will have if the user doesn't explicitly pass it in
-  final defaultsTo;
+  final dynamic defaultsTo;
 
-  @Deprecated("Use defaultsTo instead.")
-  get defaultValue => defaultsTo;
+  @Deprecated('Use defaultsTo instead.')
+  dynamic get defaultValue => defaultsTo;
 
   /// Whether this flag's value can be set to `false`.
   ///
@@ -101,14 +101,13 @@ class Option {
       {this.negatable,
       bool splitCommas,
       this.hide = false})
-      : this.allowed = allowed == null ? null : List.unmodifiable(allowed),
-        this.allowedHelp =
+      : allowed = allowed == null ? null : List.unmodifiable(allowed),
+        allowedHelp =
             allowedHelp == null ? null : Map.unmodifiable(allowedHelp),
-        this.type = type,
+        type = type,
         // If the user doesn't specify [splitCommas], it defaults to true for
         // multiple options.
-        this.splitCommas =
-            splitCommas == null ? type == OptionType.multiple : splitCommas {
+        splitCommas = splitCommas ?? type == OptionType.multiple {
     if (name.isEmpty) {
       throw ArgumentError('Name cannot be empty.');
     } else if (name.startsWith('-')) {
@@ -153,9 +152,9 @@ class OptionType {
   /// An option that can only be `true` or `false`.
   ///
   /// The presence of the option name itself in the argument list means `true`.
-  static const flag = OptionType._("OptionType.flag");
+  static const flag = OptionType._('OptionType.flag');
 
-  @Deprecated("Use OptionType.flag instead.")
+  @Deprecated('Use OptionType.flag instead.')
   static const FLAG = flag; // ignore: constant_identifier_names
 
   /// An option that takes a single value.
@@ -167,9 +166,9 @@ class OptionType {
   ///     --mode=debug
   ///
   /// If the option is passed more than once, the last one wins.
-  static const single = OptionType._("OptionType.single");
+  static const single = OptionType._('OptionType.single');
 
-  @Deprecated("Use OptionType.single instead.")
+  @Deprecated('Use OptionType.single instead.')
   static const SINGLE = single; // ignore: constant_identifier_names
 
   /// An option that allows multiple values.
@@ -180,9 +179,9 @@ class OptionType {
   ///
   /// In the parsed `ArgResults`, a multiple-valued option will always return
   /// a list, even if one or no values were passed.
-  static const multiple = OptionType._("OptionType.multiple");
+  static const multiple = OptionType._('OptionType.multiple');
 
-  @Deprecated("Use OptionType.multiple instead.")
+  @Deprecated('Use OptionType.multiple instead.')
   static const MULTIPLE = multiple; // ignore: constant_identifier_names
 
   final String name;
