@@ -273,10 +273,23 @@ support for dispatching to [Command][]s based on command-line arguments, as well
 as handling `--help` flags and invalid arguments. For example:
 
 ```dart
-var runner = CommandRunner("git", "Distributed version control.")
+void main(List<String> args) {
+  var runner = CommandRunner("git", "Distributed version control.")
+  ..addCommand(CommitCommand())
+  ..addCommand(StashCommand())
+  ..run(args);
+}
+```
+
+You can also pass predefined `arg` values to then `run` function if you want to execute a specific command by default as you can see here:
+
+```dart
+void main(List<String> args) {
+  var runner = CommandRunner("git", "Distributed version control.")
   ..addCommand(CommitCommand())
   ..addCommand(StashCommand())
   ..run(['commit', '-a']); // Calls [CommitCommand.run()]
+}
 ```
 
 Custom commands are defined by extending the [Command][] class. For example:
