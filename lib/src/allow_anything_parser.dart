@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:collection';
+
 import 'arg_parser.dart';
 import 'arg_results.dart';
 import 'option.dart';
@@ -77,7 +79,7 @@ class AllowAnythingParser implements ArgParser {
 
   @override
   ArgResults parse(Iterable<String> args) =>
-      Parser(null, this, args.toList()).parse();
+      Parser(null, this, Queue.of(args)).parse();
 
   @override
   String getUsage() => usage;
