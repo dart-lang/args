@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:collection';
+
 import 'arg_parser.dart';
 import 'arg_parser_exception.dart';
 import 'arg_results.dart';
@@ -36,10 +38,18 @@ class Parser {
   /// The accumulated parsed options.
   final Map<String, dynamic> results = <String, dynamic>{};
 
-  Parser(this.commandName, this.grammar, this.args,
-      [this.parent, List<String> rest]) {
+  Parser(this.commandName, this.grammar, List<String> args,
+      [this.parent, List<String> rest])
+      : args = _toReverseList(args) {
     if (rest != null) this.rest.addAll(rest);
   }
+
+  /// Converts a `List` to a [_ReverseList], unless it already is one.
+  ///
+  /// We rely on the 'already is one' case when sharing args lists between
+  /// parsers, so they see the same state.
+  static _ReverseList _toReverseList(List<String> args) =>
+      args is _ReverseList ? args : _ReverseList.of(args);
 
   /// The current argument being parsed.
   String get current => args[0];
@@ -299,4 +309,48 @@ class Parser {
     validate(option.allowed.contains(value),
         '"$value" is not an allowed value for option "${option.name}".');
   }
+}
+
+/// A `List` which uses another `List` as its underlying data structure, but
+/// with the elements in reverse.
+///
+/// The makes `removeAt(0)` much faster, which is critical for parser
+/// performance.
+///
+/// It would be better to use a `Queue`, but `List` was already part of the
+/// public API of `Parser` when the performance issue was noticed.
+class _ReverseList extends Object
+    with ListMixin<String>
+    implements List<String> {
+  final List<String> _list;
+
+  _ReverseList.of(List<String> list) : _list = list.reversed.toList();
+
+  @override
+  int get length => _list.length;
+
+  @override
+  set length(int length) {
+    // Elements are reversed, so if we need to drop elements, drop them from
+    // the end; there's no need to support increasing length.
+    if (length < _list.length) {
+      _list.removeRange(0, _list.length - length);
+    } else if (length == _list.length) {
+      // Nothing to do.
+    } else {
+      throw UnsupportedError("Can't increase length.");
+    }
+  }
+
+  int _reversedIndex(int index) => _list.length - 1 - index;
+
+  @override
+  String removeAt(int index) => _list.removeAt(_reversedIndex(index));
+
+  @override
+  String operator [](int index) => _list.elementAt(_reversedIndex(index));
+
+  @override
+  void operator []=(int index, String value) =>
+      _list[_reversedIndex(index)] = value;
 }
