@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:collection';
+
 import 'arg_parser.dart';
 import 'arg_parser_exception.dart';
 import 'arg_results.dart';
@@ -28,7 +30,7 @@ class Parser {
   final ArgParser grammar;
 
   /// The arguments being parsed.
-  final List<String> args;
+  final Queue<String> args;
 
   /// The remaining non-option, non-command arguments.
   final rest = <String>[];
@@ -42,7 +44,7 @@ class Parser {
   }
 
   /// The current argument being parsed.
-  String get current => args[0];
+  String get current => args.first;
 
   /// Parses the arguments. This can only be called once.
   ArgResults parse() {
@@ -58,7 +60,7 @@ class Parser {
     while (args.isNotEmpty) {
       if (current == '--') {
         // Reached the argument terminator, so stop here.
-        args.removeAt(0);
+        args.removeFirst();
         break;
       }
 
@@ -67,7 +69,7 @@ class Parser {
       var command = grammar.commands[current];
       if (command != null) {
         validate(rest.isEmpty, 'Cannot specify arguments before a command.');
-        var commandName = args.removeAt(0);
+        var commandName = args.removeFirst();
         var commandParser = Parser(commandName, command, args, this, rest);
 
         try {
@@ -92,7 +94,7 @@ class Parser {
       // This argument is neither option nor command, so stop parsing unless
       // the [allowTrailingOptions] option is set.
       if (!grammar.allowTrailingOptions) break;
-      rest.add(args.removeAt(0));
+      rest.add(args.removeFirst());
     }
 
     // Invoke the callbacks.
@@ -116,7 +118,7 @@ class Parser {
     validate(args.isNotEmpty, 'Missing argument for "${option.name}".');
 
     setOption(results, option, current);
-    args.removeAt(0);
+    args.removeFirst();
   }
 
   /// Tries to parse the current argument as a "solo" option, which is a single
@@ -136,7 +138,7 @@ class Parser {
       return parent.parseSoloOption();
     }
 
-    args.removeAt(0);
+    args.removeFirst();
 
     if (option.isFlag) {
       setFlag(results, option, true);
@@ -186,7 +188,7 @@ class Parser {
       }
     }
 
-    args.removeAt(0);
+    args.removeFirst();
     return true;
   }
 
@@ -217,7 +219,7 @@ class Parser {
     var name = longOpt[1];
     var option = grammar.options[name];
     if (option != null) {
-      args.removeAt(0);
+      args.removeFirst();
       if (option.isFlag) {
         validate(longOpt[3] == null,
             'Flag option "$name" should not be given a value.');
@@ -240,7 +242,7 @@ class Parser {
         return parent.parseLongOption();
       }
 
-      args.removeAt(0);
+      args.removeFirst();
       validate(option.isFlag, 'Cannot negate non-flag option "$name".');
       validate(option.negatable, 'Cannot negate option "$name".');
 

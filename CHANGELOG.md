@@ -1,3 +1,7 @@
+## 1.5.3
+
+* Improve performance for large numbers of args.
+
 ## 1.5.2
 
 * Added support for `usageLineLength` in `CommandRunner`
