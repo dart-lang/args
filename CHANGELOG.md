@@ -1,7 +1,6 @@
 ## 1.5.3
 
-* Improve performance for large numbers of args. Parsing 10k args fell from
-  250ms to 50ms; parsing 100k args fell from 15s to 100ms.
+* Improve performance for large numbers of args.
 
 ## 1.5.2
 

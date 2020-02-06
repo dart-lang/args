@@ -10,14 +10,26 @@ void main() {
     test('is fast', () {
       var parser = ArgParser()..addFlag('flag');
 
-      var baseSize = 10000;
+      var baseSize = 200000;
       var baseList = List<String>.generate(baseSize, (_) => '--flag');
 
       var multiplier = 10;
       var largeList =
           List<String>.generate(baseSize * multiplier, (_) => '--flag');
-      var baseTime = _time(() => parser.parse(baseList));
-      var largeTime = _time(() => parser.parse(largeList));
+
+      var baseAction = () => parser.parse(baseList);
+      var largeAction = () => parser.parse(largeList);
+
+      // Warm up JIT.
+      baseAction();
+      largeAction();
+
+      var baseTime = _time(baseAction);
+      var largeTime = _time(largeAction);
+
+      print('Parsed $baseSize elements in ${baseTime}ms, '
+          '${baseSize * multiplier} elements in ${largeTime}ms.');
+
       expect(largeTime, lessThan(baseTime * multiplier * 3),
           reason:
               'Comparing large data set time ${largeTime}ms to small data set time '
