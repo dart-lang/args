@@ -207,6 +207,22 @@ class AsyncCommand extends Command {
   Future run() => Future.value().then((_) => hasRun = true);
 }
 
+class AllowAnythingCommand extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'allowAnything';
+
+  @override
+  final description = 'A command using allowAnything.';
+
+  @override
+  final argParser = ArgParser.allowAnything();
+
+  @override
+  Future run() => Future.value().then((_) => hasRun = true);
+}
+
 void throwsIllegalArg(function, {String reason}) {
   expect(function, throwsArgumentError, reason: reason);
 }

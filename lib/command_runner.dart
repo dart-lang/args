@@ -177,7 +177,7 @@ class CommandRunner<T> {
       commands = command._subcommands;
       commandString += ' ${argResults.name}';
 
-      if (argResults['help']) {
+      if (argResults.options.contains('help') && argResults['help']) {
         command.printUsage();
         return null;
       }
@@ -364,8 +364,10 @@ abstract class Command<T> {
   List<String> get aliases => const [];
 
   Command() {
-    argParser.addFlag('help',
-        abbr: 'h', negatable: false, help: 'Print this usage information.');
+    if (!argParser.allowsAnything) {
+      argParser.addFlag('help',
+          abbr: 'h', negatable: false, help: 'Print this usage information.');
+    }
   }
 
   /// Runs this command.

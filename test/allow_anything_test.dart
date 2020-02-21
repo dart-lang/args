@@ -3,7 +3,10 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:args/args.dart';
+import 'package:args/command_runner.dart';
 import 'package:test/test.dart';
+
+import 'test_utils.dart';
 
 void main() {
   group('new ArgParser.allowAnything()', () {
@@ -50,6 +53,14 @@ void main() {
       expect(results.command.rest, equals(['--foo', '-abc', '--', 'bar']));
       expect(results.command.arguments, equals(['--foo', '-abc', '--', 'bar']));
       expect(results.command.name, equals('command'));
+    });
+
+    test('works as a subcommand in a CommandRunner', () async {
+      var commandRunner = CommandRunner('command', 'Description of command');
+      var command = AllowAnythingCommand();
+      commandRunner..addCommand(command);
+
+      await commandRunner.run([command.name, '--foo', '--bar', '-b', 'qux']);
     });
   });
 }
