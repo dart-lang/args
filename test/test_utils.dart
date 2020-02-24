@@ -220,7 +220,9 @@ class AllowAnythingCommand extends Command {
   final argParser = ArgParser.allowAnything();
 
   @override
-  Future run() => Future.value().then((_) => hasRun = true);
+  void run() {
+    hasRun = true;
+  }
 }
 
 void throwsIllegalArg(function, {String reason}) {
