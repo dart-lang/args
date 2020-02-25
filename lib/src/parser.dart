@@ -71,7 +71,7 @@ class Parser {
         validate(rest.isEmpty, 'Cannot specify arguments before a command.');
         var commandName = args.removeFirst();
         if (command.isDeprecated) {
-          print(command.deprecationMessage);
+          print('Deprecation Warning: ${command.deprecationMessage}');
         }
 
         var commandParser = Parser(commandName, command, args, this, rest);
