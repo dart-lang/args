@@ -1,4 +1,4 @@
-## 1.5.3-dev
+## 1.5.3
 
 * Improve arg parsing performance for large numbers of args.
 * No longer automatically add a 'help' option to commands that don't validate
