@@ -1,6 +1,8 @@
 ## 1.5.3
 
-* Improve performance for large numbers of args.
+* Improve arg parsing performance for large numbers of args.
+* No longer automatically add a 'help' option to commands that don't validate
+  their arguments (fix #123).
 
 ## 1.5.2
 
