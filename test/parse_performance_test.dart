@@ -8,11 +8,11 @@ import 'package:test/test.dart';
 void main() {
   group('ArgParser.parse() is fast', () {
     test('for short flags', () {
-      _test(ArgParser()..addFlag('short', abbr: 's'), '-s');
+      _testParserPerformance(ArgParser()..addFlag('short', abbr: 's'), '-s');
     });
 
     test('for abbreviations', () {
-      _test(
+      _testParserPerformance(
           ArgParser()
             ..addFlag('short', abbr: 's')
             ..addFlag('short2', abbr: 't')
@@ -22,17 +22,21 @@ void main() {
     });
 
     test('for long flags', () {
-      _test(ArgParser()..addFlag('long-flag'), '--long-flag');
+      _testParserPerformance(ArgParser()..addFlag('long-flag'), '--long-flag');
     });
 
     test('for long options with =', () {
-      _test(ArgParser()..addOption('long-option-name'),
+      _testParserPerformance(ArgParser()..addOption('long-option-name'),
           '--long-option-name=long-option-value');
     });
   });
 }
 
-void _test(ArgParser parser, String string) {
+/// Tests how quickly [parser] parses [string].
+///
+/// Checks that a 10x increase in arg count does not lead to greater than 30x
+/// increase in parse time.
+void _testParserPerformance(ArgParser parser, String string) {
   var baseSize = 50000;
   var baseList = List<String>.generate(baseSize, (_) => string);
 

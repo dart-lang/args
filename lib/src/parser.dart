@@ -127,7 +127,7 @@ class Parser {
     // Length must be two, hyphen followed by any letter/digit.
     if (current.length != 2) return false;
     if (!current.startsWith('-')) return false;
-    var opt = current.substring(1, 2);
+    var opt = current[1];
     if (!_isLetterOrDigit(opt.codeUnitAt(0))) return false;
 
     var option = grammar.findByAbbreviation(opt);
