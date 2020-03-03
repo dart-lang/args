@@ -1,6 +1,9 @@
-## 1.5.3
+## 1.5.3-dev
 
-* Improve arg parsing performance for large numbers of args.
+* Improve arg parsing performance: use queues instead of lists internally to
+  get linear instead of quadratic performance, which is important for large
+  numbers of args (>1000). And, use simple string manipulation instead of
+  regular expressions for a 1.5x improvement everywhere.
 * No longer automatically add a 'help' option to commands that don't validate
   their arguments (fix #123).
 
