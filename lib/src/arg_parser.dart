@@ -84,7 +84,11 @@ class ArgParser {
         options = UnmodifiableMapView(options),
         _commands = commands,
         commands = UnmodifiableMapView(commands),
-        allowTrailingOptions = allowTrailingOptions ?? false;
+        allowTrailingOptions = allowTrailingOptions ?? false {
+          if (deprecationMessage != null && deprecationMessage.isNotEmpty){
+            _optionsAndSeparators.add('Deprecation Message: $deprecationMessage');
+          }
+        }
 
   /// Defines a command.
   ///
