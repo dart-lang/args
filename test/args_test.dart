@@ -176,6 +176,19 @@ void main() {
     });
   });
 
+  group('ArgParser.isDeprecated', () {
+    test('returns the correct value for isDeprecate', () {
+      var parser = ArgParser(deprecationMessage: 'command deprecated.');
+      expect(parser.isDeprecated, true);
+      expect(parser.deprecationMessage, isNotNull);
+    });
+    test('returns false value for isDeprecate when empty message is given', () {
+      var parser = ArgParser(deprecationMessage: '');
+      expect(parser.isDeprecated, false);
+      expect(parser.deprecationMessage, isNotNull);
+    });
+  });
+
   group('ArgParser.options', () {
     test('returns an empty map if there are no options', () {
       var parser = ArgParser();
