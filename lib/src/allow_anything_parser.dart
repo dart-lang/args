@@ -25,7 +25,7 @@ class AllowAnythingParser implements ArgParser {
   String get deprecationMessage => null;
   @override
   bool get isDeprecated => false;
-  
+
   @override
   ArgParser addCommand(String name, [ArgParser parser]) {
     throw UnsupportedError(

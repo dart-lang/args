@@ -64,7 +64,10 @@ class ArgParser {
   /// flags and options that appear after positional arguments. If it's `false`,
   /// the parser stops parsing as soon as it finds an argument that is neither
   /// an option nor a command.
-  factory ArgParser({bool allowTrailingOptions = true, int usageLineLength, String deprecationMessage}) =>
+  factory ArgParser(
+          {bool allowTrailingOptions = true,
+          int usageLineLength,
+          String deprecationMessage}) =>
       ArgParser._(<String, Option>{}, <String, ArgParser>{},
           allowTrailingOptions: allowTrailingOptions,
           usageLineLength: usageLineLength,
@@ -79,16 +82,18 @@ class ArgParser {
   factory ArgParser.allowAnything() = AllowAnythingParser;
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
-      {bool allowTrailingOptions = true, this.usageLineLength, this.deprecationMessage})
+      {bool allowTrailingOptions = true,
+      this.usageLineLength,
+      this.deprecationMessage})
       : _options = options,
         options = UnmodifiableMapView(options),
         _commands = commands,
         commands = UnmodifiableMapView(commands),
         allowTrailingOptions = allowTrailingOptions ?? false {
-          if (deprecationMessage != null && deprecationMessage.isNotEmpty){
-            _optionsAndSeparators.add('Deprecation Message: $deprecationMessage');
-          }
-        }
+    if (deprecationMessage != null && deprecationMessage.isNotEmpty) {
+      _optionsAndSeparators.add('Deprecation Message: $deprecationMessage');
+    }
+  }
 
   /// Defines a command.
   ///
