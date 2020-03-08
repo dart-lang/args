@@ -6,38 +6,62 @@ import 'package:args/args.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('ArgParser.parse()', () {
-    test('is fast', () {
-      var parser = ArgParser()..addFlag('flag');
+  group('ArgParser.parse() is fast', () {
+    test('for short flags', () {
+      _testParserPerformance(ArgParser()..addFlag('short', abbr: 's'), '-s');
+    });
 
-      var baseSize = 200000;
-      var baseList = List<String>.generate(baseSize, (_) => '--flag');
+    test('for abbreviations', () {
+      _testParserPerformance(
+          ArgParser()
+            ..addFlag('short', abbr: 's')
+            ..addFlag('short2', abbr: 't')
+            ..addFlag('short3', abbr: 'u')
+            ..addFlag('short4', abbr: 'v'),
+          '-stuv');
+    });
 
-      var multiplier = 10;
-      var largeList =
-          List<String>.generate(baseSize * multiplier, (_) => '--flag');
+    test('for long flags', () {
+      _testParserPerformance(ArgParser()..addFlag('long-flag'), '--long-flag');
+    });
 
-      var baseAction = () => parser.parse(baseList);
-      var largeAction = () => parser.parse(largeList);
-
-      // Warm up JIT.
-      baseAction();
-      largeAction();
-
-      var baseTime = _time(baseAction);
-      var largeTime = _time(largeAction);
-
-      print('Parsed $baseSize elements in ${baseTime}ms, '
-          '${baseSize * multiplier} elements in ${largeTime}ms.');
-
-      expect(largeTime, lessThan(baseTime * multiplier * 3),
-          reason:
-              'Comparing large data set time ${largeTime}ms to small data set time '
-              '${baseTime}ms. Data set increased ${multiplier}x, time is allowed to '
-              'increase up to ${multiplier * 3}x, but it increased '
-              '${largeTime ~/ baseTime}x.');
+    test('for long options with =', () {
+      _testParserPerformance(ArgParser()..addOption('long-option-name'),
+          '--long-option-name=long-option-value');
     });
   });
+}
+
+/// Tests how quickly [parser] parses [string].
+///
+/// Checks that a 10x increase in arg count does not lead to greater than 30x
+/// increase in parse time.
+void _testParserPerformance(ArgParser parser, String string) {
+  var baseSize = 50000;
+  var baseList = List<String>.generate(baseSize, (_) => string);
+
+  var multiplier = 10;
+  var largeList = List<String>.generate(baseSize * multiplier, (_) => string);
+
+  var baseAction = () => parser.parse(baseList);
+  var largeAction = () => parser.parse(largeList);
+
+  // Warm up JIT.
+  baseAction();
+  largeAction();
+
+  var baseTime = _time(baseAction);
+  var largeTime = _time(largeAction);
+
+  print('Parsed $baseSize elements in ${baseTime}ms, '
+      '${baseSize * multiplier} elements in ${largeTime}ms.');
+
+  expect(largeTime, lessThan(baseTime * multiplier * 3),
+      reason:
+          'Comparing large data set time ${largeTime}ms to small data set time '
+          '${baseTime}ms. Data set increased ${multiplier}x, time is allowed to '
+          'increase up to ${multiplier * 3}x, but it increased '
+          '${largeTime ~/ baseTime}x.');
 }
 
 int _time(void Function() function) {

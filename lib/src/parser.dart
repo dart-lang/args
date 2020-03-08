@@ -9,10 +9,6 @@ import 'arg_parser_exception.dart';
 import 'arg_results.dart';
 import 'option.dart';
 
-final _soloOpt = RegExp(r'^-([a-zA-Z0-9])$');
-final _abbrOpt = RegExp(r'^-([a-zA-Z0-9]+)(.*)$');
-final _longOpt = RegExp(r'^--([a-zA-Z\-_0-9]+)(=(.*))?$');
-
 /// The actual argument parsing class.
 ///
 /// Unlike [ArgParser] which is really more an "arg grammar", this is the class
@@ -131,14 +127,17 @@ class Parser {
   /// We treat this differently than collapsed abbreviations (like "-abc") to
   /// handle the possible value that may follow it.
   bool parseSoloOption() {
-    var soloOpt = _soloOpt.firstMatch(current);
-    if (soloOpt == null) return false;
+    // Hand coded regexp: r'^-([a-zA-Z0-9])$'
+    // Length must be two, hyphen followed by any letter/digit.
+    if (current.length != 2) return false;
+    if (!current.startsWith('-')) return false;
+    var opt = current[1];
+    if (!_isLetterOrDigit(opt.codeUnitAt(0))) return false;
 
-    var option = grammar.findByAbbreviation(soloOpt[1]);
+    var option = grammar.findByAbbreviation(opt);
     if (option == null) {
       // Walk up to the parent command if possible.
-      validate(
-          parent != null, 'Could not find an option or flag "-${soloOpt[1]}".');
+      validate(parent != null, 'Could not find an option or flag "-$opt".');
       return parent.parseSoloOption();
     }
 
@@ -157,12 +156,28 @@ class Parser {
   /// (like "-abc") or a single abbreviation with the value directly attached
   /// to it (like "-mrelease").
   bool parseAbbreviation(Parser innermostCommand) {
-    var abbrOpt = _abbrOpt.firstMatch(current);
-    if (abbrOpt == null) return false;
+    // Hand coded regexp: r'^-([a-zA-Z0-9]+)(.*)$'
+    // Hyphen then at least one letter/digit then zero or more
+    // anything-but-newlines.
+    if (current.length < 2) return false;
+    if (!current.startsWith('-')) return false;
+
+    // Find where we go from letters/digits to rest.
+    var index = 1;
+    while (
+        index < current.length && _isLetterOrDigit(current.codeUnitAt(index))) {
+      ++index;
+    }
+    // Must be at least one letter/digit.
+    if (index == 1) return false;
 
     // If the first character is the abbreviation for a non-flag option, then
     // the rest is the value.
-    var c = abbrOpt[1].substring(0, 1);
+    var lettersAndDigits = current.substring(1, index);
+    var rest = current.substring(index);
+    if (rest.contains('\n') || rest.contains('\r')) return false;
+
+    var c = lettersAndDigits.substring(0, 1);
     var first = grammar.findByAbbreviation(c);
     if (first == null) {
       // Walk up to the parent command if possible.
@@ -172,22 +187,22 @@ class Parser {
     } else if (!first.isFlag) {
       // The first character is a non-flag option, so the rest must be the
       // value.
-      var value = '${abbrOpt[1].substring(1)}${abbrOpt[2]}';
+      var value = '${lettersAndDigits.substring(1)}$rest';
       setOption(results, first, value);
     } else {
       // If we got some non-flag characters, then it must be a value, but
       // if we got here, it's a flag, which is wrong.
       validate(
-          abbrOpt[2] == '',
+          rest == '',
           'Option "-$c" is a flag and cannot handle value '
-          '"${abbrOpt[1].substring(1)}${abbrOpt[2]}".');
+          '"${lettersAndDigits.substring(1)}$rest".');
 
       // Not an option, so all characters should be flags.
       // We use "innermostCommand" here so that if a parent command parses the
       // *first* letter, subcommands can still be found to parse the other
       // letters.
-      for (var i = 0; i < abbrOpt[1].length; i++) {
-        var c = abbrOpt[1].substring(i, i + 1);
+      for (var i = 0; i < lettersAndDigits.length; i++) {
+        var c = lettersAndDigits.substring(i, i + 1);
         innermostCommand.parseShortFlag(c);
       }
     }
@@ -217,21 +232,33 @@ class Parser {
   /// Tries to parse the current argument as a long-form named option, which
   /// may include a value like "--mode=release" or "--mode release".
   bool parseLongOption() {
-    var longOpt = _longOpt.firstMatch(current);
-    if (longOpt == null) return false;
+    // Hand coded regexp: r'^--([a-zA-Z\-_0-9]+)(=(.*))?$'
+    // Two hyphens then at least one letter/digit/hyphen, optionally an equal
+    // sign followed by zero or more anything-but-newlines.
 
-    var name = longOpt[1];
+    if (!current.startsWith('--')) return false;
+
+    var index = current.indexOf('=');
+    var name = index == -1 ? current.substring(2) : current.substring(2, index);
+    for (var i = 0; i != name.length; ++i) {
+      if (!_isLetterOrDigitOrHyphen(name.codeUnitAt(i))) return false;
+    }
+    var value = index == -1 ? null : current.substring(index + 1);
+    if (value != null && (value.contains('\n') || value.contains('\r'))) {
+      return false;
+    }
+
     var option = grammar.options[name];
     if (option != null) {
       args.removeFirst();
       if (option.isFlag) {
-        validate(longOpt[3] == null,
-            'Flag option "$name" should not be given a value.');
+        validate(
+            value == null, 'Flag option "$name" should not be given a value.');
 
         setFlag(results, option, true);
-      } else if (longOpt[3] != null) {
+      } else if (value != null) {
         // We have a value like --foo=bar.
-        setOption(results, option, longOpt[3]);
+        setOption(results, option, value);
       } else {
         // Option like --foo, so look for the value as the next arg.
         readNextArgAsValue(option);
@@ -306,3 +333,14 @@ class Parser {
         '"$value" is not an allowed value for option "${option.name}".');
   }
 }
+
+bool _isLetterOrDigit(int codeUnit) =>
+    // Uppercase letters.
+    (codeUnit >= 65 && codeUnit <= 90) ||
+    // Lowercase letters.
+    (codeUnit >= 97 && codeUnit <= 122) ||
+    // Digits.
+    (codeUnit >= 48 && codeUnit <= 57);
+
+bool _isLetterOrDigitOrHyphen(int codeUnit) =>
+    _isLetterOrDigit(codeUnit) || codeUnit == 45;
