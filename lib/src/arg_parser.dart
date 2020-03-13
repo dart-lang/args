@@ -117,7 +117,7 @@ class ArgParser {
   /// The [callback] argument is invoked with the flag's value when the flag
   /// is parsed. Note that this makes argument parsing order-dependent in ways
   /// that are often surprising, and its use is discouraged in favor of reading
-  /// values from the [ArgResult].
+  /// values from the [ArgResults].
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
@@ -174,7 +174,7 @@ class ArgParser {
   /// The [callback] argument is invoked with the option's value when the option
   /// is parsed. Note that this makes argument parsing order-dependent in ways
   /// that are often surprising, and its use is discouraged in favor of reading
-  /// values from the [ArgResult].
+  /// values from the [ArgResults].
   ///
   /// The [allowMultiple] and [splitCommas] options are deprecated; the
   /// [addMultiOption] method should be used instead.
@@ -244,7 +244,7 @@ class ArgParser {
   /// The [callback] argument is invoked with the option's value when the option
   /// is parsed. Note that this makes argument parsing order-dependent in ways
   /// that are often surprising, and its use is discouraged in favor of reading
-  /// values from the [ArgResult].
+  /// values from the [ArgResults].
   ///
   /// If [splitCommas] is `true` (the default), multiple options may be passed
   /// by writing `--option a,b` in addition to `--option a --option b`.
