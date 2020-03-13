@@ -1,4 +1,6 @@
-## 1.5.3-dev
+## 1.5.4-dev
+
+## 1.5.3
 
 * Improve arg parsing performance: use queues instead of lists internally to
   get linear instead of quadratic performance, which is important for large
