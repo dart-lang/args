@@ -1,5 +1,8 @@
 ## 1.5.4-dev
 
+* Point towards `CommandRunner` in the docs for `ArgParser.addCommand` since it
+  is what most authors will want to use instead.
+
 ## 1.5.3
 
 * Improve arg parsing performance: use queues instead of lists internally to
