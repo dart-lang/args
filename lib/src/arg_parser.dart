@@ -82,6 +82,9 @@ class ArgParser {
   /// A command is a named argument which may in turn define its own options and
   /// subcommands using the given parser. If [parser] is omitted, implicitly
   /// creates a new one. Returns the parser for the command.
+  ///
+  /// Note that adding commands this way will not impact the [usage] string. To
+  /// add commands which are included in the usage string see `CommandRunner`.
   ArgParser addCommand(String name, [ArgParser parser]) {
     // Make sure the name isn't in use.
     if (_commands.containsKey(name)) {
