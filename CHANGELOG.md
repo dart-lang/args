@@ -1,4 +1,9 @@
-## 1.5.3-dev
+## 1.6.0
+
+* Remove the blank lines in usage which separated the help for options that
+  happened to span multiple lines.
+
+## 1.5.3
 
 * Improve arg parsing performance: use queues instead of lists internally to
   get linear instead of quadratic performance, which is important for large

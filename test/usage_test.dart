@@ -96,7 +96,6 @@ void main() {
       validateUsage(parser, '''
           --[no-]affirm    Should be on
                            (defaults to on)
-
           --[no-]negate    Should be off
           --[no-]null      Should be null
           ''');
@@ -118,10 +117,8 @@ void main() {
       validateUsage(parser, '''
           --single         Can be anything
                            (defaults to "whatevs")
-
           --multiple       Can be anything
                            (defaults to "whatevs")
-
           --allow-multi    Can be anything
                            (defaults to "whatevs")
           ''');
@@ -354,22 +351,17 @@ void main() {
       validateUsage(parser, '''
           --[no-]long              The flag with a really long help
                                    text that will be wrapped.
-          
           --[no-]longNewline       The flag with a really long help
                                    text and newlines
                                    
                                    that will still be wrapped because
                                    it is really long.
-          
           --[no-]solid             The-flag-with-no-whitespace-that-wi
                                    ll-be-wrapped-by-splitting-a-word.
-          
           --[no-]longWhitespace    The flag with a really long help
                                    text and whitespace at the start.
-          
           --[no-]longTrailspace    The flag with a really long help
                                    text and whitespace at the end.
-          
           --[no-]small1            a
           --[no-]small2            a
           --[no-]small3            a
@@ -400,7 +392,6 @@ void main() {
                                 text that
                                 will be
                                 wrapped.
-          
           --[no-]longNewline    The flag
                                 with a
                                 really
@@ -414,7 +405,6 @@ void main() {
                                 because it
                                 is really
                                 long.
-          
           --[no-]solid          The-flag-w
                                 ith-no-whi
                                 tespace-th
@@ -422,7 +412,6 @@ void main() {
                                 -wrapped-b
                                 y-splittin
                                 g-a-word.
-          
           --[no-]small1         a
           --[no-]small2         a
           --[no-]small3         a

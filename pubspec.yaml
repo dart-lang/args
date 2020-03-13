@@ -1,5 +1,5 @@
 name: args
-version: 1.5.3
+version: 1.6.0-dev
 homepage: https://github.com/dart-lang/args
 description: >-
  Library for defining parsers for parsing raw command-line arguments into a set
