@@ -82,6 +82,9 @@ class ArgParser {
   /// A command is a named argument which may in turn define its own options and
   /// subcommands using the given parser. If [parser] is omitted, implicitly
   /// creates a new one. Returns the parser for the command.
+  ///
+  /// Note that adding commands this way will not impact the [usage] string. To
+  /// add commands which are included in the usage string see `CommandRunner`.
   ArgParser addCommand(String name, [ArgParser parser]) {
     // Make sure the name isn't in use.
     if (_commands.containsKey(name)) {
@@ -113,7 +116,7 @@ class ArgParser {
   /// The [callback] argument is invoked with the flag's value when the flag
   /// is parsed. Note that this makes argument parsing order-dependent in ways
   /// that are often surprising, and its use is discouraged in favor of reading
-  /// values from the [ArgResult].
+  /// values from the [ArgResults].
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
@@ -170,7 +173,7 @@ class ArgParser {
   /// The [callback] argument is invoked with the option's value when the option
   /// is parsed. Note that this makes argument parsing order-dependent in ways
   /// that are often surprising, and its use is discouraged in favor of reading
-  /// values from the [ArgResult].
+  /// values from the [ArgResults].
   ///
   /// The [allowMultiple] and [splitCommas] options are deprecated; the
   /// [addMultiOption] method should be used instead.
@@ -240,7 +243,7 @@ class ArgParser {
   /// The [callback] argument is invoked with the option's value when the option
   /// is parsed. Note that this makes argument parsing order-dependent in ways
   /// that are often surprising, and its use is discouraged in favor of reading
-  /// values from the [ArgResult].
+  /// values from the [ArgResults].
   ///
   /// If [splitCommas] is `true` (the default), multiple options may be passed
   /// by writing `--option a,b` in addition to `--option a --option b`.

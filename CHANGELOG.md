@@ -1,7 +1,9 @@
-## 1.6.0
+## 1.6.0-dev
 
 * Remove the blank lines in usage which separated the help for options that
   happened to span multiple lines.
+* Point towards `CommandRunner` in the docs for `ArgParser.addCommand` since it
+  is what most authors will want to use instead.
 
 ## 1.5.3
 
