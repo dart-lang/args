@@ -1,7 +1,8 @@
-## 1.5.4-dev
+## 1.6.0-dev
 
 * Point towards `CommandRunner` in the docs for `ArgParser.addCommand` since it
   is what most authors will want to use instead.
+* Remove `help` from the list of commands in usage.
 
 ## 1.5.3
 

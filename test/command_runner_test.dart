@@ -48,8 +48,7 @@ Global options:
 -h, --help    Print this usage information.
 
 Available commands:
-  foo    Set a value.
-  help   Display help information for test.
+  foo   Set a value.
 
 Run "test help <command>" for more information about a command.'''));
     });
@@ -66,7 +65,6 @@ Global options:
 -h, --help    Print this usage information.
 
 Available commands:
-  help        Display help information for test.
   multiline   Multi
 
 Run "test help <command>" for more information about a command.'''));
@@ -84,7 +82,6 @@ Global options:
 -h, --help    Print this usage information.
 
 Available commands:
-  help        Display help information for test.
   multiline   Multi
               line.
 
@@ -110,12 +107,20 @@ Run "test help <command>" for more information about a command.'''));
     });
 
     test("doesn't print hidden commands", () {
-      runner.addCommand(HiddenCommand());
+      runner..addCommand(HiddenCommand())..addCommand(FooCommand());
 
       expect(runner.usage, equals('''
 A test command runner.
 
-$_defaultUsage'''));
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+  foo   Set a value.
+
+Run "test help <command>" for more information about a command.'''));
     });
 
     test("doesn't print aliases", () {
@@ -131,7 +136,6 @@ Global options:
 
 Available commands:
   aliased   Set a value.
-  help      Display help information for test.
 
 Run "test help <command>" for more information about a command.'''));
     });
@@ -428,8 +432,7 @@ Global options:
 -h, --help    Print this usage information.
 
 Available commands:
-  foo    Set a value.
-  help   Display help information for test.
+  foo   Set a value.
 
 Run "test help <command>" for more information about a command.'''));
     });
