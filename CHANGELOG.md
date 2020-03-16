@@ -1,3 +1,8 @@
+## 1.6.0-dev
+
+* Remove the blank lines in usage which separated the help for options that
+  happened to span multiple lines.
+
 ## 1.5.4
 
 * Fix a bug with option names containing underscores.

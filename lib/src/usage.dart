@@ -112,12 +112,6 @@ class Usage {
           write(2, '(defaults to "${option.defaultsTo}")');
         }
       }
-
-      // If any given option displays more than one line of text on the right
-      // column (i.e. help, default value, allowed options, etc.) then put a
-      // blank line after it. This gives space where it's useful while still
-      // keeping simple one-line options clumped together.
-      if (numHelpLines > 1) newline();
     }
 
     return buffer.toString();
