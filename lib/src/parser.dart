@@ -237,7 +237,7 @@ class Parser {
     var index = current.indexOf('=');
     var name = index == -1 ? current.substring(2) : current.substring(2, index);
     for (var i = 0; i != name.length; ++i) {
-      if (!_isLetterOrDigitOrHyphen(name.codeUnitAt(i))) return false;
+      if (!_isLetterDigitHyphenOrUnderscore(name.codeUnitAt(i))) return false;
     }
     var value = index == -1 ? null : current.substring(index + 1);
     if (value != null && (value.contains('\n') || value.contains('\r'))) {
@@ -338,5 +338,9 @@ bool _isLetterOrDigit(int codeUnit) =>
     // Digits.
     (codeUnit >= 48 && codeUnit <= 57);
 
-bool _isLetterOrDigitOrHyphen(int codeUnit) =>
-    _isLetterOrDigit(codeUnit) || codeUnit == 45;
+bool _isLetterDigitHyphenOrUnderscore(int codeUnit) =>
+    _isLetterOrDigit(codeUnit) ||
+    // Hyphen.
+    codeUnit == 45 ||
+    // Underscore.
+    codeUnit == 95;
