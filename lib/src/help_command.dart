@@ -19,6 +19,9 @@ class HelpCommand<T> extends Command<T> {
   String get invocation => '${runner.executableName} help [command]';
 
   @override
+  bool get hidden => true;
+
+  @override
   T run() {
     // Show the default help if no command was specified.
     if (argResults.rest.isEmpty) {
