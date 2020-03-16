@@ -2,6 +2,10 @@
 
 * Remove the blank lines in usage which separated the help for options that
   happened to span multiple lines.
+
+## 1.5.4
+
+* Fix a bug with option names containing underscores.
 * Point towards `CommandRunner` in the docs for `ArgParser.addCommand` since it
   is what most authors will want to use instead.
 

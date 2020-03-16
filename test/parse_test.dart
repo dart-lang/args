@@ -61,6 +61,15 @@ void main() {
         expect(results['verbose'], isTrue);
         expect(results['Verbose'], isFalse);
       });
+
+      test('match letters, numbers, hyphens and underscores', () {
+        var parser = ArgParser();
+        var allCharacters =
+            'abcdefghijklmnopqrstuvwxyz-ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789';
+        parser.addFlag(allCharacters);
+        var results = parser.parse(['--$allCharacters']);
+        expect(results[allCharacters], isTrue);
+      });
     });
 
     group('flags negated with "no-"', () {
