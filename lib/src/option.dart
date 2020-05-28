@@ -6,28 +6,27 @@
 ///
 /// Since [Option] doesn't have a public constructor, this lets `ArgParser`
 /// get to it. This function isn't exported to the public API of the package.
-Option newOption(
+Option newOption<T>(
     String name,
     String abbr,
     String help,
     String valueHelp,
     Iterable<String> allowed,
     Map<String, String> allowedHelp,
-    defaultsTo,
+    T defaultsTo,
     Function callback,
     OptionType type,
     {bool negatable,
     bool splitCommas,
     bool hide = false}) {
-  return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
-      callback, type,
+  return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo, callback, type,
       negatable: negatable, splitCommas: splitCommas, hide: hide);
 }
 
 /// A command-line option.
 ///
 /// This represents both boolean flags and options which take a value.
-class Option {
+class Option<T> {
   /// The name of the option that the user passes as an argument.
   final String name;
 
@@ -53,10 +52,10 @@ class Option {
   final Map<String, String> allowedHelp;
 
   /// The value this option will have if the user doesn't explicitly pass it in
-  final dynamic defaultsTo;
+  final T defaultsTo;
 
   @Deprecated('Use defaultsTo instead.')
-  dynamic get defaultValue => defaultsTo;
+  T get defaultValue => defaultsTo;
 
   /// Whether this flag's value can be set to `false`.
   ///
@@ -88,22 +87,11 @@ class Option {
   /// Whether the option allows multiple values.
   bool get isMultiple => type == OptionType.multiple;
 
-  Option._(
-      this.name,
-      this.abbr,
-      this.help,
-      this.valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
-      this.defaultsTo,
-      this.callback,
-      OptionType type,
-      {this.negatable,
-      bool splitCommas,
-      this.hide = false})
+  Option._(this.name, this.abbr, this.help, this.valueHelp, Iterable<String> allowed,
+      Map<String, String> allowedHelp, this.defaultsTo, this.callback, OptionType type,
+      {this.negatable, bool splitCommas, this.hide = false})
       : allowed = allowed == null ? null : List.unmodifiable(allowed),
-        allowedHelp =
-            allowedHelp == null ? null : Map.unmodifiable(allowedHelp),
+        allowedHelp = allowedHelp == null ? null : Map.unmodifiable(allowedHelp),
         type = type,
         // If the user doesn't specify [splitCommas], it defaults to true for
         // multiple options.
@@ -138,7 +126,7 @@ class Option {
   /// For single-valued options, it will be [defaultsTo] if set or `null`
   /// otherwise. For multiple-valued options, it will be an empty list or a
   /// list containing [defaultsTo] if set.
-  dynamic getOrDefault(value) {
+  T getOrDefault(value) {
     if (value != null) return value;
     if (isMultiple) return defaultsTo ?? <String>[];
     return defaultsTo;

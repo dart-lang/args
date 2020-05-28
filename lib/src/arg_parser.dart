@@ -58,8 +58,7 @@ class ArgParser {
   /// an option nor a command.
   factory ArgParser({bool allowTrailingOptions = true, int usageLineLength}) =>
       ArgParser._(<String, Option>{}, <String, ArgParser>{},
-          allowTrailingOptions: allowTrailingOptions,
-          usageLineLength: usageLineLength);
+          allowTrailingOptions: allowTrailingOptions, usageLineLength: usageLineLength);
 
   /// Creates a new ArgParser that treats *all input* as non-option arguments.
   ///
@@ -131,18 +130,9 @@ class ArgParser {
       bool negatable = true,
       void Function(bool) callback,
       bool hide = false}) {
-    _addOption(
-        name,
-        abbr,
-        help,
-        null,
-        null,
-        null,
-        defaultsTo,
-        callback == null ? null : (value) => callback(value as bool),
-        OptionType.flag,
-        negatable: negatable,
-        hide: hide);
+    _addOption(name, abbr, help, null, null, null, defaultsTo,
+        callback == null ? null : (value) => callback(value as bool), OptionType.flag,
+        negatable: negatable, hide: hide);
   }
 
   /// Defines an option that takes a value.
@@ -185,32 +175,29 @@ class ArgParser {
   /// * There is already an option with name [name].
   /// * There is already an option using abbreviation [abbr].
   /// * [splitCommas] is passed but [allowMultiple] is `false`.
-  void addOption(String name,
+  void addOption<T>(String name,
       {String abbr,
       String help,
       String valueHelp,
       Iterable<String> allowed,
       Map<String, String> allowedHelp,
-      String defaultsTo,
+      T defaultsTo,
       Function callback,
       @Deprecated('Use addMultiOption() instead.') bool allowMultiple = false,
       @Deprecated('Use addMultiOption() instead.') bool splitCommas,
       bool hide = false}) {
     if (!allowMultiple && splitCommas != null) {
-      throw ArgumentError(
-          'splitCommas may not be set if allowMultiple is false.');
+      throw ArgumentError('splitCommas may not be set if allowMultiple is false.');
     }
 
-    _addOption(
+    _addOption<T>(
         name,
         abbr,
         help,
         valueHelp,
         allowed,
         allowedHelp,
-        allowMultiple
-            ? (defaultsTo == null ? <String>[] : [defaultsTo])
-            : defaultsTo,
+        allowMultiple ? (defaultsTo == null ? <T>[] : [defaultsTo]) : defaultsTo,
         callback,
         allowMultiple ? OptionType.multiple : OptionType.single,
         splitCommas: splitCommas,
@@ -278,14 +265,14 @@ class ArgParser {
         hide: hide);
   }
 
-  void _addOption(
+  void _addOption<T>(
       String name,
       String abbr,
       String help,
       String valueHelp,
       Iterable<String> allowed,
       Map<String, String> allowedHelp,
-      defaultsTo,
+      T defaultsTo,
       Function callback,
       OptionType type,
       {bool negatable = false,
@@ -300,13 +287,12 @@ class ArgParser {
     if (abbr != null) {
       var existing = findByAbbreviation(abbr);
       if (existing != null) {
-        throw ArgumentError(
-            'Abbreviation "$abbr" is already used by "${existing.name}".');
+        throw ArgumentError('Abbreviation "$abbr" is already used by "${existing.name}".');
       }
     }
 
-    var option = newOption(name, abbr, help, valueHelp, allowed, allowedHelp,
-        defaultsTo, callback, type,
+    var option = newOption<T>(
+        name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo, callback, type,
         negatable: negatable, splitCommas: splitCommas, hide: hide);
     _options[name] = option;
     _optionsAndSeparators.add(option);
@@ -322,8 +308,7 @@ class ArgParser {
 
   /// Parses [args], a list of command-line arguments, matches them against the
   /// flags and options defined by this parser, and returns the result.
-  ArgResults parse(Iterable<String> args) =>
-      Parser(null, this, Queue.of(args)).parse();
+  ArgResults parse(Iterable<String> args) => Parser(null, this, Queue.of(args)).parse();
 
   /// Generates a string displaying usage information for the defined options.
   ///
@@ -350,7 +335,6 @@ class ArgParser {
   /// Finds the option whose abbreviation is [abbr], or `null` if no option has
   /// that abbreviation.
   Option findByAbbreviation(String abbr) {
-    return options.values
-        .firstWhere((option) => option.abbr == abbr, orElse: () => null);
+    return options.values.firstWhere((option) => option.abbr == abbr, orElse: () => null);
   }
 }
