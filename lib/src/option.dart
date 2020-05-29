@@ -11,8 +11,8 @@ Option newOption<T>(
     String abbr,
     String help,
     String valueHelp,
-    Iterable<String> allowed,
-    Map<String, String> allowedHelp,
+    Iterable<T> allowed,
+    Map<T, String> allowedHelp,
     T defaultsTo,
     Function callback,
     OptionType type,
@@ -46,10 +46,10 @@ class Option<T> {
   final String valueHelp;
 
   /// A list of valid values for this option.
-  final List<String> allowed;
+  final List<T> allowed;
 
   /// A map from values in [allowed] to documentation for those values.
-  final Map<String, String> allowedHelp;
+  final Map<T, String> allowedHelp;
 
   /// The value this option will have if the user doesn't explicitly pass it in
   final T defaultsTo;
@@ -87,8 +87,8 @@ class Option<T> {
   /// Whether the option allows multiple values.
   bool get isMultiple => type == OptionType.multiple;
 
-  Option._(this.name, this.abbr, this.help, this.valueHelp, Iterable<String> allowed,
-      Map<String, String> allowedHelp, this.defaultsTo, this.callback, OptionType type,
+  Option._(this.name, this.abbr, this.help, this.valueHelp, Iterable<T> allowed,
+      Map<T, String> allowedHelp, this.defaultsTo, this.callback, OptionType type,
       {this.negatable, bool splitCommas, this.hide = false})
       : allowed = allowed == null ? null : List.unmodifiable(allowed),
         allowedHelp = allowedHelp == null ? null : Map.unmodifiable(allowedHelp),
@@ -128,7 +128,7 @@ class Option<T> {
   /// list containing [defaultsTo] if set.
   T getOrDefault(value) {
     if (value != null) return value;
-    if (isMultiple) return defaultsTo ?? <String>[];
+    if (isMultiple) return defaultsTo ?? <T>[];
     return defaultsTo;
   }
 

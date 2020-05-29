@@ -179,8 +179,8 @@ class ArgParser {
       {String abbr,
       String help,
       String valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
+      Iterable<T> allowed,
+      Map<T, String> allowedHelp,
       T defaultsTo,
       Function callback,
       @Deprecated('Use addMultiOption() instead.') bool allowMultiple = false,
@@ -265,19 +265,9 @@ class ArgParser {
         hide: hide);
   }
 
-  void _addOption<T>(
-      String name,
-      String abbr,
-      String help,
-      String valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
-      T defaultsTo,
-      Function callback,
-      OptionType type,
-      {bool negatable = false,
-      bool splitCommas,
-      bool hide = false}) {
+  void _addOption<T>(String name, String abbr, String help, String valueHelp, Iterable<T> allowed,
+      Map<T, String> allowedHelp, T defaultsTo, Function callback, OptionType type,
+      {bool negatable = false, bool splitCommas, bool hide = false}) {
     // Make sure the name isn't in use.
     if (_options.containsKey(name)) {
       throw ArgumentError('Duplicate option "$name".');
