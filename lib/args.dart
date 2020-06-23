@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-export 'src/arg_parser.dart';
-export 'src/arg_parser_exception.dart';
-export 'src/arg_results.dart' hide newArgResults;
-export 'src/option.dart' hide newOption;
+export 'src/arg_parser.dart' show ArgParser;
+export 'src/arg_parser_exception.dart' show ArgParserException;
+export 'src/arg_results.dart' show ArgResults;
+export 'src/option.dart' show Option;

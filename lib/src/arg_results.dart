@@ -32,8 +32,8 @@ class ArgResults {
   /// The option values that were parsed from arguments.
   final Map<String, dynamic> _parsed;
 
-  /// If these are the results for parsing a command's options, this will be the
-  /// name of the command. For top-level results, this returns `null`.
+  /// The name of the command for which these options are parsed, or `null` if
+  /// these are the top-level results.
   final String name;
 
   /// The command that was selected, or `null` if none was.
@@ -49,16 +49,17 @@ class ArgResults {
   /// `--` was reached.
   final List<String> rest;
 
-  /// The original list of arguments that were parsed.
+  /// The original arguments that were parsed.
   final List<String> arguments;
 
-  /// Creates a new [ArgResults].
   ArgResults._(this._parser, this._parsed, this.name, this.command,
       List<String> rest, List<String> arguments)
       : rest = UnmodifiableListView(rest),
         arguments = UnmodifiableListView(arguments);
 
-  /// Gets the parsed command-line option named [name].
+  /// Returns the parsed ore default command-line option named [name].
+  ///
+  /// [name] must be a valid option name in the parser.
   dynamic operator [](String name) {
     if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');
@@ -67,12 +68,12 @@ class ArgResults {
     return _parser.options[name].getOrDefault(_parsed[name]);
   }
 
-  /// Get the names of the available options as an [Iterable].
+  /// The names of the available options.
   ///
-  /// This includes the options whose values were parsed or that have defaults.
-  /// Options that weren't present and have no default will be omitted.
+  /// Includes the options whose values were parsed or that have defaults.
+  /// Options that weren't present and have no default are omitted.
   Iterable<String> get options {
-    var result = Set<String>.from(_parsed.keys);
+    var result = _parsed.keys.toSet();
 
     // Include the options that have defaults.
     _parser.options.forEach((name, option) {
@@ -87,9 +88,10 @@ class ArgResults {
   ///
   /// Returns `false` if it wasn't provided and the default value or no default
   /// value would be used instead.
+  ///
+  /// [name] must be a valid option name in the parser.
   bool wasParsed(String name) {
-    var option = _parser.options[name];
-    if (option == null) {
+    if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');
     }
 
