@@ -52,7 +52,7 @@ class Option {
   /// A map from values in [allowed] to documentation for those values.
   final Map<String, String> allowedHelp;
 
-  /// The value this option will have if the user doesn't explicitly pass it in
+  /// The value this option will have if the user doesn't explicitly pass it.
   final dynamic defaultsTo;
 
   @Deprecated('Use defaultsTo instead.')
