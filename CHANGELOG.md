@@ -1,3 +1,7 @@
+## 1.7.0-nullsafety
+
+* Migrate to Null Safety.
+
 ## 1.6.0
 
 * Remove `help` from the list of commands in usage.
