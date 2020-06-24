@@ -16,11 +16,11 @@ import 'option.dart';
 class Parser {
   /// If parser is parsing a command's options, this will be the name of the
   /// command. For top-level results, this returns `null`.
-  final String commandName;
+  final String? commandName;
 
   /// The parser for the supercommand of this command parser, or `null` if this
   /// is the top-level parser.
-  final Parser parent;
+  final Parser? parent;
 
   /// The grammar being parsed.
   final ArgParser grammar;
@@ -35,7 +35,7 @@ class Parser {
   final Map<String, dynamic> results = <String, dynamic>{};
 
   Parser(this.commandName, this.grammar, this.args,
-      [this.parent, List<String> rest]) {
+      [this.parent, List<String>? rest]) {
     if (rest != null) this.rest.addAll(rest);
   }
 
@@ -50,7 +50,7 @@ class Parser {
           grammar, const {}, commandName, null, arguments, arguments);
     }
 
-    ArgResults commandResults;
+    ArgResults? commandResults;
 
     // Parse the args.
     while (args.isNotEmpty) {
@@ -71,7 +71,6 @@ class Parser {
         try {
           commandResults = commandParser.parse();
         } on ArgParserException catch (error) {
-          if (commandName == null) rethrow;
           throw ArgParserException(
               error.message, [commandName, ...error.commands]);
         }
@@ -95,8 +94,8 @@ class Parser {
 
     // Invoke the callbacks.
     grammar.options.forEach((name, option) {
-      if (option.callback == null) return;
-      option.callback(option.getOrDefault(results[name]));
+      var callback = option.callback;
+      if (callback != null) callback(option.getOrDefault(results[name]));
     });
 
     // Add in the leftover arguments we didn't parse to the innermost command.
@@ -134,7 +133,7 @@ class Parser {
     if (option == null) {
       // Walk up to the parent command if possible.
       validate(parent != null, 'Could not find an option or flag "-$opt".');
-      return parent.parseSoloOption();
+      return parent!.parseSoloOption();
     }
 
     args.removeFirst();
@@ -179,7 +178,7 @@ class Parser {
       // Walk up to the parent command if possible.
       validate(
           parent != null, 'Could not find an option with short name "-$c".');
-      return parent.parseAbbreviation(innermostCommand);
+      return parent!.parseAbbreviation(innermostCommand);
     } else if (!first.isFlag) {
       // The first character is a non-flag option, so the rest must be the
       // value.
@@ -213,7 +212,7 @@ class Parser {
       // Walk up to the parent command if possible.
       validate(
           parent != null, 'Could not find an option with short name "-$c".');
-      parent.parseShortFlag(c);
+      parent!.parseShortFlag(c);
       return;
     }
 
@@ -266,18 +265,18 @@ class Parser {
       if (option == null) {
         // Walk up to the parent command if possible.
         validate(parent != null, 'Could not find an option named "$name".');
-        return parent.parseLongOption();
+        return parent!.parseLongOption();
       }
 
       args.removeFirst();
       validate(option.isFlag, 'Cannot negate non-flag option "$name".');
-      validate(option.negatable, 'Cannot negate option "$name".');
+      validate(option.negatable!, 'Cannot negate option "$name".');
 
       setFlag(results, option, false);
     } else {
       // Walk up to the parent command if possible.
       validate(parent != null, 'Could not find an option named "$name".');
-      return parent.parseLongOption();
+      return parent!.parseLongOption();
     }
 
     return true;
@@ -325,7 +324,7 @@ class Parser {
   void _validateAllowed(Option option, String value) {
     if (option.allowed == null) return;
 
-    validate(option.allowed.contains(value),
+    validate(option.allowed!.contains(value),
         '"$value" is not an allowed value for option "${option.name}".');
   }
 }

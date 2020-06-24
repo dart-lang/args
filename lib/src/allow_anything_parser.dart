@@ -20,21 +20,21 @@ class AllowAnythingParser implements ArgParser {
   @override
   bool get allowsAnything => true;
   @override
-  int get usageLineLength => null;
+  int? get usageLineLength => null;
 
   @override
-  ArgParser addCommand(String name, [ArgParser parser]) {
+  ArgParser addCommand(String name, [ArgParser? parser]) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addCommands() isn't supported.");
   }
 
   @override
   void addFlag(String name,
-      {String abbr,
-      String help,
-      bool defaultsTo = false,
+      {String? abbr,
+      String? help,
+      bool? defaultsTo = false,
       bool negatable = true,
-      void Function(bool) callback,
+      void Function(bool)? callback,
       bool hide = false}) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addFlag() isn't supported.");
@@ -42,15 +42,15 @@ class AllowAnythingParser implements ArgParser {
 
   @override
   void addOption(String name,
-      {String abbr,
-      String help,
-      String valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
-      String defaultsTo,
-      Function callback,
+      {String? abbr,
+      String? help,
+      String? valueHelp,
+      Iterable<String>? allowed,
+      Map<String, String>? allowedHelp,
+      String? defaultsTo,
+      Function? callback,
       bool allowMultiple = false,
-      bool splitCommas,
+      bool? splitCommas,
       bool hide = false}) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addOption() isn't supported.");
@@ -58,13 +58,13 @@ class AllowAnythingParser implements ArgParser {
 
   @override
   void addMultiOption(String name,
-      {String abbr,
-      String help,
-      String valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
-      Iterable<String> defaultsTo,
-      void Function(List<String>) callback,
+      {String? abbr,
+      String? help,
+      String? valueHelp,
+      Iterable<String>? allowed,
+      Map<String, String>? allowedHelp,
+      Iterable<String>? defaultsTo,
+      void Function(List<String>)? callback,
       bool splitCommas = true,
       bool hide = false}) {
     throw UnsupportedError(
@@ -93,5 +93,5 @@ class AllowAnythingParser implements ArgParser {
   }
 
   @override
-  Option findByAbbreviation(String abbr) => null;
+  Option? findByAbbreviation(String abbr) => null;
 }

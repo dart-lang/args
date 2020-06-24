@@ -26,7 +26,7 @@ class Usage {
   final List optionsAndSeparators;
 
   /// The working buffer for the generated usage text.
-  StringBuffer buffer;
+  late StringBuffer buffer;
 
   /// The column that the "cursor" is currently on.
   ///
@@ -35,7 +35,7 @@ class Usage {
   int currentColumn = 0;
 
   /// The width in characters of each column.
-  List<int> columnWidths;
+  late List<int> columnWidths;
 
   /// The number of sequential lines of text that have been written to the last
   /// column (which shows help info).
@@ -56,7 +56,7 @@ class Usage {
   /// The horizontal character position at which help text is wrapped. Help that
   /// extends past this column will be wrapped at the nearest whitespace (or
   /// truncated if there is no available whitespace).
-  final int lineLength;
+  final int? lineLength;
 
   Usage(this.optionsAndSeparators, {this.lineLength});
 
@@ -82,15 +82,15 @@ class Usage {
       write(0, getAbbreviation(option));
       write(1, getLongOption(option));
 
-      if (option.help != null) write(2, option.help);
+      if (option.help != null) write(2, option.help!);
 
       if (option.allowedHelp != null) {
-        var allowedNames = option.allowedHelp.keys.toList(growable: false);
+        var allowedNames = option.allowedHelp!.keys.toList(growable: false);
         allowedNames.sort();
         newline();
         for (var name in allowedNames) {
           write(1, getAllowedTitle(option, name));
-          write(2, option.allowedHelp[name]);
+          write(2, option.allowedHelp![name]!);
         }
         newline();
       } else if (option.allowed != null) {
@@ -122,7 +122,7 @@ class Usage {
 
   String getLongOption(Option option) {
     var result;
-    if (option.negatable) {
+    if (option.negatable!) {
       result = '--[no-]${option.name}';
     } else {
       result = '--${option.name}';
@@ -155,7 +155,7 @@ class Usage {
 
       // Make room for the allowed help.
       if (option.allowedHelp != null) {
-        for (var allowed in option.allowedHelp.keys) {
+        for (var allowed in option.allowedHelp!.keys) {
           title = math.max(title, getAllowedTitle(option, allowed).length);
         }
       }
@@ -252,7 +252,7 @@ class Usage {
     var allowedBuffer = StringBuffer();
     allowedBuffer.write('[');
     var first = true;
-    for (var allowed in option.allowed) {
+    for (var allowed in option.allowed!) {
       if (!first) allowedBuffer.write(', ');
       allowedBuffer.write(allowed);
       if (isDefault(allowed)) {

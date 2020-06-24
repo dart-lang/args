@@ -6,7 +6,7 @@ description: >-
  of options and values using GNU and POSIX style options.
 
 environment:
-  sdk: '>=2.3.0 <3.0.0'
+  sdk: '>=2.9.0 <2.10.0'
 
 dev_dependencies:
   pedantic: ^1.4.0

@@ -13,37 +13,37 @@ class HelpCommand<T> extends Command<T> {
 
   @override
   String get description =>
-      'Display help information for ${runner.executableName}.';
+      'Display help information for ${runner!.executableName}.';
 
   @override
-  String get invocation => '${runner.executableName} help [command]';
+  String get invocation => '${runner!.executableName} help [command]';
 
   @override
   bool get hidden => true;
 
   @override
-  T run() {
+  T? run() {
     // Show the default help if no command was specified.
-    if (argResults.rest.isEmpty) {
-      runner.printUsage();
+    if (argResults!.rest.isEmpty) {
+      runner!.printUsage();
       return null;
     }
 
     // Walk the command tree to show help for the selected command or
     // subcommand.
-    var commands = runner.commands;
-    Command command;
-    var commandString = runner.executableName;
+    var commands = runner!.commands;
+    Command? command;
+    var commandString = runner!.executableName;
 
-    for (var name in argResults.rest) {
+    for (var name in argResults!.rest) {
       if (commands.isEmpty) {
-        command.usageException(
+        command!.usageException(
             'Command "$commandString" does not expect a subcommand.');
       }
 
       if (commands[name] == null) {
         if (command == null) {
-          runner.usageException('Could not find a command named "$name".');
+          runner!.usageException('Could not find a command named "$name".');
         }
 
         command.usageException(
@@ -51,11 +51,11 @@ class HelpCommand<T> extends Command<T> {
       }
 
       command = commands[name];
-      commands = command.subcommands;
+      commands = command!.subcommands as Map<String, Command<T>>;
       commandString += ' $name';
     }
 
-    command.printUsage();
+    command!.printUsage();
     return null;
   }
 }

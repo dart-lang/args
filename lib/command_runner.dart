@@ -45,7 +45,7 @@ class CommandRunner<T> {
   ///
   /// If a subclass overrides this to return a string, it will automatically be
   /// added to the end of [usage].
-  String get usageFooter => null;
+  String? get usageFooter => null;
 
   /// Returns [usage] with [description] removed from the beginning.
   String get _usageWithoutDescription {
@@ -60,7 +60,7 @@ class CommandRunner<T> {
     buffer.write(_wrap(
         'Run "$executableName help <command>" for more information about a command.'));
     if (usageFooter != null) {
-      buffer.write('\n${_wrap(usageFooter)}');
+      buffer.write('\n${_wrap(usageFooter!)}');
     }
     return buffer.toString();
   }
@@ -77,7 +77,7 @@ class CommandRunner<T> {
   ArgParser get argParser => _argParser;
   final ArgParser _argParser;
 
-  CommandRunner(this.executableName, this.description, {int usageLineLength})
+  CommandRunner(this.executableName, this.description, {int? usageLineLength})
       : _argParser = ArgParser(usageLineLength: usageLineLength) {
     argParser.addFlag('help',
         abbr: 'h', negatable: false, help: 'Print this usage information.');
@@ -91,7 +91,7 @@ class CommandRunner<T> {
   void printUsage() => print(usage);
 
   /// Throws a [UsageException] with [message].
-  void usageException(String message) =>
+  Never usageException(String message) =>
       throw UsageException(message, _usageWithoutDescription);
 
   /// Adds [Command] as a top-level command to this runner.
@@ -108,15 +108,15 @@ class CommandRunner<T> {
   ///
   /// This always returns a [Future] in case the command is asynchronous. The
   /// [Future] will throw a [UsageException] if [args] was invalid.
-  Future<T> run(Iterable<String> args) =>
-      Future.sync(() => runCommand(parse(args)));
+  Future<T?> run(Iterable<String> args) =>
+      Future.sync(() => runCommand(parse(args)!));
 
   /// Parses [args] and returns the result, converting an [ArgParserException]
   /// to a [UsageException].
   ///
   /// This is notionally a protected method. It may be overridden or called from
   /// subclasses, but it shouldn't be called externally.
-  ArgResults parse(Iterable<String> args) {
+  ArgResults? parse(Iterable<String> args) {
     try {
       return argParser.parse(args);
     } on ArgParserException catch (error) {
@@ -124,10 +124,10 @@ class CommandRunner<T> {
 
       var command = commands[error.commands.first];
       for (var commandName in error.commands.skip(1)) {
-        command = command.subcommands[commandName];
+        command = command!.subcommands[commandName];
       }
 
-      command.usageException(error.message);
+      command!.usageException(error.message);
       return null;
     }
   }
@@ -142,14 +142,14 @@ class CommandRunner<T> {
   /// here to enable verbose logging before running the command.
   ///
   /// This returns the return value of [Command.run].
-  Future<T> runCommand(ArgResults topLevelResults) async {
-    var argResults = topLevelResults;
+  Future<T?> runCommand(ArgResults topLevelResults) async {
+    ArgResults? argResults = topLevelResults;
     var commands = _commands;
-    Command command;
+    Command? command;
     var commandString = executableName;
 
     while (commands.isNotEmpty) {
-      if (argResults.command == null) {
+      if (argResults!.command == null) {
         if (argResults.rest.isEmpty) {
           if (command == null) {
             // No top-level command was chosen.
@@ -171,10 +171,10 @@ class CommandRunner<T> {
 
       // Step into the command.
       argResults = argResults.command;
-      command = commands[argResults.name];
-      command._globalResults = topLevelResults;
+      command = commands[argResults!.name];
+      command!._globalResults = topLevelResults;
       command._argResults = argResults;
-      commands = command._subcommands;
+      commands = command._subcommands as Map<String, Command<T>>;
       commandString += ' ${argResults.name}';
 
       if (argResults.options.contains('help') && argResults['help']) {
@@ -184,20 +184,20 @@ class CommandRunner<T> {
     }
 
     if (topLevelResults['help']) {
-      command.printUsage();
+      command!.printUsage();
       return null;
     }
 
     // Make sure there aren't unexpected arguments.
-    if (!command.takesArguments && argResults.rest.isNotEmpty) {
+    if (!command!.takesArguments && argResults!.rest.isNotEmpty) {
       command.usageException(
           'Command "${argResults.name}" does not take any arguments.');
     }
 
-    return (await command.run()) as T;
+    return (await command.run()) as T?;
   }
 
-  String _wrap(String text, {int hangingIndent}) => wrapText(text,
+  String _wrap(String text, {int? hangingIndent}) => wrapText(text,
       length: argParser.usageLineLength, hangingIndent: hangingIndent);
 }
 
@@ -229,7 +229,7 @@ abstract class Command<T> {
     for (var command = parent; command != null; command = command.parent) {
       parents.add(command.name);
     }
-    parents.add(runner.executableName);
+    parents.add(runner!.executableName);
 
     var invocation = parents.reversed.join(' ');
     return _subcommands.isNotEmpty
@@ -241,31 +241,31 @@ abstract class Command<T> {
   ///
   /// This will be `null` until [addSubcommand] has been called with
   /// this command.
-  Command<T> get parent => _parent;
-  Command<T> _parent;
+  Command<T>? get parent => _parent;
+  Command<T>? _parent;
 
   /// The command runner for this command.
   ///
   /// This will be `null` until [CommandRunner.addCommand] has been called with
   /// this command or one of its parents.
-  CommandRunner<T> get runner {
+  CommandRunner<T>? get runner {
     if (parent == null) return _runner;
-    return parent.runner;
+    return parent!.runner;
   }
 
-  CommandRunner<T> _runner;
+  CommandRunner<T>? _runner;
 
   /// The parsed global argument results.
   ///
   /// This will be `null` until just before [Command.run] is called.
-  ArgResults get globalResults => _globalResults;
-  ArgResults _globalResults;
+  ArgResults? get globalResults => _globalResults;
+  ArgResults? _globalResults;
 
   /// The parsed argument results for this command.
   ///
   /// This will be `null` until just before [Command.run] is called.
-  ArgResults get argResults => _argResults;
-  ArgResults _argResults;
+  ArgResults? get argResults => _argResults;
+  ArgResults? _argResults;
 
   /// The argument parser for this command.
   ///
@@ -289,9 +289,9 @@ abstract class Command<T> {
   ///
   /// If a subclass overrides this to return a string, it will automatically be
   /// added to the end of [usage].
-  String get usageFooter => null;
+  String? get usageFooter => null;
 
-  String _wrap(String text, {int hangingIndent}) {
+  String _wrap(String text, {int? hangingIndent}) {
     return wrapText(text,
         length: argParser.usageLineLength, hangingIndent: hangingIndent);
   }
@@ -316,11 +316,11 @@ abstract class Command<T> {
 
     buffer.writeln();
     buffer.write(
-        _wrap('Run "${runner.executableName} help" to see global options.'));
+        _wrap('Run "${runner!.executableName} help" to see global options.'));
 
     if (usageFooter != null) {
       buffer.writeln();
-      buffer.write(_wrap(usageFooter));
+      buffer.write(_wrap(usageFooter!));
     }
 
     return buffer.toString();
@@ -374,7 +374,7 @@ abstract class Command<T> {
   ///
   /// The return value is wrapped in a `Future` if necessary and returned by
   /// [CommandRunner.runCommand].
-  FutureOr<T> run() {
+  FutureOr<T>? run() {
     throw UnimplementedError(_wrap('Leaf command $this must implement run().'));
   }
 
@@ -404,13 +404,13 @@ abstract class Command<T> {
 /// [isSubcommand] indicates whether the commands should be called "commands" or
 /// "subcommands".
 String _getCommandUsage(Map<String, Command> commands,
-    {bool isSubcommand = false, int lineLength}) {
+    {bool isSubcommand = false, int? lineLength}) {
   // Don't include aliases.
   var names =
-      commands.keys.where((name) => !commands[name].aliases.contains(name));
+      commands.keys.where((name) => !commands[name]!.aliases.contains(name));
 
   // Filter out hidden ones, unless they are all hidden.
-  var visible = names.where((name) => !commands[name].hidden);
+  var visible = names.where((name) => !commands[name]!.hidden);
   if (visible.isNotEmpty) names = visible;
 
   // Show the commands alphabetically.
@@ -420,7 +420,7 @@ String _getCommandUsage(Map<String, Command> commands,
   var buffer = StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
   var columnStart = length + 5;
   for (var name in names) {
-    var lines = wrapTextAsLines(commands[name].summary,
+    var lines = wrapTextAsLines(commands[name]!.summary,
         start: columnStart, length: lineLength);
     buffer.writeln();
     buffer.write('  ${padRight(name, length)}   ${lines.first}');
