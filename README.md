@@ -270,16 +270,37 @@ the left of `"commit"`, it is given to the top-level parser.
 If you're writing a command-based application, you can use the [CommandRunner][]
 and [Command][] classes to help structure it. [CommandRunner][] has built-in
 support for dispatching to [Command][]s based on command-line arguments, as well
-as handling `--help` flags and invalid arguments. For example:
+as handling `--help` flags and invalid arguments.
+
+When using the [CommandRunner][] it replaces the [ArgParser][].
+
+In the following example we build a dart application called `dgit` that takes commands `commit` and `stash`.
+
+The [CommandRunner][] takes an 'executableName' which is ONLY used to generate the help message.
+
+> Note: for you final application to be called `dgit` rather than `dgit.dart` you would need to compile it using dart2native.
+
+e.g.
+`dgit commit -a`
+
+File `dgit.dart`
 
 ```dart
-var runner = CommandRunner("git", "Distributed version control.")
-  ..addCommand(CommitCommand())
-  ..addCommand(StashCommand())
-  ..run(['commit', '-a']); // Calls [CommitCommand.run()]
+
+void main(List<String> args)
+{
+  var runner = CommandRunner("mygit", "A dart implementation of distributed version control.")
+    ..addCommand(CommitCommand())
+    ..addCommand(StashCommand())
+    ..run(args); 
 ```
 
-Custom commands are defined by extending the [Command][] class. For example:
+When the above `run(args)` line executes it process the command line args looking for one of the commands (`commit` or `stash`).
+
+If the [CommandRunner][] finds a matching command then the [CommandRunner][] calls the overloaded `run()` method on the matching command (e.g. CommitCommand().run).
+
+
+Commands are defined by extending the [Command][] class. For example:
 
 ```dart
 class CommitCommand extends Command {
@@ -399,3 +420,4 @@ The resulting string looks something like this:
 [usage]: https://pub.dev/documentation/args/latest/args/ArgParser/usage.html
 [addSubcommand]: https://pub.dev/documentation/args/latest/command_runner/Command/addSubcommand.html
 [run]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner/run.html
+
