@@ -289,7 +289,7 @@ File `dgit.dart`
 
 void main(List<String> args)
 {
-  var runner = CommandRunner("mygit", "A dart implementation of distributed version control.")
+  var runner = CommandRunner("dgit", "A dart implementation of distributed version control.")
     ..addCommand(CommitCommand())
     ..addCommand(StashCommand())
     ..run(args); 
