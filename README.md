@@ -295,7 +295,9 @@ void main(List<String> args)
     ..run(args); 
 ```
 
-When the above `run(args)` line executes it process the command line args looking for one of the commands (`commit` or `stash`).
+When the above `run(args)` line executes it parses the command line args looking for one of the commands (`commit` or `stash`).
+
+
 
 If the [CommandRunner][] finds a matching command then the [CommandRunner][] calls the overloaded `run()` method on the matching command (e.g. CommitCommand().run).
 
@@ -310,18 +312,45 @@ class CommitCommand extends Command {
   final description = "Record changes to the repository.";
 
   CommitCommand() {
+    // we can add command specific arguments here.
     // [argParser] is automatically created by the parent class.
     argParser.addFlag('all', abbr: 'a');
   }
 
   // [run] may also return a Future.
   void run() {
-    // [argResults] is set before [run()] is called and contains the options
+    // [argResults] is set before [run()] is called and contains the flags/options
     // passed to this command.
     print(argResults['all']);
   }
 }
 ```
+
+The [CommandRunner][] allows you to specify both global args as well as command specific arguments.
+
+Add argments directly to the [CommandRunner] to specify global arguments:
+
+Adding global arguments
+```dart
+var runner = CommandRunner('dgit',  "A dart implementation of distributed version control.");
+// add global flag
+runner.addFlag('verbose', abbr: 'v', help: 'increase logging');
+```
+
+Add arguments to each [Command][] to specify [Command][] specific arguments.
+
+Adding [Command][] specific arguments
+
+```dart
+
+  CommitCommand() {
+    // we can add command specific arguments here.
+    // [argParser] is automatically created by the parent class.
+    argParser.addFlag('all', abbr: 'a');
+  }
+
+```
+
 
 Commands can also have subcommands, which are added with [addSubcommand][]. A
 command with subcommands can't run its own code, so [run][] doesn't need to be
