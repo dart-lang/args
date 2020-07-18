@@ -325,10 +325,10 @@ class CommitCommand extends Command {
   }
 }
 ```
-## CommandRunner Arguments
+### CommandRunner Arguments
 The [CommandRunner][] allows you to specify both global args as well as command specific arguments (and even sub-command specific arguments).
 
-### Global Arguments
+#### Global Arguments
 Add argments directly to the [CommandRunner] to specify global arguments:
 
 Adding global arguments
@@ -338,10 +338,8 @@ var runner = CommandRunner('dgit',  "A dart implementation of distributed versio
 runner.addFlag('verbose', abbr: 'v', help: 'increase logging');
 ```
 
-### Command specific Arguments
+#### Command specific Arguments
 Add arguments to each [Command][] to specify [Command][] specific arguments.
-
-Adding [Command][] specific arguments
 
 ```dart
 
@@ -352,7 +350,7 @@ Adding [Command][] specific arguments
   }
 
 ```
-
+### SubCommands
 
 Commands can also have subcommands, which are added with [addSubcommand][]. A
 command with subcommands can't run its own code, so [run][] doesn't need to be
@@ -370,6 +368,7 @@ class StashCommand extends Command {
 }
 ```
 
+### Default Help Command
 [CommandRunner][] automatically adds a `help` command that displays usage
 information for commands, as well as support for the `--help` flag for all
 commands. If it encounters an error parsing the arguments or processing a
