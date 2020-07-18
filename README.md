@@ -325,9 +325,10 @@ class CommitCommand extends Command {
   }
 }
 ```
+## CommandRunner Arguments
+The [CommandRunner][] allows you to specify both global args as well as command specific arguments (and even sub-command specific arguments).
 
-The [CommandRunner][] allows you to specify both global args as well as command specific arguments.
-
+### Global Arguments
 Add argments directly to the [CommandRunner] to specify global arguments:
 
 Adding global arguments
@@ -337,6 +338,7 @@ var runner = CommandRunner('dgit',  "A dart implementation of distributed versio
 runner.addFlag('verbose', abbr: 'v', help: 'increase logging');
 ```
 
+### Command specific Arguments
 Add arguments to each [Command][] to specify [Command][] specific arguments.
 
 Adding [Command][] specific arguments
