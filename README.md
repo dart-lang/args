@@ -276,7 +276,7 @@ When using the [CommandRunner][] it replaces the [ArgParser][].
 
 In the following example we build a dart application called `dgit` that takes commands `commit` and `stash`.
 
-The [CommandRunner][] takes an 'executableName' which is ONLY used to generate the help message.
+The [CommandRunner][] takes an `executableName` which is used to generate the help message.
 
 e.g.
 `dgit commit -a`
@@ -285,14 +285,16 @@ File `dgit.dart`
 
 ```dart
 
-void main(List<String> args) {
-  var runner = CommandRunner("mygit", "A dart implementation of distributed version control.")
+void main(List<String> args){
+  var runner = CommandRunner("dgit", "A dart implementation of distributed version control.")
     ..addCommand(CommitCommand())
     ..addCommand(StashCommand())
     ..run(args); 
 ```
 
-When the above `run(args)` line executes it process the command line args looking for one of the commands (`commit` or `stash`).
+When the above `run(args)` line executes it parses the command line args looking for one of the commands (`commit` or `stash`).
+
+
 
 If the [CommandRunner][] finds a matching command then the [CommandRunner][] calls the overridden `run()` method on the matching command (e.g. CommitCommand().run).
 
@@ -307,18 +309,45 @@ class CommitCommand extends Command {
   final description = "Record changes to the repository.";
 
   CommitCommand() {
+    // we can add command specific arguments here.
     // [argParser] is automatically created by the parent class.
     argParser.addFlag('all', abbr: 'a');
   }
 
   // [run] may also return a Future.
   void run() {
-    // [argResults] is set before [run()] is called and contains the options
+    // [argResults] is set before [run()] is called and contains the flags/options
     // passed to this command.
     print(argResults['all']);
   }
 }
 ```
+### CommandRunner Arguments
+The [CommandRunner][] allows you to specify both global args as well as command specific arguments (and even sub-command specific arguments).
+
+#### Global Arguments
+Add argments directly to the [CommandRunner] to specify global arguments:
+
+Adding global arguments
+```dart
+var runner = CommandRunner('dgit',  "A dart implementation of distributed version control.");
+// add global flag
+runner.addFlag('verbose', abbr: 'v', help: 'increase logging');
+```
+
+#### Command specific Arguments
+Add arguments to each [Command][] to specify [Command][] specific arguments.
+
+```dart
+
+  CommitCommand() {
+    // we can add command specific arguments here.
+    // [argParser] is automatically created by the parent class.
+    argParser.addFlag('all', abbr: 'a');
+  }
+
+```
+### SubCommands
 
 Commands can also have subcommands, which are added with [addSubcommand][]. A
 command with subcommands can't run its own code, so [run][] doesn't need to be
@@ -336,6 +365,7 @@ class StashCommand extends Command {
 }
 ```
 
+### Default Help Command
 [CommandRunner][] automatically adds a `help` command that displays usage
 information for commands, as well as support for the `--help` flag for all
 commands. If it encounters an error parsing the arguments or processing a
@@ -417,4 +447,3 @@ The resulting string looks something like this:
 [usage]: https://pub.dev/documentation/args/latest/args/ArgParser/usage.html
 [addSubcommand]: https://pub.dev/documentation/args/latest/command_runner/Command/addSubcommand.html
 [run]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner/run.html
-
