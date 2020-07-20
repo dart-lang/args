@@ -276,7 +276,7 @@ When using the [CommandRunner][] it replaces the [ArgParser][].
 
 In the following example we build a dart application called `dgit` that takes commands `commit` and `stash`.
 
-The [CommandRunner][] takes an 'executableName' which is ONLY used to generate the help message.
+The [CommandRunner][] takes an `executableName` which is used to generate the help message.
 
 > Note: for you final application to be called `dgit` rather than `dgit.dart` you would need to compile it using dart2native.
 
@@ -450,4 +450,3 @@ The resulting string looks something like this:
 [usage]: https://pub.dev/documentation/args/latest/args/ArgParser/usage.html
 [addSubcommand]: https://pub.dev/documentation/args/latest/command_runner/Command/addSubcommand.html
 [run]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner/run.html
-
