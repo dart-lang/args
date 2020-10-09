@@ -1,3 +1,5 @@
+## 1.6.1-dev
+
 ## 1.6.0
 
 * Remove `help` from the list of commands in usage.
