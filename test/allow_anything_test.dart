@@ -51,7 +51,8 @@ void main() {
           commandParser.parse(['command', '--foo', '-abc', '--', 'bar']);
       expect(results.command!.options, isEmpty);
       expect(results.command!.rest, equals(['--foo', '-abc', '--', 'bar']));
-      expect(results.command!.arguments, equals(['--foo', '-abc', '--', 'bar']));
+      expect(
+          results.command!.arguments, equals(['--foo', '-abc', '--', 'bar']));
       expect(results.command!.name, equals('command'));
     });
 
