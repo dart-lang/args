@@ -1,6 +1,4 @@
-## 1.7.0-nullsafety
-
-* Migrate to Null Safety.
+## 2.0.0-nullsafety
 
 ## 1.6.0
 
