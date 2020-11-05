@@ -107,20 +107,12 @@ void main() {
           help: 'Can be anything', defaultsTo: 'whatevs');
       parser.addMultiOption('multiple',
           help: 'Can be anything', defaultsTo: ['whatevs']);
-      parser.addOption(
-        'allow-multi',
-        help: 'Can be anything',
-        defaultsTo: 'whatevs',
-        allowMultiple: true, // ignore: deprecated_member_use
-      );
 
       validateUsage(parser, '''
-          --single         Can be anything
-                           (defaults to "whatevs")
-          --multiple       Can be anything
-                           (defaults to "whatevs")
-          --allow-multi    Can be anything
-                           (defaults to "whatevs")
+          --single      Can be anything
+                        (defaults to "whatevs")
+          --multiple    Can be anything
+                        (defaults to "whatevs")
           ''');
     });
 
@@ -142,16 +134,10 @@ void main() {
       parser.addMultiOption('implicit', help: 'Implicit default');
       parser
           .addMultiOption('explicit', help: 'Explicit default', defaultsTo: []);
-      parser.addOption(
-        'allow-multi',
-        help: 'Implicit with allowMultiple',
-        allowMultiple: true, // ignore: deprecated_member_use
-      );
 
       validateUsage(parser, '''
-          --implicit       Implicit default
-          --explicit       Explicit default
-          --allow-multi    Implicit with allowMultiple
+          --implicit    Implicit default
+          --explicit    Explicit default
           ''');
     });
 

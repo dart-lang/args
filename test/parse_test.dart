@@ -161,108 +161,6 @@ void main() {
         parser.parse([]);
       });
 
-      group('with allowMultiple', () {
-        test('for multiple present, options are invoked with value as a list',
-            () {
-          var a;
-          var parser = ArgParser();
-          parser.addOption('a',
-              allowMultiple: true, // ignore: deprecated_member_use
-              callback: (value) => a = value);
-
-          parser.parse(['--a=v', '--a=x']);
-          expect(a, equals(['v', 'x']));
-
-          // This reified type is important in strong mode so that people can
-          // safely write "as List<String>".
-          expect(a, TypeMatcher<List<String>>());
-        });
-
-        test(
-            'for single present, options are invoked with value as a single '
-            'element list', () {
-          var a;
-          var parser = ArgParser();
-          parser.addOption('a',
-              allowMultiple: true, // ignore: deprecated_member_use
-              callback: (value) => a = value);
-
-          parser.parse(['--a=v']);
-          expect(a, equals(['v']));
-        });
-
-        test('for absent, options are invoked with default value as a list',
-            () {
-          var a;
-          var parser = ArgParser();
-          parser.addOption('a',
-              allowMultiple: true, // ignore: deprecated_member_use
-              defaultsTo: 'v',
-              callback: (value) => a = value);
-
-          parser.parse([]);
-          expect(a, equals(['v']));
-        });
-
-        test('for absent, options are invoked with value as an empty list', () {
-          var a;
-          var parser = ArgParser();
-          parser.addOption('a',
-              allowMultiple: true, // ignore: deprecated_member_use
-              callback: (value) => a = value);
-
-          parser.parse([]);
-          expect(a, isEmpty);
-        });
-
-        test('parses comma-separated strings', () {
-          var a;
-          var parser = ArgParser();
-          parser.addOption('a',
-              allowMultiple: true, // ignore: deprecated_member_use
-              callback: (value) => a = value);
-
-          parser.parse(['--a=v,w', '--a=x']);
-          expect(a, equals(['v', 'w', 'x']));
-        });
-
-        test("doesn't parse comma-separated strings with splitCommas: false",
-            () {
-          var a;
-          var parser = ArgParser();
-          parser.addOption('a',
-              allowMultiple: true, // ignore: deprecated_member_use
-              splitCommas: false, // ignore: deprecated_member_use
-              callback: (value) => a = value);
-
-          parser.parse(['--a=v,w', '--a=x']);
-          expect(a, equals(['v,w', 'x']));
-        });
-
-        test('parses empty strings', () {
-          var a;
-          var parser = ArgParser();
-          parser.addOption('a',
-              allowMultiple: true, // ignore: deprecated_member_use
-              callback: (value) => a = value);
-
-          parser.parse(['--a=,v', '--a=w,', '--a=,', '--a=x,,y', '--a', '']);
-          expect(a, equals(['', 'v', 'w', '', '', '', 'x', '', 'y', '']));
-        });
-
-        test('with allowed parses comma-separated strings', () {
-          var a;
-          var parser = ArgParser();
-          parser.addOption('a',
-              allowMultiple: true, // ignore: deprecated_member_use
-              allowed: ['v', 'w', 'x'],
-              callback: (value) => a = value);
-
-          parser.parse(['--a=v,w', '--a=x']);
-          expect(a, equals(['v', 'w', 'x']));
-        });
-      });
-
       group('with addMultiOption', () {
         test('for multiple present, options are invoked with value as a list',
             () {
@@ -437,17 +335,6 @@ void main() {
       });
 
       group('throw if a comma-separated value is not allowed', () {
-        test('with allowMultiple', () {
-          var parser = ArgParser();
-          parser.addOption(
-            'mode',
-            abbr: 'm', allowMultiple: true, // ignore: deprecated_member_use
-            allowed: ['debug', 'release'],
-          );
-
-          throwsFormat(parser, ['-mdebug,profile']);
-        });
-
         test('with addMultiOption', () {
           var parser = ArgParser();
           parser
@@ -559,17 +446,6 @@ void main() {
       });
 
       group('returns a List', () {
-        test('with allowMultiple', () {
-          var parser = ArgParser();
-          parser.addOption(
-            'define', allowMultiple: true, // ignore: deprecated_member_use
-          );
-          var args = parser.parse(['--define=1']);
-          expect(args['define'], equals(['1']));
-          args = parser.parse(['--define=1', '--define=2']);
-          expect(args['define'], equals(['1', '2']));
-        });
-
         test('with addMultiOption', () {
           var parser = ArgParser();
           parser.addMultiOption('define');
@@ -581,17 +457,6 @@ void main() {
       });
 
       group('returns the default value if not explicitly set', () {
-        test('with allowMultiple', () {
-          var parser = ArgParser();
-          parser.addOption(
-            'define',
-            defaultsTo: '0',
-            allowMultiple: true, // ignore: deprecated_member_use
-          );
-          var args = parser.parse(['']);
-          expect(args['define'], equals(['0']));
-        });
-
         test('with addMultiOption', () {
           var parser = ArgParser();
           parser.addMultiOption('define', defaultsTo: ['0']);

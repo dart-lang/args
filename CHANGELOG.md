@@ -1,5 +1,13 @@
 ## 2.0.0-nullsafety
 
+* **BREAKING** Remove APIs that had been marked as deprecated.
+  * `allowMulti` and `splitCommas` arguments to `ArgParser.addOption`, use
+    `ArgParser.addMultiOption`.
+  * `ArgParser.getUsage(),` use `ArgParser.usage`.
+  * `Option.abbreviation`, use `Option.abbr`.
+  * `Option.defaultValue`, use `Option.defaultsTo`.
+  * `OptionType.FLAG/SINGLE/MULTIPLE`, use `OptionType.flag/single/multiple`.
+
 ## 1.6.0
 
 * Remove `help` from the list of commands in usage.
