@@ -14,7 +14,7 @@ jobs:
       name: "Analyze (with experiment flag)"
       dart: dev
       os: linux
-      script: dartanalyzer --enable-experiment=non-nullable --fatal-warnings --fatal-infos .
+      script: dartanalyzer --fatal-warnings --fatal-infos .
     - stage: analyze_and_format
       name: "Format"
       dart: dev
@@ -24,12 +24,12 @@ jobs:
       name: "Vm Tests"
       dart: dev
       os: linux
-      script: pub run --enable-experiment=non-nullable test -p vm
+      script: pub run test -p vm
     - stage: test
       name: "Web Tests"
       dart: dev
       os: linux
-      script: pub run --enable-experiment=non-nullable test -p chrome
+      script: pub run test -p chrome
 
 matrix:
   include:
