@@ -353,7 +353,7 @@ void main() {
                                    text that will be wrapped.
           --[no-]longNewline       The flag with a really long help
                                    text and newlines
-
+                                   
                                    that will still be wrapped because
                                    it is really long.
           --[no-]solid             The-flag-with-no-whitespace-that-wi
@@ -398,7 +398,7 @@ void main() {
                                 long help
                                 text and
                                 newlines
-
+                                
                                 that will
                                 still be
                                 wrapped

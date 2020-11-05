@@ -309,8 +309,8 @@ void main() {
           parser.options['allow-multi-no']!.getOrDefault(['v']), equals(['v']));
       expect(parser.options['allow-multi-def']!.getOrDefault(null),
           equals(['def']));
-      expect(
-          parser.options['allow-multi-def']!.getOrDefault(['v']), equals(['v']));
+      expect(parser.options['allow-multi-def']!.getOrDefault(['v']),
+          equals(['v']));
       expect(parser.options['multi-no']!.getOrDefault(null), equals([]));
       expect(parser.options['multi-no']!.getOrDefault(['v']), equals(['v']));
       expect(parser.options['multi-def']!.getOrDefault(null), equals(['def']));

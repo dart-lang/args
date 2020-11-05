@@ -154,12 +154,11 @@ void main() {
       });
 
       test('are invoked even if the option is not present', () {
-        var a = 'not called';
         var parser = ArgParser();
-        parser.addOption('a', callback: (value) => a = value);
+        parser.addOption('a',
+            callback: expectAsync1((value) => expect(value, isNull)));
 
         parser.parse([]);
-        expect(a, isNull);
       });
 
       group('with allowMultiple', () {
