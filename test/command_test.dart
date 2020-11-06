@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import 'test_utils.dart';
 
 void main() {
-  var foo;
+  late var foo;
   setUp(() {
     foo = FooCommand();
 

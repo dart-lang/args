@@ -223,7 +223,7 @@ class AllowAnythingCommand extends Command {
   }
 }
 
-void throwsIllegalArg(function, {String reason}) {
+void throwsIllegalArg(function, {String? reason}) {
   expect(function, throwsArgumentError, reason: reason);
 }
 
@@ -231,11 +231,7 @@ void throwsFormat(ArgParser parser, List<String> args) {
   expect(() => parser.parse(args), throwsFormatException);
 }
 
-Matcher throwsUsageException(message, usage) {
-  return throwsA(predicate((error) {
-    expect(error, TypeMatcher<UsageException>());
-    expect(error.message, message);
-    expect(error.usage, usage);
-    return true;
-  }));
-}
+Matcher throwsUsageException(String message, String usage) =>
+    throwsA(isA<UsageException>()
+        .having((e) => e.message, 'message', message)
+        .having((e) => e.usage, 'usage', usage));

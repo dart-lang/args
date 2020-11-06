@@ -13,8 +13,8 @@ import 'arg_parser.dart';
 ArgResults newArgResults(
     ArgParser parser,
     Map<String, dynamic> parsed,
-    String name,
-    ArgResults command,
+    String? name,
+    ArgResults? command,
     List<String> rest,
     List<String> arguments) {
   return ArgResults._(parser, parsed, name, command, rest, arguments);
@@ -34,12 +34,12 @@ class ArgResults {
 
   /// The name of the command for which these options are parsed, or `null` if
   /// these are the top-level results.
-  final String name;
+  final String? name;
 
   /// The command that was selected, or `null` if none was.
   ///
   /// This will contain the options that were selected for that command.
-  final ArgResults command;
+  final ArgResults? command;
 
   /// The remaining command-line arguments that were not parsed as options or
   /// flags.
@@ -65,7 +65,7 @@ class ArgResults {
       throw ArgumentError('Could not find an option named "$name".');
     }
 
-    return _parser.options[name].getOrDefault(_parsed[name]);
+    return _parser.options[name]!.getOrDefault(_parsed[name]);
   }
 
   /// The names of the available options.

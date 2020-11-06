@@ -32,7 +32,7 @@ String padRight(String source, int length) =>
 ///
 /// If [length] is not specified, then no wrapping occurs, and the original
 /// [text] is returned unchanged.
-String wrapText(String text, {int length, int hangingIndent}) {
+String wrapText(String text, {int? length, int? hangingIndent}) {
   if (length == null) return text;
   hangingIndent ??= 0;
   var splitText = text.split('\n');
@@ -58,12 +58,12 @@ String wrapText(String text, {int length, int hangingIndent}) {
       notIndented = wrapTextAsLines(trimmedText,
           length: length - leadingWhitespace.length);
     }
-    String hangingIndentString;
+    String? hangingIndentString;
     result.addAll(notIndented.map<String>((String line) {
       // Don't return any lines with just whitespace on them.
       if (line.isEmpty) return '';
       var result = '${hangingIndentString ?? ''}$leadingWhitespace$line';
-      hangingIndentString ??= ' ' * hangingIndent;
+      hangingIndentString ??= ' ' * hangingIndent!;
       return result;
     }));
   }
@@ -80,7 +80,7 @@ String wrapText(String text, {int length, int hangingIndent}) {
 /// If [length] is not specified, then no wrapping occurs, and the original
 /// [text] is returned after splitting it on newlines. Whitespace is not trimmed
 /// in this case.
-List<String> wrapTextAsLines(String text, {int start = 0, int length}) {
+List<String> wrapTextAsLines(String text, {int start = 0, int? length}) {
   assert(start >= 0);
 
   /// Returns true if the code unit at [index] in [text] is a whitespace

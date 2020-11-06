@@ -44,7 +44,7 @@ class ArgParser {
   /// there is no whitespace at which to split).
   ///
   /// If null (the default), help messages are not wrapped.
-  final int usageLineLength;
+  final int? usageLineLength;
 
   /// Whether or not this parser treats unrecognized options as non-option
   /// arguments.
@@ -56,7 +56,7 @@ class ArgParser {
   /// flags and options that appear after positional arguments. If it's `false`,
   /// the parser stops parsing as soon as it finds an argument that is neither
   /// an option nor a command.
-  factory ArgParser({bool allowTrailingOptions = true, int usageLineLength}) =>
+  factory ArgParser({bool allowTrailingOptions = true, int? usageLineLength}) =>
       ArgParser._(<String, Option>{}, <String, ArgParser>{},
           allowTrailingOptions: allowTrailingOptions,
           usageLineLength: usageLineLength);
@@ -75,7 +75,7 @@ class ArgParser {
         options = UnmodifiableMapView(options),
         _commands = commands,
         commands = UnmodifiableMapView(commands),
-        allowTrailingOptions = allowTrailingOptions ?? false;
+        allowTrailingOptions = allowTrailingOptions;
 
   /// Defines a command.
   ///
@@ -85,7 +85,7 @@ class ArgParser {
   ///
   /// Note that adding commands this way will not impact the [usage] string. To
   /// add commands which are included in the usage string see `CommandRunner`.
-  ArgParser addCommand(String name, [ArgParser parser]) {
+  ArgParser addCommand(String name, [ArgParser? parser]) {
     // Make sure the name isn't in use.
     if (_commands.containsKey(name)) {
       throw ArgumentError('Duplicate command "$name".');
@@ -125,11 +125,11 @@ class ArgParser {
   /// * There is already an option named [name].
   /// * There is already an option using abbreviation [abbr].
   void addFlag(String name,
-      {String abbr,
-      String help,
-      bool defaultsTo = false,
+      {String? abbr,
+      String? help,
+      bool? defaultsTo = false,
       bool negatable = true,
-      void Function(bool) callback,
+      void Function(bool)? callback,
       bool hide = false}) {
     _addOption(
         name,
@@ -186,15 +186,15 @@ class ArgParser {
   /// * There is already an option using abbreviation [abbr].
   /// * [splitCommas] is passed but [allowMultiple] is `false`.
   void addOption(String name,
-      {String abbr,
-      String help,
-      String valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
-      String defaultsTo,
-      Function callback,
+      {String? abbr,
+      String? help,
+      String? valueHelp,
+      Iterable<String>? allowed,
+      Map<String, String>? allowedHelp,
+      String? defaultsTo,
+      Function? callback,
       @Deprecated('Use addMultiOption() instead.') bool allowMultiple = false,
-      @Deprecated('Use addMultiOption() instead.') bool splitCommas,
+      @Deprecated('Use addMultiOption() instead.') bool? splitCommas,
       bool hide = false}) {
     if (!allowMultiple && splitCommas != null) {
       throw ArgumentError(
@@ -255,13 +255,13 @@ class ArgParser {
   /// * There is already an option with name [name].
   /// * There is already an option using abbreviation [abbr].
   void addMultiOption(String name,
-      {String abbr,
-      String help,
-      String valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
-      Iterable<String> defaultsTo,
-      void Function(List<String>) callback,
+      {String? abbr,
+      String? help,
+      String? valueHelp,
+      Iterable<String>? allowed,
+      Map<String, String>? allowedHelp,
+      Iterable<String>? defaultsTo,
+      void Function(List<String>)? callback,
       bool splitCommas = true,
       bool hide = false}) {
     _addOption(
@@ -280,16 +280,16 @@ class ArgParser {
 
   void _addOption(
       String name,
-      String abbr,
-      String help,
-      String valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
+      String? abbr,
+      String? help,
+      String? valueHelp,
+      Iterable<String>? allowed,
+      Map<String, String>? allowedHelp,
       defaultsTo,
-      Function callback,
+      Function? callback,
       OptionType type,
       {bool negatable = false,
-      bool splitCommas,
+      bool? splitCommas,
       bool hide = false}) {
     // Make sure the name isn't in use.
     if (_options.containsKey(name)) {
@@ -341,16 +341,19 @@ class ArgParser {
   /// Get the default value for an option. Useful after parsing to test if the
   /// user specified something other than the default.
   dynamic getDefault(String option) {
-    if (!options.containsKey(option)) {
+    var value = options[option];
+    if (value == null) {
       throw ArgumentError('No option named $option');
     }
-    return options[option].defaultsTo;
+    return value.defaultsTo;
   }
 
   /// Finds the option whose abbreviation is [abbr], or `null` if no option has
   /// that abbreviation.
-  Option findByAbbreviation(String abbr) {
-    return options.values
-        .firstWhere((option) => option.abbr == abbr, orElse: () => null);
+  Option? findByAbbreviation(String abbr) {
+    for (var option in options.values) {
+      if (option.abbr == abbr) return option;
+    }
+    return null;
   }
 }

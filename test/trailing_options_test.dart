@@ -12,7 +12,7 @@ void main() {
   });
 
   group('when trailing options are allowed', () {
-    var parser;
+    late var parser;
     setUp(() {
       parser = ArgParser(allowTrailingOptions: true);
     });
@@ -93,7 +93,7 @@ void main() {
 
     results = parser.parse(['cmd', '-f', 'a', '-v', '--unknown']);
     expect(results['flag'], isTrue); // Not trailing.
-    expect(results.command['verbose'], isFalse);
-    expect(results.command.rest, equals(['a', '-v', '--unknown']));
+    expect(results.command!['verbose'], isFalse);
+    expect(results.command!.rest, equals(['a', '-v', '--unknown']));
   });
 }

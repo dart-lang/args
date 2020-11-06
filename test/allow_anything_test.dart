@@ -10,7 +10,7 @@ import 'test_utils.dart';
 
 void main() {
   group('new ArgParser.allowAnything()', () {
-    ArgParser parser;
+    late ArgParser parser;
     setUp(() {
       parser = ArgParser.allowAnything();
     });
@@ -49,10 +49,11 @@ void main() {
       var commandParser = ArgParser()..addCommand('command', parser);
       var results =
           commandParser.parse(['command', '--foo', '-abc', '--', 'bar']);
-      expect(results.command.options, isEmpty);
-      expect(results.command.rest, equals(['--foo', '-abc', '--', 'bar']));
-      expect(results.command.arguments, equals(['--foo', '-abc', '--', 'bar']));
-      expect(results.command.name, equals('command'));
+      expect(results.command!.options, isEmpty);
+      expect(results.command!.rest, equals(['--foo', '-abc', '--', 'bar']));
+      expect(
+          results.command!.arguments, equals(['--foo', '-abc', '--', 'bar']));
+      expect(results.command!.name, equals('command'));
     });
 
     test('works as a subcommand in a CommandRunner', () async {

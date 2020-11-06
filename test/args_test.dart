@@ -86,7 +86,7 @@ void main() {
 
     test('throws ArgumentError if the abbreviation is an invalid value', () {
       var parser = ArgParser();
-      for (var name in _invalidOptions.where((v) => v != null)) {
+      for (var name in _invalidOptions) {
         throwsIllegalArg(() => parser.addOption('flummox', abbr: name));
       }
     });
@@ -296,25 +296,25 @@ void main() {
       parser.addMultiOption('multi-no');
       parser.addMultiOption('multi-def', defaultsTo: ['def']);
 
-      expect(parser.options['flag-no'].getOrDefault(null), equals(null));
-      expect(parser.options['flag-no'].getOrDefault(false), equals(false));
-      expect(parser.options['flag-def'].getOrDefault(null), equals(true));
-      expect(parser.options['flag-def'].getOrDefault(false), equals(false));
-      expect(parser.options['single-no'].getOrDefault(null), equals(null));
-      expect(parser.options['single-no'].getOrDefault('v'), equals('v'));
-      expect(parser.options['single-def'].getOrDefault(null), equals('def'));
-      expect(parser.options['single-def'].getOrDefault('v'), equals('v'));
-      expect(parser.options['allow-multi-no'].getOrDefault(null), equals([]));
+      expect(parser.options['flag-no']!.getOrDefault(null), equals(null));
+      expect(parser.options['flag-no']!.getOrDefault(false), equals(false));
+      expect(parser.options['flag-def']!.getOrDefault(null), equals(true));
+      expect(parser.options['flag-def']!.getOrDefault(false), equals(false));
+      expect(parser.options['single-no']!.getOrDefault(null), equals(null));
+      expect(parser.options['single-no']!.getOrDefault('v'), equals('v'));
+      expect(parser.options['single-def']!.getOrDefault(null), equals('def'));
+      expect(parser.options['single-def']!.getOrDefault('v'), equals('v'));
+      expect(parser.options['allow-multi-no']!.getOrDefault(null), equals([]));
       expect(
-          parser.options['allow-multi-no'].getOrDefault(['v']), equals(['v']));
-      expect(parser.options['allow-multi-def'].getOrDefault(null),
+          parser.options['allow-multi-no']!.getOrDefault(['v']), equals(['v']));
+      expect(parser.options['allow-multi-def']!.getOrDefault(null),
           equals(['def']));
-      expect(
-          parser.options['allow-multi-def'].getOrDefault(['v']), equals(['v']));
-      expect(parser.options['multi-no'].getOrDefault(null), equals([]));
-      expect(parser.options['multi-no'].getOrDefault(['v']), equals(['v']));
-      expect(parser.options['multi-def'].getOrDefault(null), equals(['def']));
-      expect(parser.options['multi-def'].getOrDefault(['v']), equals(['v']));
+      expect(parser.options['allow-multi-def']!.getOrDefault(['v']),
+          equals(['v']));
+      expect(parser.options['multi-no']!.getOrDefault(null), equals([]));
+      expect(parser.options['multi-no']!.getOrDefault(['v']), equals(['v']));
+      expect(parser.options['multi-def']!.getOrDefault(null), equals(['def']));
+      expect(parser.options['multi-def']!.getOrDefault(['v']), equals(['v']));
     });
   });
 }

@@ -8,16 +8,16 @@
 /// get to it. This function isn't exported to the public API of the package.
 Option newOption(
     String name,
-    String abbr,
-    String help,
-    String valueHelp,
-    Iterable<String> allowed,
-    Map<String, String> allowedHelp,
+    String? abbr,
+    String? help,
+    String? valueHelp,
+    Iterable<String>? allowed,
+    Map<String, String>? allowedHelp,
     defaultsTo,
-    Function callback,
+    Function? callback,
     OptionType type,
-    {bool negatable,
-    bool splitCommas,
+    {bool? negatable,
+    bool? splitCommas,
     bool hide = false}) {
   return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
       callback, type,
@@ -35,22 +35,22 @@ class Option {
   ///
   /// For example, `abbr: "a"` will allow the user to pass `-a value` or
   /// `-avalue`.
-  final String abbr;
+  final String? abbr;
 
   @Deprecated('Use abbr instead.')
-  String get abbreviation => abbr;
+  String? get abbreviation => abbr;
 
   /// A description of this option.
-  final String help;
+  final String? help;
 
   /// A name for the value this option takes.
-  final String valueHelp;
+  final String? valueHelp;
 
   /// A list of valid values for this option.
-  final List<String> allowed;
+  final List<String>? allowed;
 
   /// A map from values in [allowed] to documentation for those values.
-  final Map<String, String> allowedHelp;
+  final Map<String, String>? allowedHelp;
 
   /// The value this option will have if the user doesn't explicitly pass it.
   final dynamic defaultsTo;
@@ -64,10 +64,10 @@ class Option {
   /// value to `false`.
   ///
   /// This is `null` unless [type] is [OptionType.flag].
-  final bool negatable;
+  final bool? negatable;
 
   /// The callback to invoke with the option's value when the option is parsed.
-  final Function callback;
+  final Function? callback;
 
   /// Whether this is a flag, a single value option, or a multi-value option.
   final OptionType type;
@@ -93,13 +93,13 @@ class Option {
       this.abbr,
       this.help,
       this.valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
+      Iterable<String>? allowed,
+      Map<String, String>? allowedHelp,
       this.defaultsTo,
       this.callback,
       OptionType type,
       {this.negatable,
-      bool splitCommas,
+      bool? splitCommas,
       this.hide = false})
       : allowed = allowed == null ? null : List.unmodifiable(allowed),
         allowedHelp =
@@ -119,6 +119,7 @@ class Option {
       throw ArgumentError('Name "$name" contains invalid characters.');
     }
 
+    var abbr = this.abbr;
     if (abbr != null) {
       if (abbr.length != 1) {
         throw ArgumentError('Abbreviation must be null or have length 1.');

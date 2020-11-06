@@ -36,7 +36,7 @@ void main() {
 
       var args = parser.parse(['install']);
 
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
       expect(args.rest, isEmpty);
     });
 
@@ -46,7 +46,7 @@ void main() {
       command.addOption('path');
 
       var args = parser.parse(['install', '--path', 'some/path']);
-      expect(args.command['path'], equals('some/path'));
+      expect(args.command!['path'], equals('some/path'));
     });
 
     test('parses a parent solo option before the command', () {
@@ -56,7 +56,7 @@ void main() {
 
       var args = parser.parse(['-m', 'debug', 'install']);
       expect(args['mode'], equals('debug'));
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
     });
 
     test('parses a parent solo option after the command', () {
@@ -66,7 +66,7 @@ void main() {
 
       var args = parser.parse(['install', '-m', 'debug']);
       expect(args['mode'], equals('debug'));
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
     });
 
     test('parses a parent option before the command', () {
@@ -76,7 +76,7 @@ void main() {
 
       var args = parser.parse(['--verbose', 'install']);
       expect(args['verbose'], isTrue);
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
     });
 
     test('parses a parent option after the command', () {
@@ -86,7 +86,7 @@ void main() {
 
       var args = parser.parse(['install', '--verbose']);
       expect(args['verbose'], isTrue);
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
     });
 
     test('parses a parent negated option before the command', () {
@@ -96,7 +96,7 @@ void main() {
 
       var args = parser.parse(['--no-verbose', 'install']);
       expect(args['verbose'], isFalse);
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
     });
 
     test('parses a parent negated option after the command', () {
@@ -106,7 +106,7 @@ void main() {
 
       var args = parser.parse(['install', '--no-verbose']);
       expect(args['verbose'], isFalse);
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
     });
 
     test('parses a parent abbreviation before the command', () {
@@ -118,7 +118,7 @@ void main() {
       var args = parser.parse(['-dv', 'install']);
       expect(args['debug'], isTrue);
       expect(args['verbose'], isTrue);
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
     });
 
     test('parses a parent abbreviation after the command', () {
@@ -130,7 +130,7 @@ void main() {
       var args = parser.parse(['install', '-dv']);
       expect(args['debug'], isTrue);
       expect(args['verbose'], isTrue);
-      expect(args.command.name, equals('install'));
+      expect(args.command!.name, equals('install'));
     });
 
     test('does not parse a solo command option before the command', () {
@@ -168,10 +168,10 @@ void main() {
 
       var args = parser.parse(['cmd', 'subcmd', '-abc']);
       expect(args['apple'], isTrue);
-      expect(args.command.name, equals('cmd'));
-      expect(args.command['banana'], isTrue);
-      expect(args.command.command.name, equals('subcmd'));
-      expect(args.command.command['cherry'], isTrue);
+      expect(args.command!.name, equals('cmd'));
+      expect(args.command!['banana'], isTrue);
+      expect(args.command!.command!.name, equals('subcmd'));
+      expect(args.command!.command!['cherry'], isTrue);
     });
 
     test('option is given to innermost command that can take it', () {
@@ -183,9 +183,9 @@ void main() {
 
       var args = parser.parse(['cmd', 'subcmd', '--verbose']);
       expect(args['verbose'], isFalse);
-      expect(args.command.name, equals('cmd'));
-      expect(args.command['verbose'], isTrue);
-      expect(args.command.command.name, equals('subcmd'));
+      expect(args.command!.name, equals('cmd'));
+      expect(args.command!['verbose'], isTrue);
+      expect(args.command!.command!.name, equals('subcmd'));
     });
 
     test('remaining arguments are given to the innermost command', () {
@@ -193,11 +193,11 @@ void main() {
       parser.addCommand('cmd')..addCommand('subcmd');
 
       var args = parser.parse(['cmd', 'subcmd', 'other', 'stuff']);
-      expect(args.command.name, equals('cmd'));
+      expect(args.command!.name, equals('cmd'));
       expect(args.rest, isEmpty);
-      expect(args.command.command.name, equals('subcmd'));
-      expect(args.command.rest, isEmpty);
-      expect(args.command.command.rest, equals(['other', 'stuff']));
+      expect(args.command!.command!.name, equals('subcmd'));
+      expect(args.command!.rest, isEmpty);
+      expect(args.command!.command!.rest, equals(['other', 'stuff']));
     });
   });
 }

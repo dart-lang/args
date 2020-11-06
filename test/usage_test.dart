@@ -502,7 +502,7 @@ String unindentString(String text) {
 
   // Count the indentation of the last line.
   var whitespace = RegExp('^ *');
-  var indent = whitespace.firstMatch(lines[lines.length - 1])[0].length;
+  var indent = whitespace.firstMatch(lines[lines.length - 1])![0]!.length;
 
   // Drop the last line. It only exists for specifying indentation.
   lines.removeLast();

@@ -1,19 +1,31 @@
 language: dart
 
 dart:
-- 2.3.0
 - dev
 
-dart_task:
-- test: -p vm
-- dartanalyzer: --fatal-infos --fatal-warnings .
-
-matrix:
+jobs:
   include:
-  - dart: dev
-    dart_task: dartfmt
+    - stage: analyze_and_format
+      name: "Analyze"
+      dart: dev
+      os: linux
+      script: dartanalyzer --fatal-warnings --fatal-infos .
+    - stage: analyze_and_format
+      name: "Format"
+      dart: dev
+      os: linux
+      script: dartfmt -n --set-exit-if-changed .
+    - stage: test
+      name: "Vm Tests"
+      dart: dev
+      os: linux
+      script: pub run test -p vm
+    - stage: test
+      name: "Web Tests"
+      dart: dev
+      os: linux
+      script: pub run test -p chrome
 
-# Only building master means that we don't run two builds for each pull request.
 branches:
   only: [master]
 
