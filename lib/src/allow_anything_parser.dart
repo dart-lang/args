@@ -82,9 +82,6 @@ class AllowAnythingParser implements ArgParser {
       Parser(null, this, Queue.of(args)).parse();
 
   @override
-  String getUsage() => usage;
-
-  @override
   String get usage => '';
 
   @override

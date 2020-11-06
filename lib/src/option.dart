@@ -37,9 +37,6 @@ class Option {
   /// `-avalue`.
   final String? abbr;
 
-  @Deprecated('Use abbr instead.')
-  String? get abbreviation => abbr;
-
   /// A description of this option.
   final String? help;
 
@@ -54,9 +51,6 @@ class Option {
 
   /// The value this option will have if the user doesn't explicitly pass it.
   final dynamic defaultsTo;
-
-  @Deprecated('Use defaultsTo instead.')
-  dynamic get defaultValue => defaultsTo;
 
   /// Whether this flag's value can be set to `false`.
   ///
@@ -155,9 +149,6 @@ class OptionType {
   /// The presence of the option name itself in the argument list means `true`.
   static const flag = OptionType._('OptionType.flag');
 
-  @Deprecated('Use OptionType.flag instead.')
-  static const FLAG = flag; // ignore: constant_identifier_names
-
   /// An option that takes a single value.
   ///
   /// Examples:
@@ -169,9 +160,6 @@ class OptionType {
   /// If the option is passed more than once, the last one wins.
   static const single = OptionType._('OptionType.single');
 
-  @Deprecated('Use OptionType.single instead.')
-  static const SINGLE = single; // ignore: constant_identifier_names
-
   /// An option that allows multiple values.
   ///
   /// Example:
@@ -181,9 +169,6 @@ class OptionType {
   /// In the parsed `ArgResults`, a multiple-valued option will always return
   /// a list, even if one or no values were passed.
   static const multiple = OptionType._('OptionType.multiple');
-
-  @Deprecated('Use OptionType.multiple instead.')
-  static const MULTIPLE = multiple; // ignore: constant_identifier_names
 
   final String name;
 

@@ -2,10 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// TODO(nweiz): Remove this ignore when sdk#30084 is fixed or when args no
-// longer refers to its own deprecated members.
-// ignore_for_file: deprecated_member_use
-
 import 'dart:collection';
 
 import 'allow_anything_parser.dart';
@@ -175,16 +171,12 @@ class ArgParser {
   /// that are often surprising, and its use is discouraged in favor of reading
   /// values from the [ArgResults].
   ///
-  /// The [allowMultiple] and [splitCommas] options are deprecated; the
-  /// [addMultiOption] method should be used instead.
-  ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
   /// Throws an [ArgumentError] if:
   ///
   /// * There is already an option with name [name].
   /// * There is already an option using abbreviation [abbr].
-  /// * [splitCommas] is passed but [allowMultiple] is `false`.
   void addOption(String name,
       {String? abbr,
       String? help,
@@ -193,27 +185,9 @@ class ArgParser {
       Map<String, String>? allowedHelp,
       String? defaultsTo,
       Function? callback,
-      @Deprecated('Use addMultiOption() instead.') bool allowMultiple = false,
-      @Deprecated('Use addMultiOption() instead.') bool? splitCommas,
       bool hide = false}) {
-    if (!allowMultiple && splitCommas != null) {
-      throw ArgumentError(
-          'splitCommas may not be set if allowMultiple is false.');
-    }
-
-    _addOption(
-        name,
-        abbr,
-        help,
-        valueHelp,
-        allowed,
-        allowedHelp,
-        allowMultiple
-            ? (defaultsTo == null ? <String>[] : [defaultsTo])
-            : defaultsTo,
-        callback,
-        allowMultiple ? OptionType.multiple : OptionType.single,
-        splitCommas: splitCommas,
+    _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
+        callback, OptionType.single,
         hide: hide);
   }
 
@@ -324,12 +298,6 @@ class ArgParser {
   /// flags and options defined by this parser, and returns the result.
   ArgResults parse(Iterable<String> args) =>
       Parser(null, this, Queue.of(args)).parse();
-
-  /// Generates a string displaying usage information for the defined options.
-  ///
-  /// This is basically the help text shown on the command line.
-  @Deprecated('Replaced with get usage. getUsage() will be removed in args 1.0')
-  String getUsage() => usage;
 
   /// Generates a string displaying usage information for the defined options.
   ///

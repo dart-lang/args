@@ -21,7 +21,6 @@ void main() {
       expect(parser.allowTrailingOptions, isFalse);
       expect(parser.allowsAnything, isTrue);
       expect(parser.usage, isEmpty);
-      expect(parser.getUsage(), isEmpty); // ignore: deprecated_member_use
       expect(parser.findByAbbreviation('a'), isNull);
     });
 

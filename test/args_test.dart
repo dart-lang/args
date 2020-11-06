@@ -110,23 +110,6 @@ void main() {
       }
     });
 
-    test(
-        'throws ArgumentError if splitCommas is passed with allowMultiple: '
-        'false', () {
-      var parser = ArgParser();
-      throwsIllegalArg(() {
-        parser.addOption(
-          'flummox', splitCommas: true, // ignore: deprecated_member_use
-        );
-      });
-      throwsIllegalArg(() {
-        parser.addOption(
-          'flummox',
-          splitCommas: false, // ignore: deprecated_member_use
-        );
-      });
-    });
-
     test('accepts valid option names', () {
       var parser = ArgParser();
 
@@ -284,15 +267,6 @@ void main() {
       parser.addFlag('flag-def', defaultsTo: true);
       parser.addOption('single-no');
       parser.addOption('single-def', defaultsTo: 'def');
-      parser.addOption(
-        'allow-multi-no',
-        allowMultiple: true, // ignore: deprecated_member_use
-      );
-      parser.addOption(
-        'allow-multi-def',
-        allowMultiple: true, // ignore: deprecated_member_use
-        defaultsTo: 'def',
-      );
       parser.addMultiOption('multi-no');
       parser.addMultiOption('multi-def', defaultsTo: ['def']);
 
@@ -304,13 +278,6 @@ void main() {
       expect(parser.options['single-no']!.getOrDefault('v'), equals('v'));
       expect(parser.options['single-def']!.getOrDefault(null), equals('def'));
       expect(parser.options['single-def']!.getOrDefault('v'), equals('v'));
-      expect(parser.options['allow-multi-no']!.getOrDefault(null), equals([]));
-      expect(
-          parser.options['allow-multi-no']!.getOrDefault(['v']), equals(['v']));
-      expect(parser.options['allow-multi-def']!.getOrDefault(null),
-          equals(['def']));
-      expect(parser.options['allow-multi-def']!.getOrDefault(['v']),
-          equals(['v']));
       expect(parser.options['multi-no']!.getOrDefault(null), equals([]));
       expect(parser.options['multi-no']!.getOrDefault(['v']), equals(['v']));
       expect(parser.options['multi-def']!.getOrDefault(null), equals(['def']));
