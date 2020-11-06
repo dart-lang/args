@@ -26,11 +26,6 @@ jobs:
       os: linux
       script: pub run test -p chrome
 
-matrix:
-  include:
-  - dart: dev
-    dart_task: dartfmt
-
 branches:
   only: [master, null_safety]
 
