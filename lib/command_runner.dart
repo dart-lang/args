@@ -142,13 +142,13 @@ class CommandRunner<T> {
   ///
   /// This returns the return value of [Command.run].
   Future<T?> runCommand(ArgResults topLevelResults) async {
-    ArgResults? argResults = topLevelResults;
+    var argResults = topLevelResults;
     var commands = _commands;
     Command? command;
     var commandString = executableName;
 
     while (commands.isNotEmpty) {
-      if (argResults!.command == null) {
+      if (argResults.command == null) {
         if (argResults.rest.isEmpty) {
           if (command == null) {
             // No top-level command was chosen.
@@ -169,8 +169,8 @@ class CommandRunner<T> {
       }
 
       // Step into the command.
-      argResults = argResults.command;
-      command = commands[argResults!.name];
+      argResults = argResults.command!;
+      command = commands[argResults.name];
       command!._globalResults = topLevelResults;
       command._argResults = argResults;
       commands = command._subcommands as Map<String, Command<T>>;
