@@ -188,7 +188,7 @@ class CommandRunner<T> {
     }
 
     // Make sure there aren't unexpected arguments.
-    if (!command!.takesArguments && argResults!.rest.isNotEmpty) {
+    if (!command!.takesArguments && argResults.rest.isNotEmpty) {
       command.usageException(
           'Command "${argResults.name}" does not take any arguments.');
     }
