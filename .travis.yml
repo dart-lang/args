@@ -6,12 +6,7 @@ dart:
 jobs:
   include:
     - stage: analyze_and_format
-      name: "Analyze lib/ (no experiment flag)"
-      dart: dev
-      os: linux
-      script: dartanalyzer --fatal-warnings --fatal-infos lib/
-    - stage: analyze_and_format
-      name: "Analyze (with experiment flag)"
+      name: "Analyze"
       dart: dev
       os: linux
       script: dartanalyzer --fatal-warnings --fatal-infos .
