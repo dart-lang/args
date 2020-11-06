@@ -109,14 +109,14 @@ class CommandRunner<T> {
   /// This always returns a [Future] in case the command is asynchronous. The
   /// [Future] will throw a [UsageException] if [args] was invalid.
   Future<T?> run(Iterable<String> args) =>
-      Future.sync(() => runCommand(parse(args)!));
+      Future.sync(() => runCommand(parse(args)));
 
   /// Parses [args] and returns the result, converting an [ArgParserException]
   /// to a [UsageException].
   ///
   /// This is notionally a protected method. It may be overridden or called from
   /// subclasses, but it shouldn't be called externally.
-  ArgResults? parse(Iterable<String> args) {
+  ArgResults parse(Iterable<String> args) {
     try {
       return argParser.parse(args);
     } on ArgParserException catch (error) {
@@ -128,7 +128,6 @@ class CommandRunner<T> {
       }
 
       command!.usageException(error.message);
-      return null;
     }
   }
 
@@ -395,7 +394,7 @@ abstract class Command<T> {
   void printUsage() => print(usage);
 
   /// Throws a [UsageException] with [message].
-  void usageException(String message) =>
+  Never usageException(String message) =>
       throw UsageException(_wrap(message), _usageWithoutDescription);
 }
 
