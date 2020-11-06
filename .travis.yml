@@ -27,7 +27,7 @@ jobs:
       script: pub run test -p chrome
 
 branches:
-  only: [master, null_safety]
+  only: [master]
 
 cache:
   directories:
