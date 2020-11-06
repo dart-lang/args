@@ -22,11 +22,11 @@ class HelpCommand<T> extends Command<T> {
   bool get hidden => true;
 
   @override
-  T? run() {
+  Null run() {
     // Show the default help if no command was specified.
     if (argResults!.rest.isEmpty) {
       runner!.printUsage();
-      return null;
+      return;
     }
 
     // Walk the command tree to show help for the selected command or
@@ -56,6 +56,5 @@ class HelpCommand<T> extends Command<T> {
     }
 
     command!.printUsage();
-    return null;
   }
 }
