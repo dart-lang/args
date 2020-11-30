@@ -1,12 +1,15 @@
-## 2.0.0-nullsafety
+## 2.0.0
 
-* **BREAKING** Remove APIs that had been marked as deprecated.
-  * `allowMulti` and `splitCommas` arguments to `ArgParser.addOption`, use
-    `ArgParser.addMultiOption`.
-  * `ArgParser.getUsage(),` use `ArgParser.usage`.
-  * `Option.abbreviation`, use `Option.abbr`.
-  * `Option.defaultValue`, use `Option.defaultsTo`.
-  * `OptionType.FLAG/SINGLE/MULTIPLE`, use `OptionType.flag/single/multiple`.
+* Migrate to null safety.
+* **BREAKING** Remove APIs that had been marked as deprecated:
+
+  * Instead of the `allowMulti` and `splitCommas` arguments to
+    `ArgParser.addOption()`, use `ArgParser.addMultiOption()`.
+  * Instead of `ArgParser.getUsage()`, use `ArgParser.usage`.
+  * Instead of `Option.abbreviation`, use `Option.abbr`.
+  * Instead of `Option.defaultValue`, use `Option.defaultsTo`.
+  * Instead of `OptionType.FLAG/SINGLE/MULTIPLE`, use
+    `OptionType.flag/single/multiple`.
 
 ## 1.6.0
 
