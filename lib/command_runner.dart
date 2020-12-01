@@ -122,12 +122,12 @@ class CommandRunner<T> {
     } on ArgParserException catch (error) {
       if (error.commands.isEmpty) usageException(error.message);
 
-      var command = commands[error.commands.first];
+      var command = commands[error.commands.first]!;
       for (var commandName in error.commands.skip(1)) {
-        command = command!.subcommands[commandName];
+        command = command.subcommands[commandName]!;
       }
 
-      command!.usageException(error.message);
+      command.usageException(error.message);
     }
   }
 
@@ -170,8 +170,8 @@ class CommandRunner<T> {
 
       // Step into the command.
       argResults = argResults.command!;
-      command = commands[argResults.name];
-      command!._globalResults = topLevelResults;
+      command = commands[argResults.name]!;
+      command._globalResults = topLevelResults;
       command._argResults = argResults;
       commands = command._subcommands as Map<String, Command<T>>;
       commandString += ' ${argResults.name}';
