@@ -184,7 +184,7 @@ class ArgParser {
       Iterable<String>? allowed,
       Map<String, String>? allowedHelp,
       String? defaultsTo,
-      Function? callback,
+      void Function(String)? callback,
       bool hide = false}) {
     _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
         callback, OptionType.single,

@@ -48,7 +48,7 @@ class AllowAnythingParser implements ArgParser {
       Iterable<String>? allowed,
       Map<String, String>? allowedHelp,
       String? defaultsTo,
-      Function? callback,
+      void Function(String)? callback,
       bool allowMultiple = false,
       bool? splitCommas,
       bool hide = false}) {
