@@ -1,7 +1,4 @@
 include: package:pedantic/analysis_options.yaml
-analyzer:
-  errors:
-    deprecated_member_use_from_same_package: ignore
 linter:
   rules:
     - avoid_null_checks_in_equality_operators
