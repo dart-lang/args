@@ -10,6 +10,7 @@
   * Instead of `Option.defaultValue`, use `Option.defaultsTo`.
   * Instead of `OptionType.FLAG/SINGLE/MULTIPLE`, use
     `OptionType.flag/single/multiple`.
+* Add a more specific function type to the `callback` argument of `addOption`.
 
 ## 1.6.0
 

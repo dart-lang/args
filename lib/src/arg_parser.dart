@@ -167,9 +167,10 @@ class ArgParser {
   /// user doesn't explicitly pass it in (or `null` by default).
   ///
   /// The [callback] argument is invoked with the option's value when the option
-  /// is parsed. Note that this makes argument parsing order-dependent in ways
-  /// that are often surprising, and its use is discouraged in favor of reading
-  /// values from the [ArgResults].
+  /// is parsed, or with `null` if the option was not parsed.
+  /// Note that this makes argument parsing order-dependent in ways that are
+  /// often surprising, and its use is discouraged in favor of reading values
+  /// from the [ArgResults].
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
@@ -184,7 +185,7 @@ class ArgParser {
       Iterable<String>? allowed,
       Map<String, String>? allowedHelp,
       String? defaultsTo,
-      Function? callback,
+      void Function(String?)? callback,
       bool hide = false}) {
     _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
         callback, OptionType.single,

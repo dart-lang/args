@@ -145,15 +145,16 @@ void main() {
       });
 
       test('for absent options are invoked with the default value', () {
-        var a;
         var parser = ArgParser();
-        parser.addOption('a', defaultsTo: 'v', callback: (value) => a = value);
+        parser.addOption('a',
+            defaultsTo: 'v',
+            callback: expectAsync1((value) => expect(value, 'v')));
 
         parser.parse([]);
-        expect(a, equals('v'));
       });
 
-      test('are invoked even if the option is not present', () {
+      test('for absent options are invoked with null if there is no default',
+          () {
         var parser = ArgParser();
         parser.addOption('a',
             callback: expectAsync1((value) => expect(value, isNull)));
