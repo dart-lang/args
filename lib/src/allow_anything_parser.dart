@@ -85,6 +85,11 @@ class AllowAnythingParser implements ArgParser {
   String get usage => '';
 
   @override
+  dynamic defaultFor(String option) {
+    throw ArgumentError('No option named $option');
+  }
+
+  @override
   dynamic getDefault(String option) {
     throw ArgumentError('No option named $option');
   }

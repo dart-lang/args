@@ -124,13 +124,13 @@ void main() {
     test('returns the default value for an option', () {
       var parser = ArgParser();
       parser.addOption('mode', defaultsTo: 'debug');
-      expect(parser.getDefault('mode'), 'debug');
+      expect(parser.defaultFor('mode'), 'debug');
     });
 
     test('throws if the option is unknown', () {
       var parser = ArgParser();
       parser.addOption('mode', defaultsTo: 'debug');
-      throwsIllegalArg(() => parser.getDefault('undefined'));
+      throwsIllegalArg(() => parser.defaultFor('undefined'));
     });
   });
 
