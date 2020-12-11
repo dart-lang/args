@@ -189,7 +189,7 @@
 * Allow option values that look like options. This more closely matches the
   behavior of [`getopt`][getopt], the *de facto* standard for option parsing.
 
-[getopt]: http://man7.org/linux/man-pages/man3/getopt.3.html
+[getopt]: https://man7.org/linux/man-pages/man3/getopt.3.html
 
 ## 0.13.1
 
