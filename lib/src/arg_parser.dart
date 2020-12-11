@@ -307,15 +307,17 @@ class ArgParser {
     return Usage(_optionsAndSeparators, lineLength: usageLineLength).generate();
   }
 
-  /// Get the default value for an option. Useful after parsing to test if the
-  /// user specified something other than the default.
-  dynamic getDefault(String option) {
+  /// Returns the default value for [option].
+  dynamic defaultFor(String option) {
     var value = options[option];
     if (value == null) {
       throw ArgumentError('No option named $option');
     }
     return value.defaultsTo;
   }
+
+  @Deprecated('use defaultFor instead')
+  dynamic getDefault(String option) => defaultFor(option);
 
   /// Finds the option whose abbreviation is [abbr], or `null` if no option has
   /// that abbreviation.
