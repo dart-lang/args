@@ -65,7 +65,7 @@ class ArgResults {
       throw ArgumentError('Could not find an option named "$name".');
     }
 
-    return _parser.options[name]!.getOrDefault(_parsed[name]);
+    return _parser.options[name]!.valueOrDefault(_parsed[name]);
   }
 
   /// The names of the available options.

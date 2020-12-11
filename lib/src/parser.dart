@@ -95,7 +95,7 @@ class Parser {
     // Invoke the callbacks.
     grammar.options.forEach((name, option) {
       var callback = option.callback;
-      if (callback != null) callback(option.getOrDefault(results[name]));
+      if (callback != null) callback(option.valueOrDefault(results[name]));
     });
 
     // Add in the leftover arguments we didn't parse to the innermost command.
