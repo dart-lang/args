@@ -304,7 +304,7 @@ class ArgParser {
   ///
   /// This is basically the help text shown on the command line.
   String get usage {
-    return Usage(_optionsAndSeparators, lineLength: usageLineLength).generate();
+    return generateUsage(_optionsAndSeparators, lineLength: usageLineLength);
   }
 
   /// Get the default value for an option. Useful after parsing to test if the
