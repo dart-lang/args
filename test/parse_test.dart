@@ -335,6 +335,25 @@ void main() {
         throwsFormat(parser, ['-mprofile']);
       });
 
+      test('throw if the value is not allowed by allowedHelp', () {
+        var parser = ArgParser();
+        parser.addOption('mode',
+            abbr: 'm',
+            allowedHelp: {'debug': 'debug mode', 'release': 'release mode'});
+
+        throwsFormat(parser, ['-mprofile']);
+      });
+
+      test('does not throw if value is allowed by allowedHelp', () {
+        var parser = ArgParser();
+        parser.addOption('mode',
+            abbr: 'm',
+            allowedHelp: {'debug': 'debug mode', 'release': 'release mode'});
+
+        // does not throw
+        parser.parse(['-mdebug']);
+      });
+
       group('throw if a comma-separated value is not allowed', () {
         test('with addMultiOption', () {
           var parser = ArgParser();

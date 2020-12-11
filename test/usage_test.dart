@@ -191,12 +191,7 @@ void main() {
 
     test('the allowed help is shown', () {
       var parser = ArgParser();
-      parser.addOption('suit', help: 'Like in cards', allowed: [
-        'spades',
-        'clubs',
-        'diamonds',
-        'hearts'
-      ], allowedHelp: {
+      parser.addOption('suit', help: 'Like in cards', allowedHelp: {
         'spades': 'Swords of a soldier',
         'clubs': 'Weapons of war',
         'diamonds': 'Money for this art',
@@ -218,12 +213,6 @@ void main() {
       parser.addOption('suit',
           help: 'Like in cards',
           defaultsTo: 'clubs',
-          allowed: [
-            'spades',
-            'clubs',
-            'diamonds',
-            'hearts'
-          ],
           allowedHelp: {
             'spades': 'Swords of a soldier',
             'clubs': 'Weapons of war',
@@ -245,11 +234,6 @@ void main() {
       var parser = ArgParser();
       parser.addMultiOption('suit', help: 'Like in cards', defaultsTo: [
         'clubs',
-        'hearts'
-      ], allowed: [
-        'spades',
-        'clubs',
-        'diamonds',
         'hearts'
       ], allowedHelp: {
         'spades': 'Swords of a soldier',
