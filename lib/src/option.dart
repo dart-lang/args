@@ -139,7 +139,7 @@ class Option {
     return defaultsTo;
   }
 
-  @Deprecated('use valueOrDefault instead')
+  @Deprecated('Use valueOrDefault instead.')
   dynamic getOrDefault(value) => valueOrDefault(value);
 
   static final _invalidChars = RegExp(r'''[ \t\r\n"'\\/]''');

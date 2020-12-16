@@ -316,7 +316,7 @@ class ArgParser {
     return value.defaultsTo;
   }
 
-  @Deprecated('use defaultFor instead')
+  @Deprecated('Use defaultFor instead.')
   dynamic getDefault(String option) => defaultFor(option);
 
   /// Finds the option whose abbreviation is [abbr], or `null` if no option has
