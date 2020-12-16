@@ -95,13 +95,9 @@ class Option {
       {this.negatable,
       bool? splitCommas,
       this.hide = false})
-      : allowed = allowed != null
-            ? List.unmodifiable(allowed)
-            : allowedHelp != null
-                ? List.unmodifiable(allowedHelp.keys)
-                : null,
+      : allowed = allowed == null ? null : List.unmodifiable(allowed),
         allowedHelp =
-            allowedHelp != null ? Map.unmodifiable(allowedHelp) : null,
+            allowedHelp == null ? null : Map.unmodifiable(allowedHelp),
         type = type,
         // If the user doesn't specify [splitCommas], it defaults to true for
         // multiple options.

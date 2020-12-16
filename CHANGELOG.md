@@ -11,8 +11,6 @@
   * Instead of `OptionType.FLAG/SINGLE/MULTIPLE`, use
     `OptionType.flag/single/multiple`.
 * Add a more specific function type to the `callback` argument of `addOption`.
-* Allow passing `allowedHelp` without also passing `allowed`. The keys of
-  `allowedHelp` will be the valid options.
 
 ## 1.6.0
 
