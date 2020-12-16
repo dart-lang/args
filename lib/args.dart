@@ -5,4 +5,4 @@
 export 'src/arg_parser.dart' show ArgParser;
 export 'src/arg_parser_exception.dart' show ArgParserException;
 export 'src/arg_results.dart' show ArgResults;
-export 'src/option.dart' show Option;
+export 'src/option.dart' show Option, OptionType;
