@@ -32,7 +32,7 @@ void main() {
     });
 
     test('getDefault() throws an error', () {
-      expect(() => parser.getDefault('option'), throwsArgumentError);
+      expect(() => parser.defaultFor('option'), throwsArgumentError);
     });
 
     test('parses all values as rest arguments', () {

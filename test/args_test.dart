@@ -124,13 +124,13 @@ void main() {
     test('returns the default value for an option', () {
       var parser = ArgParser();
       parser.addOption('mode', defaultsTo: 'debug');
-      expect(parser.getDefault('mode'), 'debug');
+      expect(parser.defaultFor('mode'), 'debug');
     });
 
     test('throws if the option is unknown', () {
       var parser = ArgParser();
       parser.addOption('mode', defaultsTo: 'debug');
-      throwsIllegalArg(() => parser.getDefault('undefined'));
+      throwsIllegalArg(() => parser.defaultFor('undefined'));
     });
   });
 
@@ -261,7 +261,7 @@ void main() {
   });
 
   group('Option', () {
-    test('.getOrDefault() returns a type-specific default value', () {
+    test('.valueOrDefault() returns a type-specific default value', () {
       var parser = ArgParser();
       parser.addFlag('flag-no', defaultsTo: null);
       parser.addFlag('flag-def', defaultsTo: true);
@@ -270,18 +270,19 @@ void main() {
       parser.addMultiOption('multi-no');
       parser.addMultiOption('multi-def', defaultsTo: ['def']);
 
-      expect(parser.options['flag-no']!.getOrDefault(null), equals(null));
-      expect(parser.options['flag-no']!.getOrDefault(false), equals(false));
-      expect(parser.options['flag-def']!.getOrDefault(null), equals(true));
-      expect(parser.options['flag-def']!.getOrDefault(false), equals(false));
-      expect(parser.options['single-no']!.getOrDefault(null), equals(null));
-      expect(parser.options['single-no']!.getOrDefault('v'), equals('v'));
-      expect(parser.options['single-def']!.getOrDefault(null), equals('def'));
-      expect(parser.options['single-def']!.getOrDefault('v'), equals('v'));
-      expect(parser.options['multi-no']!.getOrDefault(null), equals([]));
-      expect(parser.options['multi-no']!.getOrDefault(['v']), equals(['v']));
-      expect(parser.options['multi-def']!.getOrDefault(null), equals(['def']));
-      expect(parser.options['multi-def']!.getOrDefault(['v']), equals(['v']));
+      expect(parser.options['flag-no']!.valueOrDefault(null), equals(null));
+      expect(parser.options['flag-no']!.valueOrDefault(false), equals(false));
+      expect(parser.options['flag-def']!.valueOrDefault(null), equals(true));
+      expect(parser.options['flag-def']!.valueOrDefault(false), equals(false));
+      expect(parser.options['single-no']!.valueOrDefault(null), equals(null));
+      expect(parser.options['single-no']!.valueOrDefault('v'), equals('v'));
+      expect(parser.options['single-def']!.valueOrDefault(null), equals('def'));
+      expect(parser.options['single-def']!.valueOrDefault('v'), equals('v'));
+      expect(parser.options['multi-no']!.valueOrDefault(null), equals([]));
+      expect(parser.options['multi-no']!.valueOrDefault(['v']), equals(['v']));
+      expect(
+          parser.options['multi-def']!.valueOrDefault(null), equals(['def']));
+      expect(parser.options['multi-def']!.valueOrDefault(['v']), equals(['v']));
     });
   });
 }
