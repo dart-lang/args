@@ -17,6 +17,11 @@ import 'utils.dart';
 ///
 /// It builds the usage text up one column at a time and handles padding with
 /// spaces and wrapping to the next line to keep the cells correctly lined up.
+///
+/// [lineLength] specifies the horizontal character position at which the help
+/// text is wrapped. Help that extends past this column will be wrapped at the
+/// nearest whitespace (or truncated if there is no available whitespace). If
+/// `null` there will not be any wrapping.
 String generateUsage(List optionsAndSeparators, {int? lineLength}) =>
     _Usage(optionsAndSeparators, lineLength).generate();
 
@@ -37,7 +42,7 @@ class _Usage {
   int _currentColumn = 0;
 
   /// The width in characters of each column.
-  late final _columnWidths = _calculateLineWidths();
+  late final _columnWidths = _calculateColumnWidths();
 
   /// How many newlines need to be rendered before the next bit of text can be
   /// written.
@@ -85,7 +90,7 @@ class _Usage {
     if (option.help != null) _write(2, option.help!);
 
     if (option.allowedHelp != null) {
-      var allowedNames = option.allowedHelp!.keys.toList(growable: false);
+      var allowedNames = option.allowedHelp!.keys.toList();
       allowedNames.sort();
       _newline();
       for (var name in allowedNames) {
@@ -101,16 +106,12 @@ class _Usage {
       }
     } else if (option.isMultiple) {
       if (option.defaultsTo != null && option.defaultsTo.isNotEmpty) {
-        _write(
-            2,
-            '(defaults to ' +
-                option.defaultsTo.map((value) => '"$value"').join(', ') +
-                ')');
+        var defaults =
+            (option.defaultsTo as List).map((value) => '"$value"').join(', ');
+        _write(2, '(defaults to $defaults)');
       }
-    } else {
-      if (option.defaultsTo != null) {
-        _write(2, '(defaults to "${option.defaultsTo}")');
-      }
+    } else if (option.defaultsTo != null) {
+      _write(2, '(defaults to "${option.defaultsTo}")');
     }
   }
 
@@ -137,7 +138,7 @@ class _Usage {
     return '      [$allowed]' + (isDefault ? ' (default)' : '');
   }
 
-  List<int> _calculateLineWidths() {
+  List<int> _calculateColumnWidths() {
     var abbr = 0;
     var title = 0;
     for (var option in _optionsAndSeparators) {
