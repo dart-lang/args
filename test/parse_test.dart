@@ -433,6 +433,16 @@ void main() {
         expect(args['mode'], equals('debug'));
       });
 
+      test('do not throw if there is no allowed set with allowedHelp', () {
+        var parser = ArgParser();
+        parser.addOption('mode', allowedHelp: {
+          'debug': 'During development.',
+          'release': 'For customers.'
+        });
+        var args = parser.parse(['--mode=profile']);
+        expect(args['mode'], equals('profile'));
+      });
+
       test('throw if the value is not in the allowed set', () {
         var parser = ArgParser();
         parser.addOption('mode', allowed: ['debug', 'release']);
