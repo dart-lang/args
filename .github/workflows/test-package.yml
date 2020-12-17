@@ -51,7 +51,7 @@ jobs:
           channel: ${{ matrix.sdk }}
       - name: Install dependencies
         run: dart pub get
-      - name: Run tests
+      - name: Run VM tests
         run: dart test --platform vm
-      - name: Run tests
+      - name: Run Chrome tests
         run: dart test --platform chrome
