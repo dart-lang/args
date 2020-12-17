@@ -30,7 +30,7 @@ jobs:
         run: dart format --output=none --set-exit-if-changed .
       - name: Analyze code
         run: dart analyze
-        if: ${{ always() && steps.install.outcome == 'success' }}
+        if: always() && steps.install.outcome == 'success'
 
   # Run tests on a matrix consisting of three dimensions:
   # 1. OS: ubuntu-latest, (macos-latest, windows-latest)
