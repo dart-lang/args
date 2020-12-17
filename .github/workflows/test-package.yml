@@ -6,7 +6,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
+  schedule:
+    - cron: "0 0 * * 0"
 env:
   PUB_ENVIRONMENT: bot.github
 
@@ -16,6 +17,7 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         sdk: [dev]
     steps:
@@ -27,6 +29,7 @@ jobs:
         name: Install dependencies
         run: dart pub get
       - name: Check formatting
+        if: always() && steps.install.outcome == 'success'
         run: dart format --output=none --set-exit-if-changed .
       - name: Analyze code
         run: dart analyze
@@ -50,9 +53,12 @@ jobs:
       - uses: dart-lang/setup-dart@v0.1
         with:
           channel: ${{ matrix.sdk }}
-      - name: Install dependencies
+      - id: install
+        name: Install dependencies
         run: dart pub get
       - name: Run VM tests
         run: dart test --platform vm
+        if: always() && steps.install.outcome == 'success'
       - name: Run Chrome tests
         run: dart test --platform chrome
+        if: always() && steps.install.outcome == 'success'
