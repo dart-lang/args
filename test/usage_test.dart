@@ -408,7 +408,7 @@ void main() {
       var parser = ArgParser();
       parser.addOption('test', mandatory: true);
       validateUsage(parser, '''
-        --test (mandatory)    
+        --test (mandatory)
         ''');
     });
 
