@@ -74,6 +74,12 @@ The callbacks for all options are called whenever a set of arguments is parsed.
 If an option isn't provided in the args, its callback is passed the default
 value, or `null` if no default value is set.
 
+Options can be mandatory (required) with the flag `mandatory` set to `true`.
+
+```dart
+parser.addOption('mode', mandatory: true);
+```
+
 ## Parsing arguments
 
 Once you have an [ArgParser][] set up with some options and flags, you use it by
