@@ -122,6 +122,8 @@ class _Usage {
     var result;
     if (option.negatable!) {
       result = '--[no-]${option.name}';
+    } else if (option.mandatory) {
+      result = '--${option.name} (mandatory)';
     } else {
       result = '--${option.name}';
     }
