@@ -94,21 +94,17 @@ class Parser {
 
     // Check if mandatory and invoke existing callbacks.
     grammar.options.forEach((name, option) {
-<<<<<<< HEAD
-      var callback = option.callback;
-      if (callback != null) callback(option.valueOrDefault(results[name]));
-=======
       var parsedOption = results[name];
 
       // Check if an option was mandatory and exist
       // if not throw an exception
       if (option.mandatory && parsedOption == null) {
-        throw ArgParserException('Option is mandatory', [name]);
+        throw ArgParserException('mandatory', [name]);
       }
 
-      if (option.callback == null) return;
-      option.callback(option.getOrDefault(parsedOption));
->>>>>>> feature/mandatory
+      var callback = option.callback;
+      if (callback == null) return;
+      callback(option.valueOrDefault(parsedOption));
     });
 
     // Add in the leftover arguments we didn't parse to the innermost command.

@@ -179,7 +179,6 @@ class ArgParser {
   /// * There is already an option with name [name].
   /// * There is already an option using abbreviation [abbr].
   void addOption(String name,
-<<<<<<< HEAD
       {String? abbr,
       String? help,
       String? valueHelp,
@@ -187,42 +186,11 @@ class ArgParser {
       Map<String, String>? allowedHelp,
       String? defaultsTo,
       void Function(String?)? callback,
+      bool mandatory = false,
       bool hide = false}) {
     _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
         callback, OptionType.single,
-=======
-      {String abbr,
-      String help,
-      String valueHelp,
-      Iterable<String> allowed,
-      Map<String, String> allowedHelp,
-      String defaultsTo,
-      Function callback,
-      @Deprecated('Use addMultiOption() instead.') bool allowMultiple = false,
-      @Deprecated('Use addMultiOption() instead.') bool splitCommas,
-      bool mandatory = false,
-      bool hide = false}) {
-    if (!allowMultiple && splitCommas != null) {
-      throw ArgumentError(
-          'splitCommas may not be set if allowMultiple is false.');
-    }
-
-    _addOption(
-        name,
-        abbr,
-        help,
-        valueHelp,
-        allowed,
-        allowedHelp,
-        allowMultiple
-            ? (defaultsTo == null ? <String>[] : [defaultsTo])
-            : defaultsTo,
-        callback,
-        allowMultiple ? OptionType.multiple : OptionType.single,
-        mandatory: mandatory,
-        splitCommas: splitCommas,
->>>>>>> feature/mandatory
-        hide: hide);
+        mandatory: mandatory, hide: hide);
   }
 
   /// Defines an option that takes multiple values.

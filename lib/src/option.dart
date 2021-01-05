@@ -16,14 +16,9 @@ Option newOption(
     defaultsTo,
     Function? callback,
     OptionType type,
-<<<<<<< HEAD
     {bool? negatable,
     bool? splitCommas,
-=======
-    {bool negatable,
-    bool splitCommas,
-    bool mandatory,
->>>>>>> feature/mandatory
+    bool mandatory = false,
     bool hide = false}) {
   return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
       callback, type,
