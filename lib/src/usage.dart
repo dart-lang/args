@@ -85,7 +85,7 @@ class _Usage {
 
   void _writeOption(Option option) {
     _write(0, _abbreviation(option));
-    _write(1, _longOption(option));
+    _write(1, '${_longOption(option)}${_mandatoryOption(option)}');
 
     if (option.help != null) _write(2, option.help!);
 
@@ -123,7 +123,7 @@ class _Usage {
     if (option.negatable!) {
       result = '--[no-]${option.name}';
     } else if (option.mandatory) {
-      result = '--${option.name} (mandatory)';
+      result = '--${option.name}';
     } else {
       result = '--${option.name}';
     }
@@ -131,6 +131,10 @@ class _Usage {
     if (option.valueHelp != null) result += '=<${option.valueHelp}>';
 
     return result;
+  }
+
+  String _mandatoryOption(Option option) {
+    return option.mandatory ? ' (mandatory)' : '';
   }
 
   String _allowedTitle(Option option, String allowed) {
