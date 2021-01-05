@@ -404,6 +404,14 @@ void main() {
           ''');
     });
 
+    test('display "mandatory" after a mandatory option', () {
+      var parser = ArgParser();
+      parser.addOption('test', mandatory: true);
+      validateUsage(parser, '''
+        --test (mandatory)    
+        ''');
+    });
+
     group('separators', () {
       test("separates options where it's placed", () {
         var parser = ArgParser();
@@ -472,14 +480,6 @@ void main() {
 
             Second
             ''');
-      });
-
-      test('display "mandatory" after a mandatory option', () {
-        var parser = ArgParser();
-        parser.addOption('test', mandatory: true);
-        validateUsage(parser, '''
-          --test (mandatory)    
-          ''');
       });
     });
   });
