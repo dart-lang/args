@@ -609,6 +609,28 @@ void main() {
         expect(results['verbose'], equals('chatty'));
         expect(results['Verbose'], equals('no'));
       });
+
+      group('mandatory', () {
+        test('throw if no args', () {
+          var parser = ArgParser();
+          parser.addOption('username', mandatory: true);
+          throwsFormat(parser, []);
+        });
+
+        test('throw if no mandatory args', () {
+          var parser = ArgParser();
+          parser.addOption('test');
+          parser.addOption('username', mandatory: true);
+          throwsFormat(parser, ['--test', 'test']);
+        });
+
+        test('parse successfully', () {
+          var parser = ArgParser();
+          parser.addOption('test', mandatory: true);
+          var results = parser.parse(['--test', 'test']);
+          expect(results['test'], equals('test'));
+        });
+      });
     });
 
     group('remaining args', () {

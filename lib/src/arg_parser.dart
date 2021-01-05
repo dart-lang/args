@@ -195,6 +195,7 @@ class ArgParser {
       Function callback,
       @Deprecated('Use addMultiOption() instead.') bool allowMultiple = false,
       @Deprecated('Use addMultiOption() instead.') bool splitCommas,
+      bool mandatory = false,
       bool hide = false}) {
     if (!allowMultiple && splitCommas != null) {
       throw ArgumentError(
@@ -213,6 +214,7 @@ class ArgParser {
             : defaultsTo,
         callback,
         allowMultiple ? OptionType.multiple : OptionType.single,
+        mandatory: mandatory,
         splitCommas: splitCommas,
         hide: hide);
   }
@@ -290,6 +292,7 @@ class ArgParser {
       OptionType type,
       {bool negatable = false,
       bool splitCommas,
+      bool mandatory = false,
       bool hide = false}) {
     // Make sure the name isn't in use.
     if (_options.containsKey(name)) {
@@ -307,7 +310,8 @@ class ArgParser {
 
     var option = newOption(name, abbr, help, valueHelp, allowed, allowedHelp,
         defaultsTo, callback, type,
-        negatable: negatable, splitCommas: splitCommas, hide: hide);
+        negatable: negatable, mandatory: mandatory,
+        splitCommas: splitCommas, hide: hide);
     _options[name] = option;
     _optionsAndSeparators.add(option);
   }

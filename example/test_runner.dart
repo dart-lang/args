@@ -164,6 +164,7 @@ is 'dart file.dart' and you specify special command
   parser.addOption('dart', help: 'Path to dart executable');
   parser.addOption('drt', help: 'Path to content shell executable');
   parser.addOption('dartium', help: 'Path to Dartium Chrome executable');
+  parser.addOption('mandatory', help: 'A mandatory option', mandatory: true);
 
   print(parser.usage);
 }
