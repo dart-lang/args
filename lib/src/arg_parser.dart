@@ -282,6 +282,12 @@ class ArgParser {
       }
     }
 
+    // Make sure the option is not mandatory with a default value
+    if(mandatory && defaultsTo != null) {
+      throw ArgumentError(
+        'The option $name canno\'t be mandatory and have a default value.');
+    }
+
     var option = newOption(name, abbr, help, valueHelp, allowed, allowedHelp,
         defaultsTo, callback, type,
         negatable: negatable, mandatory: mandatory,
