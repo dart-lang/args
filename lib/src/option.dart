@@ -72,7 +72,7 @@ class Option {
   /// addition to `--option a --option b`.
   final bool splitCommas;
 
-  /// Whether this option should be required from usage
+  /// Whether this option must be provided for correct usage.
   final bool mandatory;
 
   /// Whether this option should be hidden from usage documentation.
