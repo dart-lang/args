@@ -77,7 +77,7 @@ value, or `null` if no default value is set.
 If an option is `required` but not provided, the parser throws an [`ArgParserException`][ArgParserException].
 
 ```dart
-parser.addOption('mode', mandatory: true);
+parser.addOption('mode', required: true);
 ```
 
 ## Parsing arguments
