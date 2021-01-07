@@ -51,7 +51,7 @@ class AllowAnythingParser implements ArgParser {
       void Function(String?)? callback,
       bool allowMultiple = false,
       bool? splitCommas,
-      bool mandatory = false,
+      bool required = false,
       bool hide = false}) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addOption() isn't supported.");

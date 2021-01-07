@@ -5,8 +5,6 @@
 import 'package:args/args.dart';
 import 'package:test/test.dart';
 
-import 'test_utils.dart';
-
 void main() {
   group('ArgParser.usage', () {
     test('negatable flags show "no-" in title', () {
@@ -406,18 +404,18 @@ void main() {
           ''');
     });
 
-    test('display "mandatory" after a mandatory option', () {
+    test('display "required" after a required option', () {
       var parser = ArgParser();
-      parser.addOption('test', mandatory: true);
+      parser.addOption('test', required: true);
       validateUsage(parser, '''
-        --test (mandatory)    
+        --test (required)    
         ''');
     });
 
-    test('throw argument error if option is mandatory with a default value', () {
+    test('throw argument error if option is required with a default value', () {
       var parser = ArgParser();
       expect(
-        () => parser.addOption('test', mandatory: true, defaultsTo: 'test'),
+        () => parser.addOption('test', required: true, defaultsTo: 'test'),
         throwsArgumentError
       );
     });
