@@ -134,7 +134,7 @@ class _Usage {
   }
 
   String _mandatoryOption(Option option) {
-    return option.mandatory ? ' (mandatory)' : '';
+    return option.required ? ' (required)' : '';
   }
 
   String _allowedTitle(Option option, String allowed) {
