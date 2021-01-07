@@ -273,7 +273,7 @@ class ArgParser {
       throw ArgumentError('Duplicate option "$name".');
     }
 
-    // Make sure the abbreviation isn't too long or in use.
+    /// Make sure the abbreviation isn't too long or in use.
     if (abbr != null) {
       var existing = findByAbbreviation(abbr);
       if (existing != null) {
