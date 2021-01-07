@@ -1,3 +1,7 @@
+## 2.0.0-nullsafety.1
+
+* Added a required field to require the presence of an option.
+
 ## 2.0.0-nullsafety.0
 
 * Migrate to null safety.
