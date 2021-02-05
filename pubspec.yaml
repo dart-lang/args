@@ -1,5 +1,5 @@
 name: args
-version: 2.0.0-nullsafety.0
+version: 2.0.0
 homepage: https://github.com/dart-lang/args
 description: >-
  Library for defining parsers for parsing raw command-line arguments into a set
@@ -9,8 +9,8 @@ environment:
   sdk: '>=2.12.0-0 <3.0.0'
 
 dev_dependencies:
-  pedantic: ^1.10.0-nullsafety.3
-  test: ^1.16.0-nullsafety.9
+  pedantic: ^1.10.0
+  test: ^1.16.0
 
 # Required to get a version solve due to cyclic dependency
 dependency_overrides:
