@@ -243,7 +243,10 @@ class Parser {
       return false;
     }
 
-    var option = grammar.options[name];
+    // Retrieve the option by its real name, if this is an alias. We don't
+    // overwrite `name` so that future messages map to the user provided
+    // name.
+    var option = grammar.findByNameOrAlias(name);
     if (option != null) {
       args.removeFirst();
       if (option.isFlag) {
@@ -261,7 +264,7 @@ class Parser {
     } else if (name.startsWith('no-')) {
       // See if it's a negated flag.
       name = name.substring('no-'.length);
-      option = grammar.options[name];
+      option = grammar.findByNameOrAlias(name);
       if (option == null) {
         // Walk up to the parent command if possible.
         validate(parent != null, 'Could not find an option named "$name".');

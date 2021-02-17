@@ -35,7 +35,8 @@ class AllowAnythingParser implements ArgParser {
       bool? defaultsTo = false,
       bool negatable = true,
       void Function(bool)? callback,
-      bool hide = false}) {
+      bool hide = false,
+      List<String> aliases = const []}) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addFlag() isn't supported.");
   }
@@ -51,7 +52,8 @@ class AllowAnythingParser implements ArgParser {
       void Function(String?)? callback,
       bool allowMultiple = false,
       bool? splitCommas,
-      bool hide = false}) {
+      bool hide = false,
+      List<String> aliases = const []}) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addOption() isn't supported.");
   }
@@ -66,7 +68,8 @@ class AllowAnythingParser implements ArgParser {
       Iterable<String>? defaultsTo,
       void Function(List<String>)? callback,
       bool splitCommas = true,
-      bool hide = false}) {
+      bool hide = false,
+      List<String> aliases = const []}) {
     throw UnsupportedError(
         "ArgParser.allowAnything().addMultiOption() isn't supported.");
   }
@@ -96,4 +99,7 @@ class AllowAnythingParser implements ArgParser {
 
   @override
   Option? findByAbbreviation(String abbr) => null;
+
+  @override
+  Option? findByNameOrAlias(String name) => null;
 }
