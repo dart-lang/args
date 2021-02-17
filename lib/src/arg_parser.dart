@@ -285,7 +285,8 @@ class ArgParser {
       bool? splitCommas,
       bool hide = false,
       List<String> aliases = const []}) {
-    if (findByNameOrAlias(name) != null) {
+    var allNames = [name, ...aliases];
+    if (allNames.any((name) => findByNameOrAlias(name) != null)) {
       throw ArgumentError('Duplicate option or alias "$name".');
     }
 
