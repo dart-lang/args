@@ -243,9 +243,6 @@ class Parser {
       return false;
     }
 
-    // Retrieve the option by its real name, if this is an alias. We don't
-    // overwrite `name` so that future messages map to the user provided
-    // name.
     var option = grammar.findByNameOrAlias(name);
     if (option != null) {
       args.removeFirst();
