@@ -1,6 +1,10 @@
-## 2.0.0-nullsafety.1
+## 2.1.0
 
 * Added a required field to require the presence of an option.
+
+## 2.0.0
+
+* Stable null safety release.
 
 ## 2.0.0-nullsafety.0
 
