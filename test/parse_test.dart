@@ -70,6 +70,19 @@ void main() {
         var results = parser.parse(['--$allCharacters']);
         expect(results[allCharacters], isTrue);
       });
+
+      test('can match by alias', () {
+        var parser = ArgParser()..addFlag('a', aliases: ['b']);
+        var results = parser.parse(['--b']);
+        expect(results['a'], isTrue);
+      });
+
+      test('can be negated by alias', () {
+        var parser = ArgParser()
+          ..addFlag('a', aliases: ['b'], defaultsTo: true, negatable: true);
+        var results = parser.parse(['--no-b']);
+        expect(results['a'], isFalse);
+      });
     });
 
     group('flags negated with "no-"', () {
@@ -244,6 +257,12 @@ void main() {
 
           parser.parse(['--a=v,w', '--a=x']);
           expect(a, equals(['v', 'w', 'x']));
+        });
+
+        test('can mix and match alias and regular name', () {
+          var parser = ArgParser()..addMultiOption('a', aliases: ['b']);
+          var results = parser.parse(['--a=1', '--b=2']);
+          expect(results['a'], ['1', '2']);
         });
       });
     });
@@ -483,6 +502,12 @@ void main() {
         var results = parser.parse(['--verbose', 'chatty']);
         expect(results['verbose'], equals('chatty'));
         expect(results['Verbose'], equals('no'));
+      });
+
+      test('can be set by alias', () {
+        var parser = ArgParser()..addOption('a', aliases: ['b']);
+        var results = parser.parse(['--b=1']);
+        expect(results['a'], '1');
       });
 
       group('mandatory', () {

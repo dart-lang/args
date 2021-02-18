@@ -19,11 +19,15 @@ Option newOption(
     {bool? negatable,
     bool? splitCommas,
     bool mandatory = false,
-    bool hide = false}) {
+    bool hide = false,
+    List<String> aliases = const []}) {
   return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
       callback, type,
-      negatable: negatable, splitCommas: splitCommas, 
-      mandatory: mandatory, hide: hide);
+      negatable: negatable,
+      splitCommas: splitCommas,
+      mandatory: mandatory,
+      hide: hide,
+      aliases: aliases);
 }
 
 /// A command-line option.
@@ -78,6 +82,9 @@ class Option {
   /// Whether this option should be hidden from usage documentation.
   final bool hide;
 
+  /// All aliases for [name].
+  final List<String> aliases;
+
   /// Whether the option is boolean-valued flag.
   bool get isFlag => type == OptionType.flag;
 
@@ -100,7 +107,8 @@ class Option {
       {this.negatable,
       bool? splitCommas,
       this.mandatory = false,
-      this.hide = false})
+      this.hide = false,
+      this.aliases = const []})
       : allowed = allowed == null ? null : List.unmodifiable(allowed),
         allowedHelp =
             allowedHelp == null ? null : Map.unmodifiable(allowedHelp),

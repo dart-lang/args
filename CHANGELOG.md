@@ -1,6 +1,10 @@
-## 2.1.0
+## 2.1.0-dev
 
-* Added a `mandatory` argument to require the presence of an option.
+* Add a `mandatory` argument to require the presence of an option.
+* Add `aliases` named argument to `addFlag`, `addOption`, and `addMultiOption`,
+  as well as a public `findByNameOrAlias` method on `ArgParser`. This allows
+  you to provide aliases for an argument name, which eases the transition from
+  one argument name to another.
 
 ## 2.0.0
 

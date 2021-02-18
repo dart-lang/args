@@ -16,6 +16,9 @@ class ArgParser {
   final Map<String, Option> _options;
   final Map<String, ArgParser> _commands;
 
+  /// A map of aliases to the option names they alias.
+  final Map<String, String> _aliases;
+
   /// The options that have been defined for this parser.
   final Map<String, Option> options;
 
@@ -53,7 +56,7 @@ class ArgParser {
   /// the parser stops parsing as soon as it finds an argument that is neither
   /// an option nor a command.
   factory ArgParser({bool allowTrailingOptions = true, int? usageLineLength}) =>
-      ArgParser._(<String, Option>{}, <String, ArgParser>{},
+      ArgParser._(<String, Option>{}, <String, ArgParser>{}, <String, String>{},
           allowTrailingOptions: allowTrailingOptions,
           usageLineLength: usageLineLength);
 
@@ -66,6 +69,7 @@ class ArgParser {
   factory ArgParser.allowAnything() = AllowAnythingParser;
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
+      this._aliases,
       {bool allowTrailingOptions = true, this.usageLineLength})
       : _options = options,
         options = UnmodifiableMapView(options),
@@ -116,6 +120,9 @@ class ArgParser {
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
+  /// If [aliases] is provided, these are used as aliases for [name]. These
+  /// aliases will not appear as keys in the [options] map.
+  ///
   /// Throws an [ArgumentError] if:
   ///
   /// * There is already an option named [name].
@@ -126,7 +133,8 @@ class ArgParser {
       bool? defaultsTo = false,
       bool negatable = true,
       void Function(bool)? callback,
-      bool hide = false}) {
+      bool hide = false,
+      List<String> aliases = const []}) {
     _addOption(
         name,
         abbr,
@@ -138,7 +146,8 @@ class ArgParser {
         callback == null ? null : (value) => callback(value as bool),
         OptionType.flag,
         negatable: negatable,
-        hide: hide);
+        hide: hide,
+        aliases: aliases);
   }
 
   /// Defines an option that takes a value.
@@ -174,6 +183,9 @@ class ArgParser {
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
+  /// If [aliases] is provided, these are used as aliases for [name]. These
+  /// aliases will not appear as keys in the [options] map.
+  ///
   /// Throws an [ArgumentError] if:
   ///
   /// * There is already an option with name [name].
@@ -187,10 +199,11 @@ class ArgParser {
       String? defaultsTo,
       void Function(String?)? callback,
       bool mandatory = false,
-      bool hide = false}) {
+      bool hide = false,
+      List<String> aliases = const []}) {
     _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
         callback, OptionType.single,
-        mandatory: mandatory, hide: hide);
+        mandatory: mandatory, hide: hide, aliases: aliases);
   }
 
   /// Defines an option that takes multiple values.
@@ -226,6 +239,9 @@ class ArgParser {
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
+  /// If [aliases] is provided, these are used as aliases for [name]. These
+  /// aliases will not appear as keys in the [options] map.
+  ///
   /// Throws an [ArgumentError] if:
   ///
   /// * There is already an option with name [name].
@@ -239,7 +255,8 @@ class ArgParser {
       Iterable<String>? defaultsTo,
       void Function(List<String>)? callback,
       bool splitCommas = true,
-      bool hide = false}) {
+      bool hide = false,
+      List<String> aliases = const []}) {
     _addOption(
         name,
         abbr,
@@ -251,7 +268,8 @@ class ArgParser {
         callback == null ? null : (value) => callback(value as List<String>),
         OptionType.multiple,
         splitCommas: splitCommas,
-        hide: hide);
+        hide: hide,
+        aliases: aliases);
   }
 
   void _addOption(
@@ -267,13 +285,14 @@ class ArgParser {
       {bool negatable = false,
       bool? splitCommas,
       bool mandatory = false,
-      bool hide = false}) {
-    // Make sure the name isn't in use.
-    if (_options.containsKey(name)) {
-      throw ArgumentError('Duplicate option "$name".');
+      bool hide = false,
+      List<String> aliases = const []}) {
+    var allNames = [name, ...aliases];
+    if (allNames.any((name) => findByNameOrAlias(name) != null)) {
+      throw ArgumentError('Duplicate option or alias "$name".');
     }
 
-    /// Make sure the abbreviation isn't too long or in use.
+    // Make sure the abbreviation isn't too long or in use.
     if (abbr != null) {
       var existing = findByAbbreviation(abbr);
       if (existing != null) {
@@ -283,17 +302,23 @@ class ArgParser {
     }
 
     // Make sure the option is not mandatory with a default value
-    if(mandatory && defaultsTo != null) {
+    if (mandatory && defaultsTo != null) {
       throw ArgumentError(
-        'The option $name cannot be mandatory and have a default value.');
+          'The option $name cannot be mandatory and have a default value.');
     }
 
     var option = newOption(name, abbr, help, valueHelp, allowed, allowedHelp,
         defaultsTo, callback, type,
-        negatable: negatable, mandatory: mandatory,
-        splitCommas: splitCommas, hide: hide);
+        negatable: negatable,
+        splitCommas: splitCommas,
+        mandatory: mandatory,
+        hide: hide,
+        aliases: aliases);
     _options[name] = option;
     _optionsAndSeparators.add(option);
+    for (var alias in aliases) {
+      _aliases[alias] = name;
+    }
   }
 
   /// Adds a separator line to the usage.
@@ -318,7 +343,7 @@ class ArgParser {
 
   /// Returns the default value for [option].
   dynamic defaultFor(String option) {
-    var value = options[option];
+    var value = findByNameOrAlias(option);
     if (value == null) {
       throw ArgumentError('No option named $option');
     }
@@ -336,4 +361,8 @@ class ArgParser {
     }
     return null;
   }
+
+  /// Finds the option whose name or alias matches [name], or `null` if no
+  /// option has that name or alias.
+  Option? findByNameOrAlias(String name) => options[_aliases[name] ?? name];
 }
