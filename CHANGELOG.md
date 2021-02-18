@@ -1,6 +1,6 @@
 ## 2.1.0
 
-* Added a required field to require the presence of an option.
+* Added a `mandatory` argument to require the presence of an option.
 
 ## 2.0.0
 

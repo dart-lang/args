@@ -74,10 +74,11 @@ The callbacks for all options are called whenever a set of arguments is parsed.
 If an option isn't provided in the args, its callback is passed the default
 value, or `null` if no default value is set.
 
-If an option is `required` but not provided, the parser throws an [`ArgParserException`][ArgParserException].
+If an option is `mandatory` but not provided, the parser throws an
+[`ArgParserException`][ArgParserException].
 
 ```dart
-parser.addOption('mode', required: true);
+parser.addOption('mode', mandatory: true);
 ```
 
 ## Parsing arguments
