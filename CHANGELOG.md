@@ -1,3 +1,10 @@
+## 2.1.0-dev
+
+* Add `aliases` named argument to `addFlag`, `addOption`, and `addMultiOption`,
+  as well as a public `findByNameOrAlias` method on `ArgParser`. This allows
+  you to provide aliases for an argument name, which eases the transition from
+  one argument name to another.
+
 ## 2.0.0
 
 * Stable null safety release.

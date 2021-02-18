@@ -184,6 +184,40 @@ void main() {
     });
   });
 
+  group('ArgParser.findByNameOrAlias', () {
+    test('returns null if there is no match', () {
+      var parser = ArgParser();
+      expect(parser.findByNameOrAlias('a'), isNull);
+    });
+
+    test('can find options by alias', () {
+      var parser = ArgParser()..addOption('a', aliases: ['b']);
+      expect(parser.findByNameOrAlias('b'),
+          isA<Option>().having((o) => o.name, 'name', 'a'));
+    });
+
+    test('can find flags by alias', () {
+      var parser = ArgParser()..addFlag('a', aliases: ['b']);
+      expect(parser.findByNameOrAlias('b'),
+          isA<Option>().having((o) => o.name, 'name', 'a'));
+    });
+
+    test('does not allow duplicate aliases', () {
+      var parser = ArgParser()..addOption('a', aliases: ['b']);
+      throwsIllegalArg(() => parser.addOption('c', aliases: ['b']));
+    });
+
+    test('does not allow aliases that conflict with existing names', () {
+      var parser = ArgParser()..addOption('a', aliases: ['b']);
+      throwsIllegalArg(() => parser.addOption('c', aliases: ['a']));
+    });
+
+    test('does not allow names that conflict with existing aliases', () {
+      var parser = ArgParser()..addOption('a', aliases: ['b']);
+      throwsIllegalArg(() => parser.addOption('b'));
+    });
+  });
+
   group('ArgResults', () {
     group('options', () {
       test('returns the provided options', () {
