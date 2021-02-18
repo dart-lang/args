@@ -301,7 +301,7 @@ class ArgParser {
       }
     }
 
-    // Make sure the option is not mandatory with a default value
+    // Make sure the option is not mandatory with a default value.
     if (mandatory && defaultsTo != null) {
       throw ArgumentError(
           'The option $name cannot be mandatory and have a default value.');
