@@ -85,7 +85,7 @@ class _Usage {
 
   void _writeOption(Option option) {
     _write(0, _abbreviation(option));
-    _write(1, _longOption(option));
+    _write(1, '${_longOption(option)}${_mandatoryOption(option)}');
 
     if (option.help != null) _write(2, option.help!);
 
@@ -131,6 +131,10 @@ class _Usage {
     return result;
   }
 
+  String _mandatoryOption(Option option) {
+    return option.mandatory ? ' (mandatory)' : '';
+  }
+
   String _allowedTitle(Option option, String allowed) {
     var isDefault = option.defaultsTo is List
         ? option.defaultsTo.contains(allowed)
@@ -149,7 +153,7 @@ class _Usage {
       abbr = math.max(abbr, _abbreviation(option).length);
 
       // Make room for the option.
-      title = math.max(title, _longOption(option).length);
+      title = math.max(title, _longOption(option).length + _mandatoryOption(option).length);
 
       // Make room for the allowed help.
       if (option.allowedHelp != null) {

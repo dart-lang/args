@@ -18,12 +18,14 @@ Option newOption(
     OptionType type,
     {bool? negatable,
     bool? splitCommas,
+    bool mandatory = false,
     bool hide = false,
     List<String> aliases = const []}) {
   return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
       callback, type,
       negatable: negatable,
       splitCommas: splitCommas,
+      mandatory: mandatory,
       hide: hide,
       aliases: aliases);
 }
@@ -74,6 +76,9 @@ class Option {
   /// addition to `--option a --option b`.
   final bool splitCommas;
 
+  /// Whether this option must be provided for correct usage.
+  final bool mandatory;
+
   /// Whether this option should be hidden from usage documentation.
   final bool hide;
 
@@ -101,6 +106,7 @@ class Option {
       OptionType type,
       {this.negatable,
       bool? splitCommas,
+      this.mandatory = false,
       this.hide = false,
       this.aliases = const []})
       : allowed = allowed == null ? null : List.unmodifiable(allowed),

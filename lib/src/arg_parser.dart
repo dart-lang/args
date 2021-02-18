@@ -198,11 +198,12 @@ class ArgParser {
       Map<String, String>? allowedHelp,
       String? defaultsTo,
       void Function(String?)? callback,
+      bool mandatory = false,
       bool hide = false,
       List<String> aliases = const []}) {
     _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
         callback, OptionType.single,
-        hide: hide, aliases: aliases);
+        mandatory: mandatory, hide: hide, aliases: aliases);
   }
 
   /// Defines an option that takes multiple values.
@@ -283,6 +284,7 @@ class ArgParser {
       OptionType type,
       {bool negatable = false,
       bool? splitCommas,
+      bool mandatory = false,
       bool hide = false,
       List<String> aliases = const []}) {
     var allNames = [name, ...aliases];
@@ -299,10 +301,17 @@ class ArgParser {
       }
     }
 
+    // Make sure the option is not mandatory with a default value.
+    if (mandatory && defaultsTo != null) {
+      throw ArgumentError(
+          'The option $name cannot be mandatory and have a default value.');
+    }
+
     var option = newOption(name, abbr, help, valueHelp, allowed, allowedHelp,
         defaultsTo, callback, type,
         negatable: negatable,
         splitCommas: splitCommas,
+        mandatory: mandatory,
         hide: hide,
         aliases: aliases);
     _options[name] = option;

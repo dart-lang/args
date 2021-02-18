@@ -92,10 +92,19 @@ class Parser {
       rest.add(args.removeFirst());
     }
 
-    // Invoke the callbacks.
+    // Check if mandatory and invoke existing callbacks.
     grammar.options.forEach((name, option) {
+      var parsedOption = results[name];
+
+      // Check if an option was mandatory and exist
+      // if not throw an exception
+      if (option.mandatory && parsedOption == null) {
+        throw ArgParserException('Option $name is mandatory.', [name]);
+      }
+
       var callback = option.callback;
-      if (callback != null) callback(option.valueOrDefault(results[name]));
+      if (callback == null) return;
+      callback(option.valueOrDefault(parsedOption));
     });
 
     // Add in the leftover arguments we didn't parse to the innermost command.
