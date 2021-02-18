@@ -1,4 +1,4 @@
-## 2.1.0
+## 2.1.0-dev
 
 * Add `aliases` named argument to `addFlag`, `addOption`, and `addMultiOption`,
   as well as a public `findByNameOrAlias` method on `ArgParser`. This allows
