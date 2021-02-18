@@ -85,7 +85,7 @@ class _Usage {
 
   void _writeOption(Option option) {
     _write(0, _abbreviation(option));
-    _write(1, '${_longOption(option)}${_requiredOption(option)}');
+    _write(1, '${_longOption(option)}${_mandatoryOption(option)}');
 
     if (option.help != null) _write(2, option.help!);
 
@@ -122,6 +122,8 @@ class _Usage {
     var result;
     if (option.negatable!) {
       result = '--[no-]${option.name}';
+    } else if (option.mandatory) {
+      result = '--${option.name}';
     } else {
       result = '--${option.name}';
     }
@@ -131,7 +133,7 @@ class _Usage {
     return result;
   }
 
-  String _requiredOption(Option option) {
+  String _mandatoryOption(Option option) {
     return option.required ? ' (required)' : '';
   }
 
@@ -153,7 +155,7 @@ class _Usage {
       abbr = math.max(abbr, _abbreviation(option).length);
 
       // Make room for the option.
-      title = math.max(title, _longOption(option).length + _requiredOption(option).length);
+      title = math.max(title, _longOption(option).length + _mandatoryOption(option).length);
 
       // Make room for the allowed help.
       if (option.allowedHelp != null) {

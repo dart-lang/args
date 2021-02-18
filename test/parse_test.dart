@@ -485,23 +485,23 @@ void main() {
         expect(results['Verbose'], equals('no'));
       });
 
-      group('required', () {
+      group('mandatory', () {
         test('throw if no args', () {
           var parser = ArgParser();
-          parser.addOption('username', required: true);
+          parser.addOption('username', mandatory: true);
           throwsFormat(parser, []);
         });
 
-        test('throw if no required args', () {
+        test('throw if no mandatory args', () {
           var parser = ArgParser();
           parser.addOption('test');
-          parser.addOption('username', required: true);
+          parser.addOption('username', mandatory: true);
           throwsFormat(parser, ['--test', 'test']);
         });
 
         test('parse successfully', () {
           var parser = ArgParser();
-          parser.addOption('test', required: true);
+          parser.addOption('test', mandatory: true);
           var results = parser.parse(['--test', 'test']);
           expect(results['test'], equals('test'));
         });

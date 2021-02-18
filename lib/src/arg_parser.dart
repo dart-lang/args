@@ -186,11 +186,11 @@ class ArgParser {
       Map<String, String>? allowedHelp,
       String? defaultsTo,
       void Function(String?)? callback,
-      bool required = false,
+      bool mandatory = false,
       bool hide = false}) {
     _addOption(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
         callback, OptionType.single,
-        required: required, hide: hide);
+        mandatory: mandatory, hide: hide);
   }
 
   /// Defines an option that takes multiple values.
@@ -266,7 +266,7 @@ class ArgParser {
       OptionType type,
       {bool negatable = false,
       bool? splitCommas,
-      bool required = false,
+      bool mandatory = false,
       bool hide = false}) {
     // Make sure the name isn't in use.
     if (_options.containsKey(name)) {
@@ -282,15 +282,15 @@ class ArgParser {
       }
     }
 
-    // Make sure the option is not required with a default value
-    if(required && defaultsTo != null) {
+    // Make sure the option is not mandatory with a default value
+    if(mandatory && defaultsTo != null) {
       throw ArgumentError(
-        'The option $name cannot be required and have a default value.');
+        'The option $name cannot be mandatory and have a default value.');
     }
 
     var option = newOption(name, abbr, help, valueHelp, allowed, allowedHelp,
         defaultsTo, callback, type,
-        negatable: negatable, required: required,
+        negatable: negatable, mandatory: mandatory,
         splitCommas: splitCommas, hide: hide);
     _options[name] = option;
     _optionsAndSeparators.add(option);

@@ -92,13 +92,13 @@ class Parser {
       rest.add(args.removeFirst());
     }
 
-    // Check if required and invoke existing callbacks.
+    // Check if mandatory and invoke existing callbacks.
     grammar.options.forEach((name, option) {
       var parsedOption = results[name];
 
-      /// Check if an option was required and exist
-      /// if not throw an exception
-      if (option.required && parsedOption == null) {
+      // Check if an option was mandatory and exist
+      // if not throw an exception
+      if (option.mandatory && parsedOption == null) {
         throw ArgParserException('Option $name is required.', [name]);
       }
 

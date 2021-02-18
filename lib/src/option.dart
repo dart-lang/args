@@ -18,12 +18,12 @@ Option newOption(
     OptionType type,
     {bool? negatable,
     bool? splitCommas,
-    bool required = false,
+    bool mandatory = false,
     bool hide = false}) {
   return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
       callback, type,
       negatable: negatable, splitCommas: splitCommas, 
-      required: required, hide: hide);
+      mandatory: mandatory, hide: hide);
 }
 
 /// A command-line option.
@@ -73,7 +73,7 @@ class Option {
   final bool splitCommas;
 
   /// Whether this option must be provided for correct usage.
-  final bool required;
+  final bool mandatory;
 
   /// Whether this option should be hidden from usage documentation.
   final bool hide;
@@ -99,7 +99,7 @@ class Option {
       OptionType type,
       {this.negatable,
       bool? splitCommas,
-      this.required = false,
+      this.mandatory = false,
       this.hide = false})
       : allowed = allowed == null ? null : List.unmodifiable(allowed),
         allowedHelp =
