@@ -34,6 +34,8 @@ class Parser {
   /// The accumulated parsed options.
   final Map<String, dynamic> results = <String, dynamic>{};
 
+  final _undefok = <String>{};
+
   Parser(this.commandName, this.grammar, this.args,
       [this.parent, List<String>? rest]) {
     if (rest != null) this.rest.addAll(rest);
@@ -66,7 +68,8 @@ class Parser {
       if (command != null) {
         validate(rest.isEmpty, 'Cannot specify arguments before a command.');
         var commandName = args.removeFirst();
-        var commandParser = Parser(commandName, command, args, this, rest);
+        var commandParser =
+            Parser(commandName, command, args, this, rest);
 
         try {
           commandResults = commandParser.parse();
@@ -284,8 +287,24 @@ class Parser {
       setFlag(results, option, false);
     } else {
       // Walk up to the parent command if possible.
-      validate(parent != null, 'Could not find an option named "$name".');
-      return parent!.parseLongOption();
+      if (parent != null) {
+        return parent!.parseLongOption();
+      }
+      if (name == 'undefok') {
+        args.removeFirst();
+        if (value == null) {
+          validate(args.isNotEmpty, 'Missing argument for "--undefok".');
+          value = current;
+          args.removeFirst();
+        }
+        _undefok.addAll(value.split(','));
+        return true;
+      }
+      if (_undefok.contains(name)) {
+        args.removeFirst();
+        return true;
+      }
+      validate(false, 'Could not find an option named "$name".');
     }
 
     return true;
