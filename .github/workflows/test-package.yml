@@ -32,7 +32,7 @@ jobs:
         if: always() && steps.install.outcome == 'success'
         run: dart format --output=none --set-exit-if-changed .
       - name: Analyze code
-        run: dart analyze
+        run: dart analyze --fatal-infos
         if: always() && steps.install.outcome == 'success'
 
   # Run tests on a matrix consisting of three dimensions:
