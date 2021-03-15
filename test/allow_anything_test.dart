@@ -58,7 +58,7 @@ void main() {
     test('works as a subcommand in a CommandRunner', () async {
       var commandRunner = CommandRunner('command', 'Description of command');
       var command = AllowAnythingCommand();
-      commandRunner..addCommand(command);
+      commandRunner.addCommand(command);
 
       await commandRunner.run([command.name, '--foo', '--bar', '-b', 'qux']);
     });

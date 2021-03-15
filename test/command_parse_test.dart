@@ -190,7 +190,7 @@ void main() {
 
     test('remaining arguments are given to the innermost command', () {
       var parser = ArgParser();
-      parser.addCommand('cmd')..addCommand('subcmd');
+      parser.addCommand('cmd').addCommand('subcmd');
 
       var args = parser.parse(['cmd', 'subcmd', 'other', 'stuff']);
       expect(args.command!.name, equals('cmd'));
