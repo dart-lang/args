@@ -5,8 +5,6 @@
 import 'package:args/args.dart';
 import 'package:test/test.dart';
 
-import 'test_utils.dart';
-
 void main() {
   group('ArgParser.usage', () {
     test('negatable flags show "no-" in title', () {
@@ -414,12 +412,12 @@ void main() {
         ''');
     });
 
-    test('throw argument error if option is mandatory with a default value', () {
+    test('throw argument error if option is mandatory with a default value',
+        () {
       var parser = ArgParser();
       expect(
-        () => parser.addOption('test', mandatory: true, defaultsTo: 'test'),
-        throwsArgumentError
-      );
+          () => parser.addOption('test', mandatory: true, defaultsTo: 'test'),
+          throwsArgumentError);
     });
 
     group('separators', () {
