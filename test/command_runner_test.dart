@@ -19,7 +19,7 @@ Available commands:
 Run "test help <command>" for more information about a command.''';
 
 void main() {
-  late var runner;
+  late CommandRunner runner;
   setUp(() {
     runner = CommandRunner('test', 'A test command runner.');
   });

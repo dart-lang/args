@@ -12,7 +12,7 @@ void main() {
   });
 
   group('when trailing options are allowed', () {
-    late var parser;
+    late ArgParser parser;
     setUp(() {
       parser = ArgParser(allowTrailingOptions: true);
     });

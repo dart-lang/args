@@ -119,7 +119,7 @@ class _Usage {
       option.abbr == null ? '' : '-${option.abbr}, ';
 
   String _longOption(Option option) {
-    var result;
+    String result;
     if (option.negatable!) {
       result = '--[no-]${option.name}';
     } else {
