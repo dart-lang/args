@@ -122,7 +122,7 @@ void main() {
 
     group('callbacks', () {
       test('for present flags are invoked with the value', () {
-        var a;
+        bool? a;
         var parser = ArgParser();
         parser.addFlag('a', callback: (value) => a = value);
 
@@ -131,7 +131,7 @@ void main() {
       });
 
       test('for absent flags are invoked with the default value', () {
-        var a;
+        bool? a;
         var parser = ArgParser();
         parser.addFlag('a', defaultsTo: false, callback: (value) => a = value);
 
@@ -149,7 +149,7 @@ void main() {
       });
 
       test('for present options are invoked with the value', () {
-        var a;
+        String? a;
         var parser = ArgParser();
         parser.addOption('a', callback: (value) => a = value);
 
@@ -178,7 +178,7 @@ void main() {
       group('with addMultiOption', () {
         test('for multiple present, options are invoked with value as a list',
             () {
-          var a;
+          List<String>? a;
           var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
@@ -193,7 +193,7 @@ void main() {
         test(
             'for single present, options are invoked with value as a single '
             'element list', () {
-          var a;
+          List<String>? a;
           var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
@@ -202,7 +202,7 @@ void main() {
         });
 
         test('for absent, options are invoked with default value', () {
-          var a;
+          List<String>? a;
           var parser = ArgParser();
           parser.addMultiOption('a',
               defaultsTo: ['v', 'w'], callback: (value) => a = value);
@@ -212,7 +212,7 @@ void main() {
         });
 
         test('for absent, options are invoked with value as an empty list', () {
-          var a;
+          List<String>? a;
           var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
@@ -221,7 +221,7 @@ void main() {
         });
 
         test('parses comma-separated strings', () {
-          var a;
+          List<String>? a;
           var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
@@ -231,7 +231,7 @@ void main() {
 
         test("doesn't parse comma-separated strings with splitCommas: false",
             () {
-          var a;
+          List<String>? a;
           var parser = ArgParser();
           parser.addMultiOption('a',
               splitCommas: false, callback: (value) => a = value);
@@ -241,7 +241,7 @@ void main() {
         });
 
         test('parses empty strings', () {
-          var a;
+          List<String>? a;
           var parser = ArgParser();
           parser.addMultiOption('a', callback: (value) => a = value);
 
@@ -250,7 +250,7 @@ void main() {
         });
 
         test('with allowed parses comma-separated strings', () {
-          var a;
+          List<String>? a;
           var parser = ArgParser();
           parser.addMultiOption('a',
               allowed: ['v', 'w', 'x'], callback: (value) => a = value);

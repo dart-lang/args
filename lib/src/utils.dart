@@ -41,7 +41,7 @@ String wrapText(String text, {int? length, int? hangingIndent}) {
     var trimmedText = line.trimLeft();
     final leadingWhitespace =
         line.substring(0, line.length - trimmedText.length);
-    var notIndented;
+    List<String> notIndented;
     if (hangingIndent != 0) {
       // When we have a hanging indent, we want to wrap the first line at one
       // width, and the rest at another (offset by hangingIndent), so we wrap
@@ -115,7 +115,7 @@ List<String> wrapTextAsLines(String text, {int start = 0, int? length}) {
     }
 
     var currentLineStart = 0;
-    var lastWhitespace;
+    int? lastWhitespace;
     for (var i = 0; i < line.length; ++i) {
       if (isWhitespace(line, i)) lastWhitespace = i;
 
