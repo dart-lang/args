@@ -29,15 +29,14 @@ class Parser {
   final Queue<String> _args;
 
   /// The remaining non-option, non-command arguments.
-  final _rest = <String>[];
+  final List<String> _rest;
 
   /// The accumulated parsed options.
   final Map<String, dynamic> _results = <String, dynamic>{};
 
   Parser(this._commandName, this._grammar, this._args,
-      [this._parent, List<String>? rest]) {
-    if (rest != null) _rest.addAll(rest);
-  }
+      [this._parent, List<String>? rest])
+      : _rest = [...?rest];
 
   /// The current argument being parsed.
   String get _current => _args.first;
@@ -171,8 +170,8 @@ class Parser {
 
     // Find where we go from letters/digits to rest.
     var index = 1;
-    while (
-        index < _current.length && _isLetterOrDigit(_current.codeUnitAt(index))) {
+    while (index < _current.length &&
+        _isLetterOrDigit(_current.codeUnitAt(index))) {
       ++index;
     }
     // Must be at least one letter/digit.
@@ -251,7 +250,8 @@ class Parser {
     if (!_current.startsWith('--')) return false;
 
     var index = _current.indexOf('=');
-    var name = index == -1 ? _current.substring(2) : _current.substring(2, index);
+    var name =
+        index == -1 ? _current.substring(2) : _current.substring(2, index);
     for (var i = 0; i != name.length; ++i) {
       if (!_isLetterDigitHyphenOrUnderscore(name.codeUnitAt(i))) return false;
     }
