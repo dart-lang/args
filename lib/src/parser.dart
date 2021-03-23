@@ -16,57 +16,56 @@ import 'option.dart';
 class Parser {
   /// If parser is parsing a command's options, this will be the name of the
   /// command. For top-level results, this returns `null`.
-  final String? commandName;
+  final String? _commandName;
 
   /// The parser for the supercommand of this command parser, or `null` if this
   /// is the top-level parser.
-  final Parser? parent;
+  final Parser? _parent;
 
   /// The grammar being parsed.
-  final ArgParser grammar;
+  final ArgParser _grammar;
 
   /// The arguments being parsed.
-  final Queue<String> args;
+  final Queue<String> _args;
 
   /// The remaining non-option, non-command arguments.
-  final rest = <String>[];
+  final List<String> _rest;
 
   /// The accumulated parsed options.
-  final Map<String, dynamic> results = <String, dynamic>{};
+  final Map<String, dynamic> _results = <String, dynamic>{};
 
-  Parser(this.commandName, this.grammar, this.args,
-      [this.parent, List<String>? rest]) {
-    if (rest != null) this.rest.addAll(rest);
-  }
+  Parser(this._commandName, this._grammar, this._args,
+      [this._parent, List<String>? rest])
+      : _rest = [...?rest];
 
   /// The current argument being parsed.
-  String get current => args.first;
+  String get _current => _args.first;
 
   /// Parses the arguments. This can only be called once.
   ArgResults parse() {
-    var arguments = args.toList();
-    if (grammar.allowsAnything) {
+    var arguments = _args.toList();
+    if (_grammar.allowsAnything) {
       return newArgResults(
-          grammar, const {}, commandName, null, arguments, arguments);
+          _grammar, const {}, _commandName, null, arguments, arguments);
     }
 
     ArgResults? commandResults;
 
     // Parse the args.
-    while (args.isNotEmpty) {
-      if (current == '--') {
+    while (_args.isNotEmpty) {
+      if (_current == '--') {
         // Reached the argument terminator, so stop here.
-        args.removeFirst();
+        _args.removeFirst();
         break;
       }
 
       // Try to parse the current argument as a command. This happens before
       // options so that commands can have option-like names.
-      var command = grammar.commands[current];
+      var command = _grammar.commands[_current];
       if (command != null) {
-        validate(rest.isEmpty, 'Cannot specify arguments before a command.');
-        var commandName = args.removeFirst();
-        var commandParser = Parser(commandName, command, args, this, rest);
+        _validate(_rest.isEmpty, 'Cannot specify arguments before a command.');
+        var commandName = _args.removeFirst();
+        var commandParser = Parser(commandName, command, _args, this, _rest);
 
         try {
           commandResults = commandParser.parse();
@@ -76,25 +75,25 @@ class Parser {
         }
 
         // All remaining arguments were passed to command so clear them here.
-        rest.clear();
+        _rest.clear();
         break;
       }
 
       // Try to parse the current argument as an option. Note that the order
       // here matters.
-      if (parseSoloOption()) continue;
-      if (parseAbbreviation(this)) continue;
-      if (parseLongOption()) continue;
+      if (_parseSoloOption()) continue;
+      if (_parseAbbreviation(this)) continue;
+      if (_parseLongOption()) continue;
 
       // This argument is neither option nor command, so stop parsing unless
       // the [allowTrailingOptions] option is set.
-      if (!grammar.allowTrailingOptions) break;
-      rest.add(args.removeFirst());
+      if (!_grammar.allowTrailingOptions) break;
+      _rest.add(_args.removeFirst());
     }
 
     // Check if mandatory and invoke existing callbacks.
-    grammar.options.forEach((name, option) {
-      var parsedOption = results[name];
+    _grammar.options.forEach((name, option) {
+      var parsedOption = _results[name];
 
       // Check if an option was mandatory and exist
       // if not throw an exception
@@ -108,21 +107,21 @@ class Parser {
     });
 
     // Add in the leftover arguments we didn't parse to the innermost command.
-    rest.addAll(args);
-    args.clear();
+    _rest.addAll(_args);
+    _args.clear();
     return newArgResults(
-        grammar, results, commandName, commandResults, rest, arguments);
+        _grammar, _results, _commandName, commandResults, _rest, arguments);
   }
 
-  /// Pulls the value for [option] from the second argument in [args].
+  /// Pulls the value for [option] from the second argument in [_args].
   ///
   /// Validates that there is a valid value there.
-  void readNextArgAsValue(Option option) {
+  void _readNextArgAsValue(Option option) {
     // Take the option argument from the next command line arg.
-    validate(args.isNotEmpty, 'Missing argument for "${option.name}".');
+    _validate(_args.isNotEmpty, 'Missing argument for "${option.name}".');
 
-    setOption(results, option, current);
-    args.removeFirst();
+    _setOption(_results, option, _current);
+    _args.removeFirst();
   }
 
   /// Tries to parse the current argument as a "solo" option, which is a single
@@ -130,27 +129,30 @@ class Parser {
   ///
   /// We treat this differently than collapsed abbreviations (like "-abc") to
   /// handle the possible value that may follow it.
-  bool parseSoloOption() {
+  bool _parseSoloOption() {
     // Hand coded regexp: r'^-([a-zA-Z0-9])$'
     // Length must be two, hyphen followed by any letter/digit.
-    if (current.length != 2) return false;
-    if (!current.startsWith('-')) return false;
-    var opt = current[1];
+    if (_current.length != 2) return false;
+    if (!_current.startsWith('-')) return false;
+    var opt = _current[1];
     if (!_isLetterOrDigit(opt.codeUnitAt(0))) return false;
+    return _handleSoloOption(opt);
+  }
 
-    var option = grammar.findByAbbreviation(opt);
+  bool _handleSoloOption(String opt) {
+    var option = _grammar.findByAbbreviation(opt);
     if (option == null) {
       // Walk up to the parent command if possible.
-      validate(parent != null, 'Could not find an option or flag "-$opt".');
-      return parent!.parseSoloOption();
+      _validate(_parent != null, 'Could not find an option or flag "-$opt".');
+      return _parent!._handleSoloOption(opt);
     }
 
-    args.removeFirst();
+    _args.removeFirst();
 
     if (option.isFlag) {
-      setFlag(results, option, true);
+      _setFlag(_results, option, true);
     } else {
-      readNextArgAsValue(option);
+      _readNextArgAsValue(option);
     }
 
     return true;
@@ -159,17 +161,17 @@ class Parser {
   /// Tries to parse the current argument as a series of collapsed abbreviations
   /// (like "-abc") or a single abbreviation with the value directly attached
   /// to it (like "-mrelease").
-  bool parseAbbreviation(Parser innermostCommand) {
+  bool _parseAbbreviation(Parser innermostCommand) {
     // Hand coded regexp: r'^-([a-zA-Z0-9]+)(.*)$'
     // Hyphen then at least one letter/digit then zero or more
     // anything-but-newlines.
-    if (current.length < 2) return false;
-    if (!current.startsWith('-')) return false;
+    if (_current.length < 2) return false;
+    if (!_current.startsWith('-')) return false;
 
     // Find where we go from letters/digits to rest.
     var index = 1;
-    while (
-        index < current.length && _isLetterOrDigit(current.codeUnitAt(index))) {
+    while (index < _current.length &&
+        _isLetterOrDigit(_current.codeUnitAt(index))) {
       ++index;
     }
     // Must be at least one letter/digit.
@@ -177,26 +179,31 @@ class Parser {
 
     // If the first character is the abbreviation for a non-flag option, then
     // the rest is the value.
-    var lettersAndDigits = current.substring(1, index);
-    var rest = current.substring(index);
+    var lettersAndDigits = _current.substring(1, index);
+    var rest = _current.substring(index);
     if (rest.contains('\n') || rest.contains('\r')) return false;
+    return _handleAbbreviation(lettersAndDigits, rest, innermostCommand);
+  }
 
+  bool _handleAbbreviation(
+      String lettersAndDigits, String rest, Parser innermostCommand) {
     var c = lettersAndDigits.substring(0, 1);
-    var first = grammar.findByAbbreviation(c);
+    var first = _grammar.findByAbbreviation(c);
     if (first == null) {
       // Walk up to the parent command if possible.
-      validate(
-          parent != null, 'Could not find an option with short name "-$c".');
-      return parent!.parseAbbreviation(innermostCommand);
+      _validate(
+          _parent != null, 'Could not find an option with short name "-$c".');
+      return _parent!
+          ._handleAbbreviation(lettersAndDigits, rest, innermostCommand);
     } else if (!first.isFlag) {
       // The first character is a non-flag option, so the rest must be the
       // value.
       var value = '${lettersAndDigits.substring(1)}$rest';
-      setOption(results, first, value);
+      _setOption(_results, first, value);
     } else {
       // If we got some non-flag characters, then it must be a value, but
       // if we got here, it's a flag, which is wrong.
-      validate(
+      _validate(
           rest == '',
           'Option "-$c" is a flag and cannot handle value '
           '"${lettersAndDigits.substring(1)}$rest".');
@@ -207,85 +214,89 @@ class Parser {
       // letters.
       for (var i = 0; i < lettersAndDigits.length; i++) {
         var c = lettersAndDigits.substring(i, i + 1);
-        innermostCommand.parseShortFlag(c);
+        innermostCommand._parseShortFlag(c);
       }
     }
 
-    args.removeFirst();
+    _args.removeFirst();
     return true;
   }
 
-  void parseShortFlag(String c) {
-    var option = grammar.findByAbbreviation(c);
+  void _parseShortFlag(String c) {
+    var option = _grammar.findByAbbreviation(c);
     if (option == null) {
       // Walk up to the parent command if possible.
-      validate(
-          parent != null, 'Could not find an option with short name "-$c".');
-      parent!.parseShortFlag(c);
+      _validate(
+          _parent != null, 'Could not find an option with short name "-$c".');
+      _parent!._parseShortFlag(c);
       return;
     }
 
     // In a list of short options, only the first can be a non-flag. If
     // we get here we've checked that already.
-    validate(
+    _validate(
         option.isFlag, 'Option "-$c" must be a flag to be in a collapsed "-".');
 
-    setFlag(results, option, true);
+    _setFlag(_results, option, true);
   }
 
   /// Tries to parse the current argument as a long-form named option, which
   /// may include a value like "--mode=release" or "--mode release".
-  bool parseLongOption() {
+  bool _parseLongOption() {
     // Hand coded regexp: r'^--([a-zA-Z\-_0-9]+)(=(.*))?$'
     // Two hyphens then at least one letter/digit/hyphen, optionally an equal
     // sign followed by zero or more anything-but-newlines.
 
-    if (!current.startsWith('--')) return false;
+    if (!_current.startsWith('--')) return false;
 
-    var index = current.indexOf('=');
-    var name = index == -1 ? current.substring(2) : current.substring(2, index);
+    var index = _current.indexOf('=');
+    var name =
+        index == -1 ? _current.substring(2) : _current.substring(2, index);
     for (var i = 0; i != name.length; ++i) {
       if (!_isLetterDigitHyphenOrUnderscore(name.codeUnitAt(i))) return false;
     }
-    var value = index == -1 ? null : current.substring(index + 1);
+    var value = index == -1 ? null : _current.substring(index + 1);
     if (value != null && (value.contains('\n') || value.contains('\r'))) {
       return false;
     }
+    return _handleLongOption(name, value);
+  }
 
-    var option = grammar.findByNameOrAlias(name);
+  bool _handleLongOption(String name, String? value) {
+    var option = _grammar.findByNameOrAlias(name);
     if (option != null) {
-      args.removeFirst();
+      _args.removeFirst();
       if (option.isFlag) {
-        validate(
+        _validate(
             value == null, 'Flag option "$name" should not be given a value.');
 
-        setFlag(results, option, true);
+        _setFlag(_results, option, true);
       } else if (value != null) {
         // We have a value like --foo=bar.
-        setOption(results, option, value);
+        _setOption(_results, option, value);
       } else {
         // Option like --foo, so look for the value as the next arg.
-        readNextArgAsValue(option);
+        _readNextArgAsValue(option);
       }
     } else if (name.startsWith('no-')) {
       // See if it's a negated flag.
-      name = name.substring('no-'.length);
-      option = grammar.findByNameOrAlias(name);
+      var positiveName = name.substring('no-'.length);
+      option = _grammar.findByNameOrAlias(positiveName);
       if (option == null) {
         // Walk up to the parent command if possible.
-        validate(parent != null, 'Could not find an option named "$name".');
-        return parent!.parseLongOption();
+        _validate(_parent != null, 'Could not find an option named "$name".');
+        return _parent!._handleLongOption(name, value);
       }
 
-      args.removeFirst();
-      validate(option.isFlag, 'Cannot negate non-flag option "$name".');
-      validate(option.negatable!, 'Cannot negate option "$name".');
+      _args.removeFirst();
+      _validate(option.isFlag, 'Cannot negate non-flag option "$name".');
+      _validate(option.negatable!, 'Cannot negate option "$name".');
 
-      setFlag(results, option, false);
+      _setFlag(_results, option, false);
     } else {
       // Walk up to the parent command if possible.
-      validate(parent != null, 'Could not find an option named "$name".');
-      return parent!.parseLongOption();
+      _validate(_parent != null, 'Could not find an option named "$name".');
+      return _parent!._handleLongOption(name, value);
     }
 
     return true;
@@ -294,13 +305,13 @@ class Parser {
   /// Called during parsing to validate the arguments.
   ///
   /// Throws an [ArgParserException] if [condition] is `false`.
-  void validate(bool condition, String message) {
+  void _validate(bool condition, String message) {
     if (!condition) throw ArgParserException(message);
   }
 
   /// Validates and stores [value] as the value for [option], which must not be
   /// a flag.
-  void setOption(Map results, Option option, String value) {
+  void _setOption(Map results, Option option, String value) {
     assert(!option.isFlag);
 
     if (!option.isMultiple) {
@@ -324,7 +335,7 @@ class Parser {
 
   /// Validates and stores [value] as the value for [option], which must be a
   /// flag.
-  void setFlag(Map results, Option option, bool value) {
+  void _setFlag(Map results, Option option, bool value) {
     assert(option.isFlag);
     results[option.name] = value;
   }
@@ -333,7 +344,7 @@ class Parser {
   void _validateAllowed(Option option, String value) {
     if (option.allowed == null) return;
 
-    validate(option.allowed!.contains(value),
+    _validate(option.allowed!.contains(value),
         '"$value" is not an allowed value for option "${option.name}".');
   }
 }
