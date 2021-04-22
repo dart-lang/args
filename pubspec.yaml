@@ -6,14 +6,8 @@ description: >-
  of options and values using GNU and POSIX style options.
 
 environment:
-  sdk: '>=2.12.0-0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dev_dependencies:
   pedantic: ^1.10.0
   test: ^1.16.0
-
-# Required to get a version solve due to cyclic dependency
-dependency_overrides:
-  test_core: ^0.3.12-nullsafety.9
-  coverage: ">=0.13.4 <0.15.0"
-  analyzer: ">=0.39.5 <0.41.0"
