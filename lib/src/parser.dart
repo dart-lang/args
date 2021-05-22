@@ -94,7 +94,7 @@ class Parser {
 
     // if we have the help flag enabled
     // we show the usage message and exit
-    if(_results.containsKey('help')) {
+    if (_results.containsKey('help')) {
       print(_grammar.usage);
       exit(0);
     }
