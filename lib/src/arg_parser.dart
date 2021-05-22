@@ -76,6 +76,7 @@ class ArgParser {
         _commands = commands,
         commands = UnmodifiableMapView(commands),
         allowTrailingOptions = allowTrailingOptions {
+          // register by default a help flag
           addFlag('help', abbr: 'h', negatable: false, help: 'Print this usage information.');
         }
 
@@ -293,7 +294,7 @@ class ArgParser {
 
     if (allNames.any((name) => findByNameOrAlias(name) != null)) {
 
-      // ignore duplicate help (needed to not break current lib, `test_core`)
+      // ignore duplicate help (needed to not break current lib or `test_core`)
       if(name == 'help') {
         return;
       }
