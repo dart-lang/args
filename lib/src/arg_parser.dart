@@ -290,10 +290,6 @@ class ArgParser {
     var allNames = [name, ...aliases];
 
     if (allNames.any((name) => findByNameOrAlias(name) != null)) {
-      // ignore duplicate help (needed to not break current lib or `test_core`)
-      if (name == 'help') {
-        return;
-      }
       throw ArgumentError('Duplicate option or alias "$name".');
     }
 
