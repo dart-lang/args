@@ -75,7 +75,9 @@ class ArgParser {
         options = UnmodifiableMapView(options),
         _commands = commands,
         commands = UnmodifiableMapView(commands),
-        allowTrailingOptions = allowTrailingOptions;
+        allowTrailingOptions = allowTrailingOptions {
+          addFlag('help', abbr: 'h', negatable: false, help: 'Print this usage information.');
+        }
 
   /// Defines a command.
   ///
@@ -288,7 +290,13 @@ class ArgParser {
       bool hide = false,
       List<String> aliases = const []}) {
     var allNames = [name, ...aliases];
+
     if (allNames.any((name) => findByNameOrAlias(name) != null)) {
+
+      // ignore duplicate help (needed to not break current lib, `test_core`)
+      if(name == 'help') {
+        return;
+      }
       throw ArgumentError('Duplicate option or alias "$name".');
     }
 

@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:collection';
+import 'dart:io';
 
 import 'arg_parser.dart';
 import 'arg_parser_exception.dart';
@@ -89,6 +90,13 @@ class Parser {
       // the [allowTrailingOptions] option is set.
       if (!_grammar.allowTrailingOptions) break;
       _rest.add(_args.removeFirst());
+    }
+
+    // if we have the help flag enabled
+    // we show the usage message and exit
+    if(_results.containsKey('help')) {
+      print(_grammar.usage);
+      exit(0);
     }
 
     // Check if mandatory and invoke existing callbacks.
