@@ -92,12 +92,8 @@ class Parser {
       _rest.add(_args.removeFirst());
     }
 
-    // if we have the help flag enabled
-    // we show the usage message and exit
-    if (_results.containsKey('help')) {
-      print(_grammar.usage);
-      exit(0);
-    }
+    // if we have the help flag enabled we ignore the next mandatory flags
+    final ignoreMandatory = _results.containsKey('help');
 
     // Check if mandatory and invoke existing callbacks.
     _grammar.options.forEach((name, option) {
@@ -105,7 +101,7 @@ class Parser {
 
       // Check if an option was mandatory and exist
       // if not throw an exception
-      if (option.mandatory && parsedOption == null) {
+      if (!ignoreMandatory && option.mandatory && parsedOption == null) {
         throw ArgParserException('Option $name is mandatory.', [name]);
       }
 
