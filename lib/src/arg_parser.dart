@@ -75,10 +75,7 @@ class ArgParser {
         options = UnmodifiableMapView(options),
         _commands = commands,
         commands = UnmodifiableMapView(commands),
-        allowTrailingOptions = allowTrailingOptions {
-          // register by default a help flag
-          addFlag('help', abbr: 'h', negatable: false, help: 'Print this usage information.');
-        }
+        allowTrailingOptions = allowTrailingOptions;
 
   /// Defines a command.
   ///
