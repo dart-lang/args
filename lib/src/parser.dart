@@ -3,7 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:collection';
-import 'dart:io';
 
 import 'arg_parser.dart';
 import 'arg_parser_exception.dart';
