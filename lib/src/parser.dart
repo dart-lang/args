@@ -105,11 +105,7 @@ class Parser {
         // make sure the flag value is true
         // checking all the possible types
         if (value != null) {
-          if (value is String) {
-            flagVal = value.toLowerCase() == 'true';
-          } else if (value is int || value is double) {
-            flagVal = value >= 1;
-          } else if (value is bool) {
+          if (value is bool) {
             flagVal = value;
           }
         }
