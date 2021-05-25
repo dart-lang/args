@@ -533,14 +533,14 @@ void main() {
       });
 
       group('ignore mandatory', () {
-        test('throw if is false', () {
+        test('throw if false', () {
           var parser = ArgParser();
           parser.addFlag('help', ignoreMandatory: false);
           parser.addOption('test', mandatory: true);
           throwsFormat(parser, []);
         });
 
-        test('not throw if is true', () {
+        test('no throw if true', () {
           var parser = ArgParser();
           parser.addFlag('help', ignoreMandatory: true);
           parser.addOption('test', mandatory: true);
