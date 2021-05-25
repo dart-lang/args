@@ -95,11 +95,30 @@ class Parser {
     // the mandatory check
     var ignoreMandatory = false;
 
-    for (final name in _results.keys) {
+    for (final entry in _results.entries) {
+      final name = entry.key;
+      final value = entry.value;
       final option = _grammar.options[name];
-      if (option != null && option.ignoreMandatory) {
-        ignoreMandatory = true;
-        break;
+      // only checking if the option is a flag
+      if (option != null && option.isFlag ) {
+        var flagVal = true;
+        // make sure the flag value is true
+        // checking all the possible types
+        if (value != null) {
+          if (value is String) {
+            flagVal = value.toLowerCase() == 'true';
+          }
+          else if (value is int || value is double) {
+            flagVal = value >= 1;
+          }
+          else if (value is bool) {
+            flagVal = value;
+          }
+        }
+        if (option.ignoreMandatory && flagVal) {
+          ignoreMandatory = true;
+          break;
+        }
       }
     }
 
