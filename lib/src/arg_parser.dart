@@ -185,6 +185,8 @@ class ArgParser {
   /// Note that this makes argument parsing order-dependent in ways that are
   /// often surprising, and its use is discouraged in favor of reading values
   /// from the [ArgResults].
+  /// 
+  /// If [mandatory] is `true`, this option must be provided for correct usage.
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
