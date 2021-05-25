@@ -95,7 +95,7 @@ class Parser {
     // the mandatory check
     var ignoreMandatory = false;
 
-    for(final name in _results.keys) {
+    for (final name in _results.keys) {
       final option = _grammar.options[name];
       if (option != null && option.ignoreMandatory) {
         ignoreMandatory = true;
