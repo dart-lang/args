@@ -310,6 +310,12 @@ class ArgParser {
       }
     }
 
+    // Make sure the option is not ignoring mandatory with a default value of true.
+    if (ignoreMandatory && defaultsTo != null && defaultsTo == true) {
+      throw ArgumentError(
+          'The option $name cannot ignore mandatory and have a default value of true.');
+    }
+
     // Make sure the option is not mandatory with a default value.
     if (mandatory && defaultsTo != null) {
       throw ArgumentError(

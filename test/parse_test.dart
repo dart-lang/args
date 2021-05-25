@@ -547,6 +547,13 @@ void main() {
           var results = parser.parse(['--help']);
           expect(results['help'], isNotNull);
         });
+
+        test('throw if ignoring with default value of true', () {
+          var parser = ArgParser();
+          throwsIllegalArg(() => {
+            parser.addFlag('help', ignoreMandatory: true, defaultsTo: true)
+          });
+        });
       });
     });
 
