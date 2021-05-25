@@ -100,18 +100,16 @@ class Parser {
       final value = entry.value;
       final option = _grammar.options[name];
       // only checking if the option is a flag
-      if (option != null && option.isFlag ) {
+      if (option != null && option.isFlag) {
         var flagVal = true;
         // make sure the flag value is true
         // checking all the possible types
         if (value != null) {
           if (value is String) {
             flagVal = value.toLowerCase() == 'true';
-          }
-          else if (value is int || value is double) {
+          } else if (value is int || value is double) {
             flagVal = value >= 1;
-          }
-          else if (value is bool) {
+          } else if (value is bool) {
             flagVal = value;
           }
         }

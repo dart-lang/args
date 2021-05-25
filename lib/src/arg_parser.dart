@@ -119,9 +119,9 @@ class ArgParser {
   /// values from the [ArgResults].
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
-  /// 
+  ///
   /// If [ignoreMandatory] is `true`, then passing any explicit value for this flag will cause
-  /// all other mandatory options to not be mandatory. 
+  /// all other mandatory options to not be mandatory.
   ///
   /// If [aliases] is provided, these are used as aliases for [name]. These
   /// aliases will not appear as keys in the [options] map.
