@@ -531,6 +531,23 @@ void main() {
           expect(results['test'], equals('test'));
         });
       });
+
+      group('ignore mandatory', () {
+        test('throw if is false', () {
+          var parser = ArgParser();
+          parser.addFlag('help', ignoreMandatory: false);
+          parser.addOption('test', mandatory: true);
+          throwsFormat(parser, []);
+        });
+
+        test('not throw if is true', () {
+          var parser = ArgParser();
+          parser.addFlag('help', ignoreMandatory: true);
+          parser.addOption('test', mandatory: true);
+          var results = parser.parse(['--help']);
+          expect(results['help'], isNotNull);
+        });
+      });
     });
 
     group('remaining args', () {

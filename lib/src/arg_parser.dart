@@ -134,6 +134,7 @@ class ArgParser {
       bool negatable = true,
       void Function(bool)? callback,
       bool hide = false,
+      bool ignoreMandatory = false,
       List<String> aliases = const []}) {
     _addOption(
         name,
@@ -147,6 +148,7 @@ class ArgParser {
         OptionType.flag,
         negatable: negatable,
         hide: hide,
+        ignoreMandatory: ignoreMandatory,
         aliases: aliases);
   }
 
@@ -286,6 +288,7 @@ class ArgParser {
       bool? splitCommas,
       bool mandatory = false,
       bool hide = false,
+      bool ignoreMandatory = false,
       List<String> aliases = const []}) {
     var allNames = [name, ...aliases];
 
@@ -314,6 +317,7 @@ class ArgParser {
         splitCommas: splitCommas,
         mandatory: mandatory,
         hide: hide,
+        ignoreMandatory: ignoreMandatory,
         aliases: aliases);
     _options[name] = option;
     _optionsAndSeparators.add(option);

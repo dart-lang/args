@@ -91,8 +91,17 @@ class Parser {
       _rest.add(_args.removeFirst());
     }
 
-    // if we have the help flag enabled we ignore the next mandatory flags
-    final ignoreMandatory = _results.containsKey('help');
+    // Check if there are any parsed flags that ignore
+    // the mandatory check
+    var ignoreMandatory = false;
+
+    for(final name in _results.keys) {
+      final option = _grammar.options[name];
+      if (option != null && option.ignoreMandatory) {
+        ignoreMandatory = true;
+        break;
+      }
+    }
 
     // Check if mandatory and invoke existing callbacks.
     _grammar.options.forEach((name, option) {
@@ -100,6 +109,8 @@ class Parser {
 
       // Check if an option was mandatory and exist
       // if not throw an exception
+      // if there is a flag which ignore mandatory
+      // we are ignoring this check
       if (!ignoreMandatory && option.mandatory && parsedOption == null) {
         throw ArgParserException('Option $name is mandatory.', [name]);
       }
