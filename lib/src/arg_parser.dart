@@ -120,6 +120,9 @@ class ArgParser {
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
+  /// If [ignoreMandatory] is `true`, then passing any explicit value for this flag will cause
+  /// all other mandatory options to not be mandatory.
+  ///
   /// If [aliases] is provided, these are used as aliases for [name]. These
   /// aliases will not appear as keys in the [options] map.
   ///
@@ -134,6 +137,7 @@ class ArgParser {
       bool negatable = true,
       void Function(bool)? callback,
       bool hide = false,
+      bool ignoreMandatory = false,
       List<String> aliases = const []}) {
     _addOption(
         name,
@@ -147,6 +151,7 @@ class ArgParser {
         OptionType.flag,
         negatable: negatable,
         hide: hide,
+        ignoreMandatory: ignoreMandatory,
         aliases: aliases);
   }
 
@@ -180,6 +185,8 @@ class ArgParser {
   /// Note that this makes argument parsing order-dependent in ways that are
   /// often surprising, and its use is discouraged in favor of reading values
   /// from the [ArgResults].
+  ///
+  /// If [mandatory] is `true`, this option must be provided for correct usage.
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
@@ -286,8 +293,10 @@ class ArgParser {
       bool? splitCommas,
       bool mandatory = false,
       bool hide = false,
+      bool ignoreMandatory = false,
       List<String> aliases = const []}) {
     var allNames = [name, ...aliases];
+
     if (allNames.any((name) => findByNameOrAlias(name) != null)) {
       throw ArgumentError('Duplicate option or alias "$name".');
     }
@@ -299,6 +308,12 @@ class ArgParser {
         throw ArgumentError(
             'Abbreviation "$abbr" is already used by "${existing.name}".');
       }
+    }
+
+    // Make sure the option is not ignoring mandatory with a default value of true.
+    if (ignoreMandatory && defaultsTo != null && defaultsTo == true) {
+      throw ArgumentError(
+          'The option $name cannot ignore mandatory and have a default value of true.');
     }
 
     // Make sure the option is not mandatory with a default value.
@@ -313,6 +328,7 @@ class ArgParser {
         splitCommas: splitCommas,
         mandatory: mandatory,
         hide: hide,
+        ignoreMandatory: ignoreMandatory,
         aliases: aliases);
     _options[name] = option;
     _optionsAndSeparators.add(option);

@@ -20,6 +20,7 @@ Option newOption(
     bool? splitCommas,
     bool mandatory = false,
     bool hide = false,
+    bool ignoreMandatory = false,
     List<String> aliases = const []}) {
   return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
       callback, type,
@@ -27,6 +28,7 @@ Option newOption(
       splitCommas: splitCommas,
       mandatory: mandatory,
       hide: hide,
+      ignoreMandatory: ignoreMandatory,
       aliases: aliases);
 }
 
@@ -82,6 +84,9 @@ class Option {
   /// Whether this option should be hidden from usage documentation.
   final bool hide;
 
+  /// Whether this option should ignore the mandatory check (used for flags like : version or help).
+  final bool ignoreMandatory;
+
   /// All aliases for [name].
   final List<String> aliases;
 
@@ -108,6 +113,7 @@ class Option {
       bool? splitCommas,
       this.mandatory = false,
       this.hide = false,
+      this.ignoreMandatory = false,
       this.aliases = const []})
       : allowed = allowed == null ? null : List.unmodifiable(allowed),
         allowedHelp =

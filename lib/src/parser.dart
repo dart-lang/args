@@ -91,13 +91,40 @@ class Parser {
       _rest.add(_args.removeFirst());
     }
 
+    // Check if there are any parsed flags that ignore
+    // the mandatory check
+    var ignoreMandatory = false;
+
+    for (final entry in _results.entries) {
+      final name = entry.key;
+      final value = entry.value;
+      final option = _grammar.options[name];
+      // only checking if the option is a flag
+      if (option != null && option.isFlag) {
+        var flagVal = true;
+        // make sure the flag value is true
+        // checking all the possible types
+        if (value != null) {
+          if (value is bool) {
+            flagVal = value;
+          }
+        }
+        if (option.ignoreMandatory && flagVal) {
+          ignoreMandatory = true;
+          break;
+        }
+      }
+    }
+
     // Check if mandatory and invoke existing callbacks.
     _grammar.options.forEach((name, option) {
       var parsedOption = _results[name];
 
       // Check if an option was mandatory and exist
       // if not throw an exception
-      if (option.mandatory && parsedOption == null) {
+      // if there is a flag which ignore mandatory
+      // we are ignoring this check
+      if (!ignoreMandatory && option.mandatory && parsedOption == null) {
         throw ArgParserException('Option $name is mandatory.', [name]);
       }
 
