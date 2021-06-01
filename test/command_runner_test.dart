@@ -462,4 +462,30 @@ Usage: test foo [arguments]
 Run "test help" to see global options.'''));
     });
   });
+
+  test('mandatory options in commands', () async {
+    var subcommand = _MandatoryOptionCommand();
+    runner.addCommand(subcommand);
+    expect(
+        () => runner.run([subcommand.name]),
+        throwsA(isA<UsageException>().having((e) => e.message, 'message',
+            contains('Option mandatory-option is mandatory'))));
+    expect(await runner.run([subcommand.name, '--mandatory-option', 'foo']),
+        'foo');
+  });
+}
+
+class _MandatoryOptionCommand extends Command {
+  _MandatoryOptionCommand() {
+    argParser.addOption('mandatory-option', mandatory: true);
+  }
+
+  @override
+  String get description => 'A command with a mandatory option';
+
+  @override
+  String get name => 'mandatory-option-command';
+
+  @override
+  String run() => argResults!['mandatory-option'];
 }
