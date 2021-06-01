@@ -1,3 +1,8 @@
+## 2.1.1
+
+* Fix a bug with `mandatory` options which caused a null assertion failure when
+  used within a command.
+
 ## 2.1.0
 
 * Add a `mandatory` argument to require the presence of an option.
