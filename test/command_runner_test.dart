@@ -53,6 +53,30 @@ Available commands:
 Run "test help <command>" for more information about a command.'''));
     });
 
+    test('displays categories', () {
+      runner.addCommand(Category1Command());
+      runner.addCommand(Category2Command());
+      runner.addCommand(FooCommand());
+
+      expect(runner.usage, equals('''
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+  foo   Set a value.
+Displayers
+  baz   Display a value.
+
+Printers
+  bar   Print a value.
+
+Run "test help <command>" for more information about a command.'''));
+    });
+
     test('truncates newlines in command descriptions by default', () {
       runner.addCommand(MultilineCommand());
 

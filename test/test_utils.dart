@@ -75,6 +75,48 @@ class AsyncValueCommand extends Command<String> {
   Future<String> run() async => 'hi';
 }
 
+class Category1Command extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'bar';
+
+  @override
+  final description = 'Print a value.';
+
+  @override
+  final category = 'Printers';
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
+class Category2Command extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'baz';
+
+  @override
+  final description = 'Display a value.';
+
+  @override
+  final category = 'Displayers';
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
 class MultilineCommand extends Command {
   var hasRun = false;
 
