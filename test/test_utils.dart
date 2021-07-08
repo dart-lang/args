@@ -223,6 +223,16 @@ class AllowAnythingCommand extends Command {
   }
 }
 
+class CustomNameCommand extends Command {
+  @override
+  final String name;
+
+  CustomNameCommand(this.name);
+
+  @override
+  String get description => 'A command with a custom name';
+}
+
 void throwsIllegalArg(function, {String? reason}) {
   expect(function, throwsArgumentError, reason: reason);
 }
@@ -231,7 +241,7 @@ void throwsFormat(ArgParser parser, List<String> args) {
   expect(() => parser.parse(args), throwsFormatException);
 }
 
-Matcher throwsUsageException(String message, String usage) =>
+Matcher throwsUsageException(Object? message, Object? usage) =>
     throwsA(isA<UsageException>()
         .having((e) => e.message, 'message', message)
         .having((e) => e.usage, 'usage', usage));

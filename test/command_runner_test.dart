@@ -237,6 +237,99 @@ information about a command.'''));
           completes);
     });
 
+    group('suggests similar commands', () {
+      test('deletions', () {
+        var command = FooCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['afoo', 'foao', 'fooa']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo". The most similar command is:
+  foo
+''', anything));
+        }
+      });
+
+      test('additions', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['ong', 'lng', 'lon']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo". The most similar command is:
+  long
+''', anything));
+        }
+      });
+
+      test('substitutions', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['aong', 'lang', 'lona']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo". The most similar command is:
+  long
+''', anything));
+        }
+      });
+
+      test('swaps', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['olng', 'lnog', 'logn']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo". The most similar command is:
+  long
+''', anything));
+        }
+      });
+
+      test('combinations', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['oln', 'on', 'lgn', 'alogn']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo". The most similar command is:
+  long
+''', anything));
+        }
+      });
+
+      test('sorts by relevance', () {
+        var a = CustomNameCommand('abcd');
+        runner.addCommand(a);
+        var b = CustomNameCommand('bcd');
+        runner.addCommand(b);
+
+        expect(() => runner.run(['abdc']), throwsUsageException('''
+Could not find a command named "abdc". The most similar commands are:
+  abcd
+  bcd
+''', anything));
+
+        expect(() => runner.run(['bdc']), throwsUsageException('''
+Could not find a command named "bdc". The most similar commands are:
+  bcd
+  abcd
+''', anything));
+      });
+
+      test('omits commands with an edit distance over 2', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['llllong', 'aolgn', 'abcg', 'longggg']) {
+          expect(
+              () => runner.run([typo]),
+              throwsUsageException(
+                  'Could not find a command named "$typo".', anything));
+        }
+      });
+    });
+
     group('with --help', () {
       test('with no command prints the usage', () {
         expect(() => runner.run(['--help']), prints('''
