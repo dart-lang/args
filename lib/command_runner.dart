@@ -77,7 +77,14 @@ class CommandRunner<T> {
   ArgParser get argParser => _argParser;
   final ArgParser _argParser;
 
-  CommandRunner(this.executableName, this.description, {int? usageLineLength})
+  /// The maximum edit distance allowed when suggesting possible intended
+  /// commands.
+  ///
+  /// Set to `0` in order to disable suggestions, defaults to `2`.
+  final int suggestedCommandsMaxEditDistance;
+
+  CommandRunner(this.executableName, this.description,
+      {int? usageLineLength, this.suggestedCommandsMaxEditDistance = 2})
       : _argParser = ArgParser(usageLineLength: usageLineLength) {
     argParser.addFlag('help',
         abbr: 'h', negatable: false, help: 'Print this usage information.');
@@ -148,13 +155,13 @@ class CommandRunner<T> {
     var commandString = executableName;
 
     // Returns commands similar to `name`, in sorted order.
-    Iterable<Command> similarCommands(String name) {
+    Iterable<Command<T>> similarCommands(String name) {
       final distances = Expando<int>();
       final candidates =
-          SplayTreeSet<Command>((a, b) => distances[a]! - distances[b]!);
+          SplayTreeSet<Command<T>>((a, b) => distances[a]! - distances[b]!);
       for (var command in commands.values) {
         var distance = _editDistance(name, command.name);
-        if (distance < 3) {
+        if (distance <= suggestedCommandsMaxEditDistance) {
           distances[command] = distance;
           candidates.add(command);
         }
@@ -176,17 +183,19 @@ class CommandRunner<T> {
           var requested = argResults.rest[0];
 
           // Build up a help message containing similar commands, if found.
-          var possible = similarCommands(requested);
           var similar = StringBuffer();
-          if (possible.isNotEmpty) {
-            similar.write(' The most similar command');
-            if (possible.length == 1) {
-              similar.writeln(' is:');
-            } else {
-              similar.writeln('s are:');
-            }
-            for (var command in possible) {
-              similar.writeln('  ${command.name}');
+          if (suggestedCommandsMaxEditDistance > 0) {
+            var possible = similarCommands(requested);
+            if (possible.isNotEmpty) {
+              similar.write(' The most similar command');
+              if (possible.length == 1) {
+                similar.writeln(' is:');
+              } else {
+                similar.writeln('s are:');
+              }
+              for (var command in possible) {
+                similar.writeln('  ${command.name}');
+              }
             }
           }
 

@@ -107,9 +107,7 @@ Run "test help <command>" for more information about a command.'''));
     });
 
     test("doesn't print hidden commands", () {
-      runner
-        ..addCommand(HiddenCommand())
-        ..addCommand(FooCommand());
+      runner..addCommand(HiddenCommand())..addCommand(FooCommand());
 
       expect(runner.usage, equals('''
 A test command runner.
@@ -329,6 +327,34 @@ Could not find a command named "bdc". The most similar commands are:
               throwsUsageException(
                   'Could not find a command named "$typo".', anything));
         }
+      });
+
+      test('max edit distance is configurable', () {
+        runner = CommandRunner('test', 'A test command runner.',
+            suggestedCommandsMaxEditDistance: 1)
+          ..addCommand(LongCommand());
+        expect(
+            () => runner.run(['ng']),
+            throwsUsageException(
+                'Could not find a command named "ng".', anything));
+
+        runner = CommandRunner('test', 'A test command runner.',
+            suggestedCommandsMaxEditDistance: 3)
+          ..addCommand(LongCommand());
+        expect(() => runner.run(['g']), throwsUsageException('''
+Could not find a command named "g". The most similar command is:
+  long
+''', anything));
+      });
+
+      test('supports subcommands', () {
+        var command = FooCommand();
+        command.addSubcommand(LongCommand());
+        runner.addCommand(command);
+        expect(() => runner.run(['foo', 'ong']), throwsUsageException('''
+Could not find a subcommand named "ong" for "test foo". The most similar command is:
+  long
+''', anything));
       });
     });
 
