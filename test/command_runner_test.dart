@@ -107,7 +107,9 @@ Run "test help <command>" for more information about a command.'''));
     });
 
     test("doesn't print hidden commands", () {
-      runner..addCommand(HiddenCommand())..addCommand(FooCommand());
+      runner
+        ..addCommand(HiddenCommand())
+        ..addCommand(FooCommand());
 
       expect(runner.usage, equals('''
 A test command runner.
