@@ -473,8 +473,8 @@ String _getCommandUsage(Map<String, Command> commands,
 /// See https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance#Optimal_string_alignment_distance
 int _editDistance(String from, String to) {
   // Pad words with a space in front to mimic indexing by 1 instead of 0.
-  from = from.padLeft(1);
-  to = to.padLeft(1);
+  from = ' $from';
+  to = ' $to';
   var distances = [
     for (var i = 0; i < from.length; i++)
       [
