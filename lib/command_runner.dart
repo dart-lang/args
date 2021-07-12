@@ -160,6 +160,7 @@ class CommandRunner<T> {
       final candidates =
           SplayTreeSet<Command<T>>((a, b) => distances[a]! - distances[b]!);
       for (var command in commands.values) {
+        if (command.hidden) continue;
         var distance = _editDistance(name, command.name);
         if (distance <= suggestedCommandsMaxEditDistance) {
           distances[command] = distance;

@@ -358,6 +358,15 @@ Could not find a subcommand named "ong" for "test foo". The most similar command
   long
 ''', anything));
       });
+
+      test('doesn\'t show hidden commands', () {
+        var command = HiddenCommand();
+        runner.addCommand(command);
+        expect(
+            () => runner.run(['hidde']),
+            throwsUsageException(
+                'Could not find a command named "hidde".', anything));
+      });
     });
 
     group('with --help', () {
