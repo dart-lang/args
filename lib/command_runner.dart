@@ -154,33 +154,6 @@ class CommandRunner<T> {
     Command? command;
     var commandString = executableName;
 
-    // Returns help text for commands similar to `name`, in sorted order.
-    String similarCommandsText(String name) {
-      if (suggestionDistanceLimit <= 0) return '';
-      var distances = <Command, int>{};
-      var candidates =
-          SplayTreeSet<Command<T>>((a, b) => distances[a]! - distances[b]!);
-      for (var command in commands.values) {
-        if (command.hidden) continue;
-        var distance = _editDistance(name, command.name);
-        if (distance <= suggestionDistanceLimit) {
-          distances[command] = distance;
-          candidates.add(command);
-        }
-      }
-      if (candidates.isEmpty) return '';
-      var similar = StringBuffer();
-      similar
-        ..writeln()
-        ..writeln()
-        ..writeln('Did you mean one of these?');
-      for (var command in candidates) {
-        similar.writeln('  ${command.name}');
-      }
-
-      return similar.toString();
-    }
-
     while (commands.isNotEmpty) {
       if (argResults.command == null) {
         if (argResults.rest.isEmpty) {
@@ -195,7 +168,8 @@ class CommandRunner<T> {
           var requested = argResults.rest[0];
 
           // Build up a help message containing similar commands, if found.
-          var similarCommands = similarCommandsText(requested);
+          var similarCommands =
+              _similarCommandsText(requested, commands.values);
 
           if (command == null) {
             usageException(
@@ -233,6 +207,34 @@ class CommandRunner<T> {
     }
 
     return (await command.run()) as T?;
+  }
+
+  // Returns help text for commands similar to `name`, in sorted order.
+  String _similarCommandsText(String name, Iterable<Command<T>> commands) {
+    if (suggestionDistanceLimit <= 0) return '';
+    var distances = <Command<T>, int>{};
+    var candidates =
+        SplayTreeSet<Command<T>>((a, b) => distances[a]! - distances[b]!);
+    for (var command in commands) {
+      if (command.hidden) continue;
+      var distance = _editDistance(name, command.name);
+      if (distance <= suggestionDistanceLimit) {
+        distances[command] = distance;
+        candidates.add(command);
+      }
+    }
+    if (candidates.isEmpty) return '';
+
+    var similar = StringBuffer();
+    similar
+      ..writeln()
+      ..writeln()
+      ..writeln('Did you mean one of these?');
+    for (var command in candidates) {
+      similar.writeln('  ${command.name}');
+    }
+
+    return similar.toString();
   }
 
   String _wrap(String text, {int? hangingIndent}) => wrapText(text,
@@ -492,17 +494,17 @@ int _editDistance(String from, String to) {
 
   for (var i = 1; i < from.length; i++) {
     for (var j = 1; j < to.length; j++) {
-      // Removals from `from`,
+      // Removals from `from`.
       var min = distances[i - 1][j] + 1;
-      // Additions to `from`,
+      // Additions to `from`.
       min = math.min(min, distances[i][j - 1] + 1);
-      // Substitutions (and equality),
+      // Substitutions (and equality).
       min = math.min(
           min,
           distances[i - 1][j - 1] +
-              // Cost is zero if substitution was not actually necessary,
+              // Cost is zero if substitution was not actually necessary.
               (from[i] == to[j] ? 0 : 1));
-      // Allows for basic swaps, but no additional edits of swapped regions,
+      // Allows for basic swaps, but no additional edits of swapped regions.
       if (i > 1 && j > 1 && from[i] == to[j - 1] && from[i - 1] == to[j]) {
         min = math.min(min, distances[i - 2][j - 2] + 1);
       }
