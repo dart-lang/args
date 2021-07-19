@@ -81,10 +81,10 @@ class CommandRunner<T> {
   /// commands.
   ///
   /// Set to `0` in order to disable suggestions, defaults to `2`.
-  final int suggestedCommandsMaxEditDistance;
+  final int suggestionDistanceLimit;
 
   CommandRunner(this.executableName, this.description,
-      {int? usageLineLength, this.suggestedCommandsMaxEditDistance = 2})
+      {int? usageLineLength, this.suggestionDistanceLimit = 2})
       : _argParser = ArgParser(usageLineLength: usageLineLength) {
     argParser.addFlag('help',
         abbr: 'h', negatable: false, help: 'Print this usage information.');
@@ -154,20 +154,31 @@ class CommandRunner<T> {
     Command? command;
     var commandString = executableName;
 
-    // Returns commands similar to `name`, in sorted order.
-    Iterable<Command<T>> similarCommands(String name) {
-      final distances = Expando<int>();
-      final candidates =
+    // Returns help text for commands similar to `name`, in sorted order.
+    String similarCommandsText(String name) {
+      if (suggestionDistanceLimit <= 0) return '';
+      var distances = <Command, int>{};
+      var candidates =
           SplayTreeSet<Command<T>>((a, b) => distances[a]! - distances[b]!);
       for (var command in commands.values) {
         if (command.hidden) continue;
         var distance = _editDistance(name, command.name);
-        if (distance <= suggestedCommandsMaxEditDistance) {
+        if (distance <= suggestionDistanceLimit) {
           distances[command] = distance;
           candidates.add(command);
         }
       }
-      return candidates;
+      if (candidates.isEmpty) return '';
+      var similar = StringBuffer();
+      similar
+        ..writeln()
+        ..writeln()
+        ..writeln('Did you mean one of these?');
+      for (var command in candidates) {
+        similar.writeln('  ${command.name}');
+      }
+
+      return similar.toString();
     }
 
     while (commands.isNotEmpty) {
@@ -184,29 +195,15 @@ class CommandRunner<T> {
           var requested = argResults.rest[0];
 
           // Build up a help message containing similar commands, if found.
-          var similar = StringBuffer();
-          if (suggestedCommandsMaxEditDistance > 0) {
-            var possible = similarCommands(requested);
-            if (possible.isNotEmpty) {
-              similar.write(' The most similar command');
-              if (possible.length == 1) {
-                similar.writeln(' is:');
-              } else {
-                similar.writeln('s are:');
-              }
-              for (var command in possible) {
-                similar.writeln('  ${command.name}');
-              }
-            }
-          }
+          var similarCommands = similarCommandsText(requested);
 
           if (command == null) {
             usageException(
-                'Could not find a command named "$requested".$similar');
+                'Could not find a command named "$requested".$similarCommands');
           }
 
           command.usageException('Could not find a subcommand named '
-              '"$requested" for "$commandString".$similar');
+              '"$requested" for "$commandString".$similarCommands');
         }
       }
 
@@ -492,24 +489,26 @@ int _editDistance(String from, String to) {
           if (i == 0) j else if (j == 0) i else 0,
       ],
   ];
+
   for (var i = 1; i < from.length; i++) {
     for (var j = 1; j < to.length; j++) {
-      // Removals from `from`
+      // Removals from `from`,
       var min = distances[i - 1][j] + 1;
-      // Additions to `from`
+      // Additions to `from`,
       min = math.min(min, distances[i][j - 1] + 1);
-      // Substitutions (and equality)
+      // Substitutions (and equality),
       min = math.min(
           min,
           distances[i - 1][j - 1] +
-              // Cost is zero if substitution was not actually necessary
+              // Cost is zero if substitution was not actually necessary,
               (from[i] == to[j] ? 0 : 1));
-      // Allows for basic swaps, but no additional edits of swapped regions
+      // Allows for basic swaps, but no additional edits of swapped regions,
       if (i > 1 && j > 1 && from[i] == to[j - 1] && from[i - 1] == to[j]) {
         min = math.min(min, distances[i - 2][j - 2] + 1);
       }
       distances[i][j] = min;
     }
   }
+
   return distances.last.last;
 }

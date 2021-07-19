@@ -246,7 +246,9 @@ information about a command.'''));
 
         for (var typo in ['afoo', 'foao', 'fooa']) {
           expect(() => runner.run([typo]), throwsUsageException('''
-Could not find a command named "$typo". The most similar command is:
+Could not find a command named "$typo".
+
+Did you mean one of these?
   foo
 ''', anything));
         }
@@ -258,7 +260,9 @@ Could not find a command named "$typo". The most similar command is:
 
         for (var typo in ['ong', 'lng', 'lon']) {
           expect(() => runner.run([typo]), throwsUsageException('''
-Could not find a command named "$typo". The most similar command is:
+Could not find a command named "$typo".
+
+Did you mean one of these?
   long
 ''', anything));
         }
@@ -270,7 +274,9 @@ Could not find a command named "$typo". The most similar command is:
 
         for (var typo in ['aong', 'lang', 'lona']) {
           expect(() => runner.run([typo]), throwsUsageException('''
-Could not find a command named "$typo". The most similar command is:
+Could not find a command named "$typo".
+
+Did you mean one of these?
   long
 ''', anything));
         }
@@ -282,7 +288,9 @@ Could not find a command named "$typo". The most similar command is:
 
         for (var typo in ['olng', 'lnog', 'logn']) {
           expect(() => runner.run([typo]), throwsUsageException('''
-Could not find a command named "$typo". The most similar command is:
+Could not find a command named "$typo".
+
+Did you mean one of these?
   long
 ''', anything));
         }
@@ -294,7 +302,9 @@ Could not find a command named "$typo". The most similar command is:
 
         for (var typo in ['oln', 'on', 'lgn', 'alogn']) {
           expect(() => runner.run([typo]), throwsUsageException('''
-Could not find a command named "$typo". The most similar command is:
+Could not find a command named "$typo".
+
+Did you mean one of these?
   long
 ''', anything));
         }
@@ -307,13 +317,17 @@ Could not find a command named "$typo". The most similar command is:
         runner.addCommand(b);
 
         expect(() => runner.run(['abdc']), throwsUsageException('''
-Could not find a command named "abdc". The most similar commands are:
+Could not find a command named "abdc".
+
+Did you mean one of these?
   abcd
   bcd
 ''', anything));
 
         expect(() => runner.run(['bdc']), throwsUsageException('''
-Could not find a command named "bdc". The most similar commands are:
+Could not find a command named "bdc".
+
+Did you mean one of these?
   bcd
   abcd
 ''', anything));
@@ -333,7 +347,7 @@ Could not find a command named "bdc". The most similar commands are:
 
       test('max edit distance is configurable', () {
         runner = CommandRunner('test', 'A test command runner.',
-            suggestedCommandsMaxEditDistance: 1)
+            suggestionDistanceLimit: 1)
           ..addCommand(LongCommand());
         expect(
             () => runner.run(['ng']),
@@ -341,10 +355,12 @@ Could not find a command named "bdc". The most similar commands are:
                 'Could not find a command named "ng".', anything));
 
         runner = CommandRunner('test', 'A test command runner.',
-            suggestedCommandsMaxEditDistance: 3)
+            suggestionDistanceLimit: 3)
           ..addCommand(LongCommand());
         expect(() => runner.run(['g']), throwsUsageException('''
-Could not find a command named "g". The most similar command is:
+Could not find a command named "g".
+
+Did you mean one of these?
   long
 ''', anything));
       });
@@ -354,7 +370,9 @@ Could not find a command named "g". The most similar command is:
         command.addSubcommand(LongCommand());
         runner.addCommand(command);
         expect(() => runner.run(['foo', 'ong']), throwsUsageException('''
-Could not find a subcommand named "ong" for "test foo". The most similar command is:
+Could not find a subcommand named "ong" for "test foo".
+
+Did you mean one of these?
   long
 ''', anything));
       });
