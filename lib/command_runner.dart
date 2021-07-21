@@ -77,7 +77,14 @@ class CommandRunner<T> {
   ArgParser get argParser => _argParser;
   final ArgParser _argParser;
 
-  CommandRunner(this.executableName, this.description, {int? usageLineLength})
+  /// The maximum edit distance allowed when suggesting possible intended
+  /// commands.
+  ///
+  /// Set to `0` in order to disable suggestions, defaults to `2`.
+  final int suggestionDistanceLimit;
+
+  CommandRunner(this.executableName, this.description,
+      {int? usageLineLength, this.suggestionDistanceLimit = 2})
       : _argParser = ArgParser(usageLineLength: usageLineLength) {
     argParser.addFlag('help',
         abbr: 'h', negatable: false, help: 'Print this usage information.');
@@ -158,13 +165,19 @@ class CommandRunner<T> {
 
           command.usageException('Missing subcommand for "$commandString".');
         } else {
+          var requested = argResults.rest[0];
+
+          // Build up a help message containing similar commands, if found.
+          var similarCommands =
+              _similarCommandsText(requested, commands.values);
+
           if (command == null) {
             usageException(
-                'Could not find a command named "${argResults.rest[0]}".');
+                'Could not find a command named "$requested".$similarCommands');
           }
 
           command.usageException('Could not find a subcommand named '
-              '"${argResults.rest[0]}" for "$commandString".');
+              '"$requested" for "$commandString".$similarCommands');
         }
       }
 
@@ -194,6 +207,34 @@ class CommandRunner<T> {
     }
 
     return (await command.run()) as T?;
+  }
+
+  // Returns help text for commands similar to `name`, in sorted order.
+  String _similarCommandsText(String name, Iterable<Command<T>> commands) {
+    if (suggestionDistanceLimit <= 0) return '';
+    var distances = <Command<T>, int>{};
+    var candidates =
+        SplayTreeSet<Command<T>>((a, b) => distances[a]! - distances[b]!);
+    for (var command in commands) {
+      if (command.hidden) continue;
+      var distance = _editDistance(name, command.name);
+      if (distance <= suggestionDistanceLimit) {
+        distances[command] = distance;
+        candidates.add(command);
+      }
+    }
+    if (candidates.isEmpty) return '';
+
+    var similar = StringBuffer();
+    similar
+      ..writeln()
+      ..writeln()
+      ..writeln('Did you mean one of these?');
+    for (var command in candidates) {
+      similar.writeln('  ${command.name}');
+    }
+
+    return similar.toString();
   }
 
   String _wrap(String text, {int? hangingIndent}) => wrapText(text,
@@ -432,4 +473,44 @@ String _getCommandUsage(Map<String, Command> commands,
   }
 
   return buffer.toString();
+}
+
+/// Returns the edit distance between `from` and `to`.
+//
+/// Allows for edits, deletes, substitutions, and swaps all as single cost.
+///
+/// See https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance#Optimal_string_alignment_distance
+int _editDistance(String from, String to) {
+  // Add a space in front to mimic indexing by 1 instead of 0.
+  from = ' $from';
+  to = ' $to';
+  var distances = [
+    for (var i = 0; i < from.length; i++)
+      [
+        for (var j = 0; j < to.length; j++)
+          if (i == 0) j else if (j == 0) i else 0,
+      ],
+  ];
+
+  for (var i = 1; i < from.length; i++) {
+    for (var j = 1; j < to.length; j++) {
+      // Removals from `from`.
+      var min = distances[i - 1][j] + 1;
+      // Additions to `from`.
+      min = math.min(min, distances[i][j - 1] + 1);
+      // Substitutions (and equality).
+      min = math.min(
+          min,
+          distances[i - 1][j - 1] +
+              // Cost is zero if substitution was not actually necessary.
+              (from[i] == to[j] ? 0 : 1));
+      // Allows for basic swaps, but no additional edits of swapped regions.
+      if (i > 1 && j > 1 && from[i] == to[j - 1] && from[i - 1] == to[j]) {
+        min = math.min(min, distances[i - 2][j - 2] + 1);
+      }
+      distances[i][j] = min;
+    }
+  }
+
+  return distances.last.last;
 }
