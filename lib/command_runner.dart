@@ -422,17 +422,12 @@ String _getCommandUsage(Map<String, Command> commands,
   names = names.toList()..sort();
 
   // Group the commands by category.
-  var commandsByCategory = <String, List<Command>?>{};
+  var commandsByCategory = SplayTreeMap<String, List<Command>>();
   for (var name in names) {
     var category = commands[name]!.category;
-    if (commandsByCategory[category] == null) {
-      commandsByCategory[category] = [];
-    }
-    commandsByCategory[category]!.add(commands[name]!);
+    commandsByCategory.putIfAbsent(category, () => []).add(commands[name]!);
   }
-  // Sort categories alphabetically.
   final categories = commandsByCategory.keys.toList();
-  categories.sort();
 
   var length = names.map((name) => name.length).reduce(math.max);
 

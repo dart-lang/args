@@ -53,12 +53,13 @@ Available commands:
 Run "test help <command>" for more information about a command.'''));
     });
 
-    test('displays categories', () {
-      runner.addCommand(Category1Command());
-      runner.addCommand(Category2Command());
-      runner.addCommand(FooCommand());
+    group('displays categories', () {
+      test('when some commands are categorized', () {
+        runner.addCommand(Category1Command());
+        runner.addCommand(Category2Command());
+        runner.addCommand(FooCommand());
 
-      expect(runner.usage, equals('''
+        expect(runner.usage, equals('''
 A test command runner.
 
 Usage: test <command> [arguments]
@@ -75,6 +76,53 @@ Printers
   bar   Print a value.
 
 Run "test help <command>" for more information about a command.'''));
+      });
+
+      test('when all commands are categorized', () {
+        runner.addCommand(Category1Command());
+        runner.addCommand(Category2Command());
+
+        expect(runner.usage, equals('''
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+Displayers
+  baz   Display a value.
+
+Printers
+  bar   Print a value.
+
+Run "test help <command>" for more information about a command.'''));
+      });
+
+      test('when multiple commands are in a category', () {
+        runner.addCommand(Category1Command());
+        runner.addCommand(Category2Command());
+        runner.addCommand(Category2Command2());
+
+        expect(runner.usage, equals('''
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+Displayers
+  baz    Display a value.
+  baz2   Display another value.
+
+Printers
+  bar    Print a value.
+
+Run "test help <command>" for more information about a command.'''));
+      });
     });
 
     test('truncates newlines in command descriptions by default', () {
@@ -131,7 +179,9 @@ Run "test help <command>" for more information about a command.'''));
     });
 
     test("doesn't print hidden commands", () {
-      runner..addCommand(HiddenCommand())..addCommand(FooCommand());
+      runner
+        ..addCommand(HiddenCommand())
+        ..addCommand(FooCommand());
 
       expect(runner.usage, equals('''
 A test command runner.

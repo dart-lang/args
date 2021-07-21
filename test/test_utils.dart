@@ -117,6 +117,27 @@ class Category2Command extends Command {
   }
 }
 
+class Category2Command2 extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'baz2';
+
+  @override
+  final description = 'Display another value.';
+
+  @override
+  final category = 'Displayers';
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
 class MultilineCommand extends Command {
   var hasRun = false;
 
