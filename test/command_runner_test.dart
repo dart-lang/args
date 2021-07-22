@@ -107,7 +107,9 @@ Run "test help <command>" for more information about a command.'''));
     });
 
     test("doesn't print hidden commands", () {
-      runner..addCommand(HiddenCommand())..addCommand(FooCommand());
+      runner
+        ..addCommand(HiddenCommand())
+        ..addCommand(FooCommand());
 
       expect(runner.usage, equals('''
 A test command runner.
@@ -315,7 +317,7 @@ Run "test help" to see global options.
         expect(
             runner.run(['--asdf']),
             throwsUsageException(
-                'Could not find an option named "asdf".', '$_defaultUsage'));
+                'Could not find an option named "asdf".', _defaultUsage));
       });
 
       test('for a command throws the command usage', () {

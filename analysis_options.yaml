@@ -1,4 +1,4 @@
-include: package:pedantic/analysis_options.yaml
+include: package:lints/recommended.yaml
 linter:
   rules:
     - avoid_null_checks_in_equality_operators

@@ -70,12 +70,11 @@ class ArgParser {
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
       this._aliases,
-      {bool allowTrailingOptions = true, this.usageLineLength})
+      {this.allowTrailingOptions = true, this.usageLineLength})
       : _options = options,
         options = UnmodifiableMapView(options),
         _commands = commands,
-        commands = UnmodifiableMapView(commands),
-        allowTrailingOptions = allowTrailingOptions;
+        commands = UnmodifiableMapView(commands);
 
   /// Defines a command.
   ///

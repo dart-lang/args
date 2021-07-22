@@ -43,8 +43,8 @@ void _testParserPerformance(ArgParser parser, String string) {
   var multiplier = 10;
   var largeList = List<String>.generate(baseSize * multiplier, (_) => string);
 
-  var baseAction = () => parser.parse(baseList);
-  var largeAction = () => parser.parse(largeList);
+  ArgResults baseAction() => parser.parse(baseList);
+  ArgResults largeAction() => parser.parse(largeList);
 
   // Warm up JIT.
   baseAction();
