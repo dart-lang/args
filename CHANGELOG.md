@@ -1,3 +1,13 @@
+## 2.2.1-dev
+
+## 2.2.0
+
+* Suggest similar commands if an unknown command is encountered, when using the
+  `CommandRunner`.
+  * The max edit distance for suggestions defaults to 2, but can be configured
+    using the `suggestionDistanceLimit` parameter on the constructor. You can
+    set it to `0` to disable the feature.
+
 ## 2.1.1
 
 * Fix a bug with `mandatory` options which caused a null assertion failure when
