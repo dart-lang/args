@@ -53,6 +53,101 @@ Available commands:
 Run "test help <command>" for more information about a command.'''));
     });
 
+    group('displays categories', () {
+      test('when some commands are categorized', () {
+        runner.addCommand(Category1Command());
+        runner.addCommand(Category2Command());
+        runner.addCommand(FooCommand());
+
+        expect(runner.usage, equals('''
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+  foo   Set a value.
+
+Displayers
+  baz   Display a value.
+
+Printers
+  bar   Print a value.
+
+Run "test help <command>" for more information about a command.'''));
+      });
+
+      test('except when all commands in a category are hidden', () {
+        runner.addCommand(Category1Command());
+        runner.addCommand(HiddenCategorizedCommand());
+
+        expect(runner.usage, equals('''
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+
+Printers
+  bar   Print a value.
+
+Run "test help <command>" for more information about a command.'''));
+      });
+
+      test('when all commands are categorized', () {
+        runner.addCommand(Category1Command());
+        runner.addCommand(Category2Command());
+
+        expect(runner.usage, equals('''
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+
+Displayers
+  baz   Display a value.
+
+Printers
+  bar   Print a value.
+
+Run "test help <command>" for more information about a command.'''));
+      });
+
+      test('when multiple commands are in a category', () {
+        runner.addCommand(Category1Command());
+        runner.addCommand(Category2Command());
+        runner.addCommand(Category2Command2());
+
+        expect(runner.usage, equals('''
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
+
+Displayers
+  baz    Display a value.
+  baz2   Display another value.
+
+Printers
+  bar    Print a value.
+
+Run "test help <command>" for more information about a command.'''));
+      });
+    });
+
     test('truncates newlines in command descriptions by default', () {
       runner.addCommand(MultilineCommand());
 
@@ -109,6 +204,7 @@ Run "test help <command>" for more information about a command.'''));
     test("doesn't print hidden commands", () {
       runner
         ..addCommand(HiddenCommand())
+        ..addCommand(HiddenCategorizedCommand())
         ..addCommand(FooCommand());
 
       expect(runner.usage, equals('''

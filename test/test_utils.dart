@@ -75,6 +75,69 @@ class AsyncValueCommand extends Command<String> {
   Future<String> run() async => 'hi';
 }
 
+class Category1Command extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'bar';
+
+  @override
+  final description = 'Print a value.';
+
+  @override
+  final category = 'Printers';
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
+class Category2Command extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'baz';
+
+  @override
+  final description = 'Display a value.';
+
+  @override
+  final category = 'Displayers';
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
+class Category2Command2 extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'baz2';
+
+  @override
+  final description = 'Display another value.';
+
+  @override
+  final category = 'Displayers';
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
 class MultilineCommand extends Command {
   var hasRun = false;
 
@@ -155,6 +218,30 @@ class HiddenCommand extends Command {
 
   @override
   final description = 'Set a value.';
+
+  @override
+  final hidden = true;
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
+class HiddenCategorizedCommand extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'hiddencategorized';
+
+  @override
+  final description = 'Set a value.';
+
+  @override
+  final category = 'Some category';
 
   @override
   final hidden = true;
