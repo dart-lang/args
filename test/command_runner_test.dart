@@ -69,8 +69,29 @@ Global options:
 
 Available commands:
   foo   Set a value.
+
 Displayers
   baz   Display a value.
+
+Printers
+  bar   Print a value.
+
+Run "test help <command>" for more information about a command.'''));
+      });
+
+      test('except when all commands in a category are hidden', () {
+        runner.addCommand(Category1Command());
+        runner.addCommand(HiddenCategorizedCommand());
+
+        expect(runner.usage, equals('''
+A test command runner.
+
+Usage: test <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+
+Available commands:
 
 Printers
   bar   Print a value.
@@ -91,6 +112,7 @@ Global options:
 -h, --help    Print this usage information.
 
 Available commands:
+
 Displayers
   baz   Display a value.
 
@@ -114,6 +136,7 @@ Global options:
 -h, --help    Print this usage information.
 
 Available commands:
+
 Displayers
   baz    Display a value.
   baz2   Display another value.
@@ -181,6 +204,7 @@ Run "test help <command>" for more information about a command.'''));
     test("doesn't print hidden commands", () {
       runner
         ..addCommand(HiddenCommand())
+        ..addCommand(HiddenCategorizedCommand())
         ..addCommand(FooCommand());
 
       expect(runner.usage, equals('''

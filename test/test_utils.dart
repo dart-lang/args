@@ -231,6 +231,30 @@ class HiddenCommand extends Command {
   }
 }
 
+class HiddenCategorizedCommand extends Command {
+  var hasRun = false;
+
+  @override
+  final name = 'hiddencategorized';
+
+  @override
+  final description = 'Set a value.';
+
+  @override
+  final category = 'Some category';
+
+  @override
+  final hidden = true;
+
+  @override
+  final takesArguments = false;
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
 class AliasedCommand extends Command {
   var hasRun = false;
 

@@ -436,6 +436,7 @@ String _getCommandUsage(Map<String, Command> commands,
   for (var category in categories) {
     if (category != '') {
       buffer.writeln();
+      buffer.writeln();
       buffer.write('$category');
     }
     for (var command in commandsByCategory[category]!) {
@@ -449,9 +450,6 @@ String _getCommandUsage(Map<String, Command> commands,
         buffer.write(' ' * columnStart);
         buffer.write(line);
       }
-    }
-    if (category != '' && category != categories.last) {
-      buffer.writeln();
     }
   }
 
