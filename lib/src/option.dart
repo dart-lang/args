@@ -103,7 +103,7 @@ class Option {
       Map<String, String>? allowedHelp,
       this.defaultsTo,
       this.callback,
-      OptionType type,
+      this.type,
       {this.negatable,
       bool? splitCommas,
       this.mandatory = false,
@@ -112,7 +112,6 @@ class Option {
       : allowed = allowed == null ? null : List.unmodifiable(allowed),
         allowedHelp =
             allowedHelp == null ? null : Map.unmodifiable(allowedHelp),
-        type = type,
         // If the user doesn't specify [splitCommas], it defaults to true for
         // multiple options.
         splitCommas = splitCommas ?? type == OptionType.multiple {

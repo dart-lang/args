@@ -561,7 +561,7 @@ Run "test help" to see global options.
         expect(
             runner.run(['--asdf']),
             throwsUsageException(
-                'Could not find an option named "asdf".', '$_defaultUsage'));
+                'Could not find an option named "asdf".', _defaultUsage));
       });
 
       test('for a command throws the command usage', () {

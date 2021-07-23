@@ -22,6 +22,8 @@ class HelpCommand<T> extends Command<T> {
   bool get hidden => true;
 
   @override
+  // TODO: Remove when https://github.com/dart-lang/linter/issues/2792 is fixed.
+  // ignore: prefer_void_to_null
   Null run() {
     // Show the default help if no command was specified.
     if (argResults!.rest.isEmpty) {
