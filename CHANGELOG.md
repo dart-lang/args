@@ -1,3 +1,7 @@
+## 2.3.0
+
+* Add the ability to group commands by category in usage text.
+
 ## 2.2.0
 
 * Suggest similar commands if an unknown command is encountered, when using the
