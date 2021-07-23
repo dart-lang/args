@@ -335,6 +335,154 @@ information about a command.'''));
           completes);
     });
 
+    group('suggests similar commands', () {
+      test('deletions', () {
+        var command = FooCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['afoo', 'foao', 'fooa']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo".
+
+Did you mean one of these?
+  foo
+''', anything));
+        }
+      });
+
+      test('additions', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['ong', 'lng', 'lon']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo".
+
+Did you mean one of these?
+  long
+''', anything));
+        }
+      });
+
+      test('substitutions', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['aong', 'lang', 'lona']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo".
+
+Did you mean one of these?
+  long
+''', anything));
+        }
+      });
+
+      test('swaps', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['olng', 'lnog', 'logn']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo".
+
+Did you mean one of these?
+  long
+''', anything));
+        }
+      });
+
+      test('combinations', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['oln', 'on', 'lgn', 'alogn']) {
+          expect(() => runner.run([typo]), throwsUsageException('''
+Could not find a command named "$typo".
+
+Did you mean one of these?
+  long
+''', anything));
+        }
+      });
+
+      test('sorts by relevance', () {
+        var a = CustomNameCommand('abcd');
+        runner.addCommand(a);
+        var b = CustomNameCommand('bcd');
+        runner.addCommand(b);
+
+        expect(() => runner.run(['abdc']), throwsUsageException('''
+Could not find a command named "abdc".
+
+Did you mean one of these?
+  abcd
+  bcd
+''', anything));
+
+        expect(() => runner.run(['bdc']), throwsUsageException('''
+Could not find a command named "bdc".
+
+Did you mean one of these?
+  bcd
+  abcd
+''', anything));
+      });
+
+      test('omits commands with an edit distance over 2', () {
+        var command = LongCommand();
+        runner.addCommand(command);
+
+        for (var typo in ['llllong', 'aolgn', 'abcg', 'longggg']) {
+          expect(
+              () => runner.run([typo]),
+              throwsUsageException(
+                  'Could not find a command named "$typo".', anything));
+        }
+      });
+
+      test('max edit distance is configurable', () {
+        runner = CommandRunner('test', 'A test command runner.',
+            suggestionDistanceLimit: 1)
+          ..addCommand(LongCommand());
+        expect(
+            () => runner.run(['ng']),
+            throwsUsageException(
+                'Could not find a command named "ng".', anything));
+
+        runner = CommandRunner('test', 'A test command runner.',
+            suggestionDistanceLimit: 3)
+          ..addCommand(LongCommand());
+        expect(() => runner.run(['g']), throwsUsageException('''
+Could not find a command named "g".
+
+Did you mean one of these?
+  long
+''', anything));
+      });
+
+      test('supports subcommands', () {
+        var command = FooCommand();
+        command.addSubcommand(LongCommand());
+        runner.addCommand(command);
+        expect(() => runner.run(['foo', 'ong']), throwsUsageException('''
+Could not find a subcommand named "ong" for "test foo".
+
+Did you mean one of these?
+  long
+''', anything));
+      });
+
+      test('doesn\'t show hidden commands', () {
+        var command = HiddenCommand();
+        runner.addCommand(command);
+        expect(
+            () => runner.run(['hidde']),
+            throwsUsageException(
+                'Could not find a command named "hidde".', anything));
+      });
+    });
+
     group('with --help', () {
       test('with no command prints the usage', () {
         expect(() => runner.run(['--help']), prints('''
