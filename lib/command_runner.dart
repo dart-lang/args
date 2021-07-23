@@ -262,6 +262,12 @@ abstract class Command<T> {
   /// This defaults to the first line of [description].
   String get summary => description.split('\n').first;
 
+  /// The command's category.
+  ///
+  /// Displayed in [parent]'s [CommandRunner.usage]. Commands with categories
+  /// will be grouped together, and displayed after commands without a category.
+  String get category => '';
+
   /// A single-line template for how to invoke this command (e.g. `"pub get
   /// `package`"`).
   String get invocation {
@@ -455,20 +461,36 @@ String _getCommandUsage(Map<String, Command> commands,
 
   // Show the commands alphabetically.
   names = names.toList()..sort();
+
+  // Group the commands by category.
+  var commandsByCategory = SplayTreeMap<String, List<Command>>();
+  for (var name in names) {
+    var category = commands[name]!.category;
+    commandsByCategory.putIfAbsent(category, () => []).add(commands[name]!);
+  }
+  final categories = commandsByCategory.keys.toList();
+
   var length = names.map((name) => name.length).reduce(math.max);
 
   var buffer = StringBuffer('Available ${isSubcommand ? "sub" : ""}commands:');
   var columnStart = length + 5;
-  for (var name in names) {
-    var lines = wrapTextAsLines(commands[name]!.summary,
-        start: columnStart, length: lineLength);
-    buffer.writeln();
-    buffer.write('  ${padRight(name, length)}   ${lines.first}');
-
-    for (var line in lines.skip(1)) {
+  for (var category in categories) {
+    if (category != '') {
       buffer.writeln();
-      buffer.write(' ' * columnStart);
-      buffer.write(line);
+      buffer.writeln();
+      buffer.write('$category');
+    }
+    for (var command in commandsByCategory[category]!) {
+      var lines = wrapTextAsLines(command.summary,
+          start: columnStart, length: lineLength);
+      buffer.writeln();
+      buffer.write('  ${padRight(command.name, length)}   ${lines.first}');
+
+      for (var line in lines.skip(1)) {
+        buffer.writeln();
+        buffer.write(' ' * columnStart);
+        buffer.write(line);
+      }
     }
   }
 
