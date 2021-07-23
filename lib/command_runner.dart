@@ -478,7 +478,7 @@ String _getCommandUsage(Map<String, Command> commands,
     if (category != '') {
       buffer.writeln();
       buffer.writeln();
-      buffer.write('$category');
+      buffer.write(category);
     }
     for (var command in commandsByCategory[category]!) {
       var lines = wrapTextAsLines(command.summary,
