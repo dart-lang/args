@@ -13,7 +13,7 @@ void main() {
       var parser = ArgParser();
       var command = parser.addCommand('install');
       expect(parser.commands['install'], equals(command));
-      expect(command is ArgParser, isTrue);
+      expect(command, const TypeMatcher<ArgParser>());
     });
 
     test('uses the command parser if given one', () {
