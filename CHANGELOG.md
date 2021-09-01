@@ -1,3 +1,5 @@
+## 2.3.1-dev
+
 ## 2.3.0
 
 * Add the ability to group commands by category in usage text.
