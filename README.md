@@ -339,7 +339,7 @@ Adding global arguments
 ```dart
 var runner = CommandRunner('dgit',  "A dart implementation of distributed version control.");
 // add global flag
-runner.addFlag('verbose', abbr: 'v', help: 'increase logging');
+runner.argParser.addFlag('verbose', abbr: 'v', help: 'increase logging');
 ```
 
 #### Command specific Arguments
