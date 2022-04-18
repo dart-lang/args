@@ -1,9 +1,9 @@
 name: args
 version: 2.3.1-dev
-homepage: https://github.com/dart-lang/args
 description: >-
  Library for defining parsers for parsing raw command-line arguments into a set
  of options and values using GNU and POSIX style options.
+repository: https://github.com/dart-lang/args
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
