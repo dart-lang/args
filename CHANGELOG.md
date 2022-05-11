@@ -1,4 +1,8 @@
-## 2.3.1-dev
+## 2.3.1
+
+* Switch to using package:lints.
+* Address an issue with the readme API documentation (#211).
+* Populate the pubspec `repository` field.
 
 ## 2.3.0
 
