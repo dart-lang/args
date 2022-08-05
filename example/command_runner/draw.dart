@@ -4,24 +4,17 @@
 
 import 'dart:async';
 import 'dart:math';
+
 import 'package:args/command_runner.dart';
 
-String draw(
-    int width, int height, String char, bool Function(double, double) pixel) {
-  final out = StringBuffer();
-  for (int y = 0; y <= height; ++y) {
-    final ty = 2 * y / height - 1;
-    for (int x = 0; x <= width; ++x) {
-      final tx = 2 * x / width - 1;
-      out.write(pixel(tx, ty) ? char : ' ');
-    }
-    out.write('\n');
-  }
-  return out.toString();
-}
-
-String drawTriangle(int width, int height, String char) {
-  return draw(width, height, char, (x, y) => x.abs() <= (1 + y) / 2);
+void main(List<String> args) async {
+  final runner = CommandRunner<String>('draw', 'Draws shapes')
+    ..addCommand(SquareCommand())
+    ..addCommand(CircleCommand())
+    ..addCommand(TriangleCommand());
+  runner.argParser.addOption('char', help: 'The character to use for drawing');
+  final output = await runner.run(args);
+  print(output);
 }
 
 class SquareCommand extends Command<String> {
@@ -130,12 +123,20 @@ class IsoscelesTriangleCommand extends Command<String> {
   }
 }
 
-void main(List<String> args) async {
-  final runner = CommandRunner<String>('draw', 'Draws shapes')
-    ..addCommand(SquareCommand())
-    ..addCommand(CircleCommand())
-    ..addCommand(TriangleCommand());
-  runner.argParser.addOption('char', help: 'The character to use for drawing');
-  final output = await runner.run(args);
-  print(output);
+String draw(
+    int width, int height, String char, bool Function(double, double) pixel) {
+  final out = StringBuffer();
+  for (int y = 0; y <= height; ++y) {
+    final ty = 2 * y / height - 1;
+    for (int x = 0; x <= width; ++x) {
+      final tx = 2 * x / width - 1;
+      out.write(pixel(tx, ty) ? char : ' ');
+    }
+    out.write('\n');
+  }
+  return out.toString();
+}
+
+String drawTriangle(int width, int height, String char) {
+  return draw(width, height, char, (x, y) => x.abs() <= (1 + y) / 2);
 }
