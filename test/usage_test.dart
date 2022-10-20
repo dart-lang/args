@@ -322,15 +322,19 @@ void main() {
       parser.addFlag('longNewline',
           help: 'The flag with a really long help text and newlines\n\nthat '
               'will still be wrapped because it is really long.');
-      parser.addFlag('solid',
-          help:
-              'The-flag-with-no-whitespace-that-will-be-wrapped-by-splitting-a-word.');
+      parser.addFlag(
+        'solid',
+        help: 'The-flag-with-no-whitespace-that-will-be-wrapped-by-splitting-a'
+            '-word.',
+      );
       parser.addFlag('longWhitespace',
           help:
-              '           The flag with a really long help text and whitespace at the start.');
+              '           The flag with a really long help text and whitespace '
+              'at the start.');
       parser.addFlag('longTrailspace',
           help:
-              'The flag with a really long help text and whitespace at the end.             ');
+              'The flag with a really long help text and whitespace at the end.'
+              '             ');
       parser.addFlag('small1', help: ' a ');
       parser.addFlag('small2', help: ' a');
       parser.addFlag('small3', help: 'a ');
@@ -364,9 +368,11 @@ void main() {
           help:
               'The flag with a really long help text and newlines\n\nthat will '
               'still be wrapped because it is really long.');
-      parser.addFlag('solid',
-          help:
-              'The-flag-with-no-whitespace-that-will-be-wrapped-by-splitting-a-word.');
+      parser.addFlag(
+        'solid',
+        help: 'The-flag-with-no-whitespace-that-will-be-wrapped-by-splitting-a-'
+            'word.',
+      );
       parser.addFlag('small1', help: ' a ');
       parser.addFlag('small2', help: ' a');
       parser.addFlag('small3', help: 'a ');
@@ -494,12 +500,11 @@ void main() {
 }
 
 void validateUsage(ArgParser parser, String expected) {
-  expected = unindentString(expected);
+  expected = _unindentString(expected);
   expect(parser.usage, equals(expected));
 }
 
-// TODO(rnystrom): Replace one in test_utils.
-String unindentString(String text) {
+String _unindentString(String text) {
   var lines = text.split('\n');
 
   // Count the indentation of the last line.

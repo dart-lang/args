@@ -52,13 +52,16 @@ class CommandRunner<T> {
     var usagePrefix = 'Usage:';
     var buffer = StringBuffer();
     buffer.writeln(
-        '$usagePrefix ${_wrap(invocation, hangingIndent: usagePrefix.length)}\n');
+      '$usagePrefix ${_wrap(invocation, hangingIndent: usagePrefix.length)}\n',
+    );
     buffer.writeln(_wrap('Global options:'));
     buffer.writeln('${argParser.usage}\n');
     buffer.writeln(
-        '${_getCommandUsage(_commands, lineLength: argParser.usageLineLength)}\n');
+      '${_getCommandUsage(_commands, lineLength: argParser.usageLineLength)}\n',
+    );
     buffer.write(_wrap(
-        'Run "$executableName help <command>" for more information about a command.'));
+        'Run "$executableName help <command>" for more information about a '
+        'command.'));
     if (usageFooter != null) {
       buffer.write('\n${_wrap(usageFooter!)}');
     }

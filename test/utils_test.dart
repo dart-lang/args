@@ -7,13 +7,12 @@ import 'package:test/test.dart';
 
 const _lineLength = 40;
 const _longLine = 'This is a long line that needs to be wrapped.';
-final _longLineWithNewlines = 'This is a long line with newlines that\n'
-        'needs to be wrapped.\n\n' +
-    '0123456789' * 5;
+final _longLineWithNewlines =
+    'This is a long line with newlines that\nneeds to be wrapped.\n\n'
+    '${'0123456789' * 5}';
 final _indentedLongLineWithNewlines =
-    '    This is an indented long line with newlines that\n'
-            'needs to be wrapped.\n\tAnd preserves tabs.\n      \n  ' +
-        '0123456789' * 5;
+    '    This is an indented long line with newlines that\nneeds to be wrapped.'
+    '\n\tAnd preserves tabs.\n      \n  ${'0123456789' * 5}';
 const _shortLine = 'Short line.';
 const _indentedLongLine = '    This is an indented long line that needs to be '
     'wrapped and indentation preserved.';
@@ -42,7 +41,7 @@ wrapped.'''));
 0123456789'''));
     });
     test('refuses to wrap to a column smaller than 10 characters', () {
-      expect(wrapText('$_longLine ' + '0123456789' * 4, length: 1), equals('''
+      expect(wrapText('$_longLine ${'0123456789' * 4}', length: 1), equals('''
 This is a
 long line
 that needs
@@ -104,13 +103,14 @@ This is a long line that needs to be
 Short line.'''));
     });
     test(
-        'handles hangingIndent with two unwrapped lines and the second is empty.',
-        () {
-      expect(wrapText('$_shortLine\n', length: _lineLength, hangingIndent: 6),
-          equals('''
+      'handles hangingIndent with two unwrapped lines and the second is empty.',
+      () {
+        expect(wrapText('$_shortLine\n', length: _lineLength, hangingIndent: 6),
+            equals('''
 Short line.
 '''));
-    });
+      },
+    );
     test('honors hangingIndent parameter on already indented line.', () {
       expect(wrapText(_indentedLongLine, length: _lineLength, hangingIndent: 6),
           equals('''
@@ -151,7 +151,7 @@ needs to be wrapped.
 
     test('refuses to wrap to a column smaller than 10 characters', () {
       expect(
-          wrapTextAsLines('$_longLine ' + '0123456789' * 4, length: 1),
+          wrapTextAsLines('$_longLine ${'0123456789' * 4}', length: 1),
           equals([
             'This is a',
             'long line',

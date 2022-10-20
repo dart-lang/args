@@ -56,12 +56,15 @@ void _testParserPerformance(ArgParser parser, String string) {
   print('Parsed $baseSize elements in ${baseTime}ms, '
       '${baseSize * multiplier} elements in ${largeTime}ms.');
 
-  expect(largeTime, lessThan(baseTime * multiplier * 3),
-      reason:
-          'Comparing large data set time ${largeTime}ms to small data set time '
-          '${baseTime}ms. Data set increased ${multiplier}x, time is allowed to '
-          'increase up to ${multiplier * 3}x, but it increased '
-          '${largeTime ~/ baseTime}x.');
+  expect(
+    largeTime,
+    lessThan(baseTime * multiplier * 3),
+    reason:
+        'Comparing large data set time ${largeTime}ms to small data set time '
+        '${baseTime}ms. Data set increased ${multiplier}x, time is allowed to '
+        'increase up to ${multiplier * 3}x, but it increased '
+        '${largeTime ~/ baseTime}x.',
+  );
 }
 
 int _time(void Function() function) {

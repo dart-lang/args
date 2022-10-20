@@ -103,6 +103,7 @@ class Parser {
 
       var callback = option.callback;
       if (callback == null) return;
+      // ignore: avoid_dynamic_calls
       callback(option.valueOrDefault(parsedOption));
     });
 
@@ -320,7 +321,7 @@ class Parser {
       return;
     }
 
-    var list = results.putIfAbsent(option.name, () => <String>[]);
+    var list = results.putIfAbsent(option.name, () => <String>[]) as List;
 
     if (option.splitCommas) {
       for (var element in value.split(',')) {

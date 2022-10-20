@@ -105,7 +105,8 @@ class _Usage {
         _write(2, '(defaults to on)');
       }
     } else if (option.isMultiple) {
-      if (option.defaultsTo != null && option.defaultsTo.isNotEmpty) {
+      if (option.defaultsTo != null &&
+          (option.defaultsTo as Iterable).isNotEmpty) {
         var defaults =
             (option.defaultsTo as List).map((value) => '"$value"').join(', ');
         _write(2, '(defaults to $defaults)');
@@ -137,9 +138,9 @@ class _Usage {
 
   String _allowedTitle(Option option, String allowed) {
     var isDefault = option.defaultsTo is List
-        ? option.defaultsTo.contains(allowed)
+        ? (option.defaultsTo as List).contains(allowed)
         : option.defaultsTo == allowed;
-    return '      [$allowed]' + (isDefault ? ' (default)' : '');
+    return '      [$allowed]${isDefault ? ' (default)' : ''}';
   }
 
   List<int> _calculateColumnWidths() {
@@ -234,7 +235,7 @@ class _Usage {
 
   String _buildAllowedList(Option option) {
     var isDefault = option.defaultsTo is List
-        ? option.defaultsTo.contains
+        ? (option.defaultsTo as List).contains
         : (value) => value == option.defaultsTo;
 
     var allowedBuffer = StringBuffer();
