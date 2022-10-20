@@ -55,7 +55,6 @@ void main() {
       allowedHelp: {
         'vm': 'Run Dart code on the standalone dart vm.',
         'd8': 'Run JavaScript from the command line using v8.',
-        // TODO(antonm): rename flag.
         'drt': 'Run Dart or JavaScript in the headless version of Chrome,\n'
             'content shell.',
         'dartium': 'Run Dart or JavaScript in Dartium.',

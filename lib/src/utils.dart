@@ -21,7 +21,9 @@ String padRight(String source, int length) =>
 ///
 /// ```dart
 /// var prefix = "Usage: ";
-/// print(prefix + wrapText(invocation, hangingIndent: prefix.length, length: 40));
+/// print(
+///   prefix + wrapText(invocation, hangingIndent: prefix.length, length: 40),
+/// );
 /// ```
 ///
 /// yields:

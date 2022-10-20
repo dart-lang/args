@@ -22,8 +22,6 @@ class HelpCommand<T> extends Command<T> {
   bool get hidden => true;
 
   @override
-  // TODO: Remove when https://github.com/dart-lang/linter/issues/2792 is fixed.
-  // ignore: prefer_void_to_null
   Null run() {
     // Show the default help if no command was specified.
     if (argResults!.rest.isEmpty) {
@@ -34,7 +32,7 @@ class HelpCommand<T> extends Command<T> {
     // Walk the command tree to show help for the selected command or
     // subcommand.
     var commands = runner!.commands;
-    Command? command;
+    Command<T>? command;
     var commandString = runner!.executableName;
 
     for (var name in argResults!.rest) {
@@ -53,7 +51,7 @@ class HelpCommand<T> extends Command<T> {
       }
 
       command = commands[name];
-      commands = command!.subcommands as Map<String, Command<T>>;
+      commands = command!.subcommands;
       commandString += ' $name';
     }
 

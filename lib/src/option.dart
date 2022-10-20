@@ -13,7 +13,7 @@ Option newOption(
     String? valueHelp,
     Iterable<String>? allowed,
     Map<String, String>? allowedHelp,
-    defaultsTo,
+    Object? defaultsTo,
     Function? callback,
     OptionType type,
     {bool? negatable,
@@ -146,14 +146,14 @@ class Option {
   /// For single-valued options, it will be [defaultsTo] if set or `null`
   /// otherwise. For multiple-valued options, it will be an empty list or a
   /// list containing [defaultsTo] if set.
-  dynamic valueOrDefault(value) {
+  dynamic valueOrDefault(Object? value) {
     if (value != null) return value;
     if (isMultiple) return defaultsTo ?? <String>[];
     return defaultsTo;
   }
 
   @Deprecated('Use valueOrDefault instead.')
-  dynamic getOrDefault(value) => valueOrDefault(value);
+  dynamic getOrDefault(Object? value) => valueOrDefault(value);
 
   static final _invalidChars = RegExp(r'''[ \t\r\n"'\\/]''');
 }

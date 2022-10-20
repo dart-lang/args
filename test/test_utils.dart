@@ -10,8 +10,7 @@ class CommandRunnerWithFooter extends CommandRunner {
   @override
   String get usageFooter => 'Also, footer!';
 
-  CommandRunnerWithFooter(String executableName, String description)
-      : super(executableName, description);
+  CommandRunnerWithFooter(super.executableName, super.description);
 }
 
 class CommandRunnerWithFooterAndWrapping extends CommandRunner {
@@ -25,12 +24,11 @@ class CommandRunnerWithFooterAndWrapping extends CommandRunner {
   ArgParser get argParser => _argParser;
   final _argParser = ArgParser(usageLineLength: 40);
 
-  CommandRunnerWithFooterAndWrapping(String executableName, String description)
-      : super(executableName, description);
+  CommandRunnerWithFooterAndWrapping(super.executableName, super.description);
 }
 
 class FooCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'foo';
@@ -76,7 +74,7 @@ class AsyncValueCommand extends Command<String> {
 }
 
 class Category1Command extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'bar';
@@ -97,7 +95,7 @@ class Category1Command extends Command {
 }
 
 class Category2Command extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'baz';
@@ -118,7 +116,7 @@ class Category2Command extends Command {
 }
 
 class Category2Command2 extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'baz2';
@@ -139,7 +137,7 @@ class Category2Command2 extends Command {
 }
 
 class MultilineCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'multiline';
@@ -157,7 +155,7 @@ class MultilineCommand extends Command {
 }
 
 class WrappingCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   ArgParser get argParser => _argParser;
@@ -180,7 +178,7 @@ class WrappingCommand extends Command {
 }
 
 class LongCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   ArgParser get argParser => _argParser;
@@ -190,11 +188,11 @@ class LongCommand extends Command {
   final name = 'long';
 
   @override
-  final description = 'This command has a long description that needs to be '
-          'wrapped sometimes.\nIt has embedded newlines,\n'
-          '     and indented lines that also need to be wrapped and have their '
-          'indentation preserved.\n' +
-      ('0123456789' * 10);
+  final description =
+      'This command has a long description that needs to be wrapped '
+      'sometimes.\nIt has embedded newlines,\n'
+      '     and indented lines that also need to be wrapped and have their '
+      'indentation preserved.\n${'0123456789' * 10}';
 
   @override
   final takesArguments = false;
@@ -211,7 +209,7 @@ class MultilineSummaryCommand extends MultilineCommand {
 }
 
 class HiddenCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'hidden';
@@ -232,7 +230,7 @@ class HiddenCommand extends Command {
 }
 
 class HiddenCategorizedCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'hiddencategorized';
@@ -256,7 +254,7 @@ class HiddenCategorizedCommand extends Command {
 }
 
 class AliasedCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'aliased';
@@ -277,7 +275,7 @@ class AliasedCommand extends Command {
 }
 
 class AsyncCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'async';
@@ -293,7 +291,7 @@ class AsyncCommand extends Command {
 }
 
 class AllowAnythingCommand extends Command {
-  var hasRun = false;
+  bool hasRun = false;
 
   @override
   final name = 'allowAnything';
@@ -320,7 +318,7 @@ class CustomNameCommand extends Command {
   String get description => 'A command with a custom name';
 }
 
-void throwsIllegalArg(function, {String? reason}) {
+void throwsIllegalArg(void Function() function, {String? reason}) {
   expect(function, throwsArgumentError, reason: reason);
 }
 

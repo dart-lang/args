@@ -1,3 +1,7 @@
+## 2.3.2-dev
+
+* Require Dart 2.18
+
 ## 2.3.1
 
 * Switch to using package:lints.
