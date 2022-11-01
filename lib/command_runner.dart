@@ -209,7 +209,13 @@ class CommandRunner<T> {
           'Command "${argResults.name}" does not take any arguments.');
     }
 
-    return (await command.run()) as T?;
+    final result = (await command.run()) as T?;
+
+    // Cleanup command after execution.
+    command._argResults = null;
+    command._globalResults = null;
+
+    return result;
   }
 
   // Returns help text for commands similar to `name`, in sorted order.
@@ -307,13 +313,25 @@ abstract class Command<T> {
   /// The parsed global argument results.
   ///
   /// This will be `null` until just before [Command.run] is called.
-  ArgResults? get globalResults => _globalResults;
+  ArgResults get globalResults {
+    if (_argResults == null) {
+      throw StateError('_globalResults accessed outside of `Command.run`.');
+    }
+    return _globalResults!;
+  }
+
   ArgResults? _globalResults;
 
   /// The parsed argument results for this command.
   ///
   /// This will be `null` until just before [Command.run] is called.
-  ArgResults? get argResults => _argResults;
+  ArgResults get argResults {
+    if (_argResults == null) {
+      throw StateError('argResults accessed outside of `Command.run`.');
+    }
+    return _argResults!;
+  }
+
   ArgResults? _argResults;
 
   /// The argument parser for this command.
