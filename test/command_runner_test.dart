@@ -733,5 +733,5 @@ class _MandatoryOptionCommand extends Command {
   String get name => 'mandatory-option-command';
 
   @override
-  String run() => argResults!['mandatory-option'];
+  String run() => argResults['mandatory-option'];
 }
