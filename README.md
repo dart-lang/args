@@ -377,6 +377,7 @@ class StashCommand extends Command {
 ```
 
 ### Default Help Command
+
 [CommandRunner][] automatically adds a `help` command that displays usage
 information for commands, as well as support for the `--help` flag for all
 commands. If it encounters an error parsing the arguments or processing a
@@ -442,23 +443,6 @@ The resulting string looks something like this:
       [ia32]      Intel x86
 ```
 
-[posix]: https://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap12.html#tag_12_02
-[gnu]: https://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
-[ArgParser]: https://pub.dev/documentation/args/latest/args/ArgParser/ArgParser.html
-[ArgParserException]: https://pub.dev/documentation/args/latest/args/ArgParserException-class.html
-[ArgResults]: https://pub.dev/documentation/args/latest/args/ArgResults-class.html
-[CommandRunner]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner-class.html
-[Command]: https://pub.dev/documentation/args/latest/command_runner/Command-class.html
-[UsageException]: https://pub.dev/documentation/args/latest/command_runner/UsageException-class.html
-[addOption]: https://pub.dev/documentation/args/latest/args/ArgParser/addOption.html
-[addFlag]: https://pub.dev/documentation/args/latest/args/ArgParser/addFlag.html
-[parse]: https://pub.dev/documentation/args/latest/args/ArgParser/parse.html
-[rest]: https://pub.dev/documentation/args/latest/args/ArgResults/rest.html
-[addCommand]: https://pub.dev/documentation/args/latest/args/ArgParser/addCommand.html
-[usage]: https://pub.dev/documentation/args/latest/args/ArgParser/usage.html
-[addSubcommand]: https://pub.dev/documentation/args/latest/command_runner/Command/addSubcommand.html
-[run]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner/run.html
-
 ## Contributions, PRs, and publishing
 
 When contributing to this repo:
@@ -477,3 +461,21 @@ When contributing to this repo:
   a new stable version, a repo maintainer will tag that commit with the pubspec
   version (e.g., `v1.2.3`); that tag event will trigger the `Publish` bot to
   publish a new version of the package to pub.dev
+
+
+[posix]: https://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap12.html#tag_12_02
+[gnu]: https://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
+[ArgParser]: https://pub.dev/documentation/args/latest/args/ArgParser/ArgParser.html
+[ArgParserException]: https://pub.dev/documentation/args/latest/args/ArgParserException-class.html
+[ArgResults]: https://pub.dev/documentation/args/latest/args/ArgResults-class.html
+[CommandRunner]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner-class.html
+[Command]: https://pub.dev/documentation/args/latest/command_runner/Command-class.html
+[UsageException]: https://pub.dev/documentation/args/latest/command_runner/UsageException-class.html
+[addOption]: https://pub.dev/documentation/args/latest/args/ArgParser/addOption.html
+[addFlag]: https://pub.dev/documentation/args/latest/args/ArgParser/addFlag.html
+[parse]: https://pub.dev/documentation/args/latest/args/ArgParser/parse.html
+[rest]: https://pub.dev/documentation/args/latest/args/ArgResults/rest.html
+[addCommand]: https://pub.dev/documentation/args/latest/args/ArgParser/addCommand.html
+[usage]: https://pub.dev/documentation/args/latest/args/ArgParser/usage.html
+[addSubcommand]: https://pub.dev/documentation/args/latest/command_runner/Command/addSubcommand.html
+[run]: https://pub.dev/documentation/args/latest/command_runner/CommandRunner/run.html
