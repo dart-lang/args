@@ -220,10 +220,17 @@ class CommandRunner<T> {
         SplayTreeSet<Command<T>>((a, b) => distances[a]! - distances[b]!);
     for (var command in commands) {
       if (command.hidden) continue;
-      var distance = _editDistance(name, command.name);
-      if (distance <= suggestionDistanceLimit) {
-        distances[command] = distance;
-        candidates.add(command);
+      for (var alias in [
+        command.name,
+        ...command.aliases,
+        ...command.suggestionAliases
+      ]) {
+        var distance = _editDistance(name, alias);
+        if (distance <= suggestionDistanceLimit) {
+          distances[command] =
+              math.min(distances[command] ?? distance, distance);
+          candidates.add(command);
+        }
       }
     }
     if (candidates.isEmpty) return '';
@@ -411,6 +418,17 @@ abstract class Command<T> {
   ///
   /// This is intended to be overridden.
   List<String> get aliases => const [];
+
+  /// Alternate non-functional names for this command.
+  ///
+  /// These names won't be used in the documentation, and also they will work
+  /// when invoked on the command line. But if an unknown command is used it
+  /// will be matched against this when creating suggestions.
+  ///
+  /// A name does not have to be repeated both here and in [aliases].
+  ///
+  /// This is intended to be overridden.
+  List<String> get suggestionAliases => const [];
 
   Command() {
     if (!argParser.allowsAnything) {
