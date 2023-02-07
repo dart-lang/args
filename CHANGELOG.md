@@ -1,4 +1,4 @@
-## 2.4.0-dev
+## 2.4.0
 
 * Command suggestions will now also suggest based on aliases of a command.
 * Introduce getter `Command.suggestionAliases` for names that cannot be used as
