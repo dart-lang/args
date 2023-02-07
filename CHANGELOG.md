@@ -1,3 +1,9 @@
+## 2.4.0
+
+* Command suggestions will now also suggest based on aliases of a command.
+* Introduce getter `Command.suggestionAliases` for names that cannot be used as
+  aliases, but will trigger suggestions.
+
 ## 2.3.2
 
 * Require Dart 2.18
