@@ -421,7 +421,7 @@ abstract class Command<T> {
 
   /// Alternate non-functional names for this command.
   ///
-  /// These names won't be used in the documentation, and also they will work
+  /// These names won't be used in the documentation, and also they won't work
   /// when invoked on the command line. But if an unknown command is used it
   /// will be matched against this when creating suggestions.
   ///
