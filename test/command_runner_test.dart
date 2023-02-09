@@ -481,6 +481,28 @@ Did you mean one of these?
             throwsUsageException(
                 'Could not find a command named "hidde".', anything));
       });
+
+      test('Suggests based on aliases', () {
+        var command = AliasedCommand();
+        runner.addCommand(command);
+        expect(() => runner.run(['rename']), throwsUsageException('''
+Could not find a command named "rename".
+
+Did you mean one of these?
+  aliased
+''', anything));
+      });
+
+      test('Suggests based on suggestedAliases', () {
+        var command = SuggestionAliasedCommand();
+        runner.addCommand(command);
+        expect(() => runner.run(['renamed']), throwsUsageException('''
+Could not find a command named "renamed".
+
+Did you mean one of these?
+  aliased
+''', anything));
+      });
     });
 
     group('with --help', () {

@@ -266,7 +266,28 @@ class AliasedCommand extends Command {
   final takesArguments = false;
 
   @override
-  final aliases = const ['alias', 'als'];
+  final aliases = const ['alias', 'als', 'renamed'];
+
+  @override
+  void run() {
+    hasRun = true;
+  }
+}
+
+class SuggestionAliasedCommand extends Command {
+  bool hasRun = false;
+
+  @override
+  final name = 'aliased';
+
+  @override
+  final description = 'Set a value.';
+
+  @override
+  final takesArguments = false;
+
+  @override
+  final suggestionAliases = const ['renamed'];
 
   @override
   void run() {
