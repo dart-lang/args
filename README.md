@@ -205,7 +205,7 @@ By default, values for a multi-valued option may also be separated with commas:
 
 ```dart
 var parser = ArgParser();
-parser.addOption('mode', allowMultiple: true);
+parser.addMultiOption('mode');
 var results = parser.parse(['--mode', 'on,off']);
 print(results['mode']); // prints '[on, off]'
 ```
