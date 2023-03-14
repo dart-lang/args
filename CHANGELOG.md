@@ -1,3 +1,8 @@
+## 2.4.1-dev
+
+* Add a `CONTRIBUTING.md` file; move the publishing automation docs from the
+  readme into the contributing doc.
+
 ## 2.4.0
 
 * Command suggestions will now also suggest based on aliases of a command.
