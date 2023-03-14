@@ -212,7 +212,7 @@ print(results['mode']); // prints '[on, off]'
 
 This can be disabled by passing `splitCommas: false`.
 
-## Defining commands ##
+## Defining commands
 
 In addition to *options*, you can also define *commands*. A command is a named
 argument that has its own set of options. For example, consider this shell
@@ -295,7 +295,6 @@ e.g.
 File `dgit.dart`
 
 ```dart
-
 void main(List<String> args){
   var runner = CommandRunner("dgit", "A dart implementation of distributed version control.")
     ..addCommand(CommitCommand())
@@ -305,10 +304,7 @@ void main(List<String> args){
 
 When the above `run(args)` line executes it parses the command line args looking for one of the commands (`commit` or `stash`).
 
-
-
 If the [CommandRunner][] finds a matching command then the [CommandRunner][] calls the overridden `run()` method on the matching command (e.g. CommitCommand().run).
-
 
 Commands are defined by extending the [Command][] class. For example:
 
@@ -333,6 +329,7 @@ class CommitCommand extends Command {
   }
 }
 ```
+
 ### CommandRunner Arguments
 The [CommandRunner][] allows you to specify both global args as well as command specific arguments (and even sub-command specific arguments).
 
@@ -340,6 +337,7 @@ The [CommandRunner][] allows you to specify both global args as well as command 
 Add argments directly to the [CommandRunner] to specify global arguments:
 
 Adding global arguments
+
 ```dart
 var runner = CommandRunner('dgit',  "A dart implementation of distributed version control.");
 // add global flag
@@ -350,14 +348,13 @@ runner.argParser.addFlag('verbose', abbr: 'v', help: 'increase logging');
 Add arguments to each [Command][] to specify [Command][] specific arguments.
 
 ```dart
-
   CommitCommand() {
     // we can add command specific arguments here.
     // [argParser] is automatically created by the parent class.
     argParser.addFlag('all', abbr: 'a');
   }
-
 ```
+
 ### SubCommands
 
 Commands can also have subcommands, which are added with [addSubcommand][]. A
@@ -442,11 +439,6 @@ The resulting string looks something like this:
       [arm]       ARM Holding 32-bit chip
       [ia32]      Intel x86
 ```
-
-## Publishing automation
-
-For information about our publishing automation and release process, see
-https://github.com/dart-lang/ecosystem/wiki/Publishing-automation.
 
 [posix]: https://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap12.html#tag_12_02
 [gnu]: https://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
