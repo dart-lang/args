@@ -1,7 +1,8 @@
-## 2.4.1-dev
+## 2.4.1
 
 * Add a `CONTRIBUTING.md` file; move the publishing automation docs from the
   readme into the contributing doc.
+* Added package topics to the pubspec file.
 
 ## 2.4.0
 
