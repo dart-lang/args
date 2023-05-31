@@ -514,14 +514,17 @@ void main() {
         test('throw if no args', () {
           var parser = ArgParser();
           parser.addOption('username', mandatory: true);
-          throwsFormat(parser, []);
+          var results = parser.parse([]);
+          expect(() => results['username'], throwsA(isA<ArgumentError>()));
         });
 
         test('throw if no mandatory args', () {
           var parser = ArgParser();
           parser.addOption('test');
           parser.addOption('username', mandatory: true);
-          throwsFormat(parser, ['--test', 'test']);
+          var results = parser.parse(['--test', 'test']);
+          expect(results['test'], equals('test'));
+          expect(() => results['username'], throwsA(isA<ArgumentError>()));
         });
 
         test('parse successfully', () {
@@ -529,6 +532,15 @@ void main() {
           parser.addOption('test', mandatory: true);
           var results = parser.parse(['--test', 'test']);
           expect(results['test'], equals('test'));
+        });
+
+        test('throws when value retrieved', () {
+          var parser = ArgParser();
+          parser.addFlag('help', abbr: 'h', negatable: false);
+          parser.addOption('test', mandatory: true);
+          var results = parser.parse(['-h']);
+          expect(results['help'], true);
+          expect(() => results['test'], throwsA(isA<ArgumentError>()));
         });
       });
     });

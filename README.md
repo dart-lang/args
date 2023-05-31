@@ -4,8 +4,8 @@
 
 Parses raw command-line arguments into a set of options and values.
 
-This library supports [GNU][] and [POSIX][] style options, and it works
-in both server-side and client-side apps.
+This library supports [GNU][] and [POSIX][] style options, and it works in both
+server-side and client-side apps.
 
 ## Defining options
 
@@ -78,8 +78,8 @@ The callbacks for all options are called whenever a set of arguments is parsed.
 If an option isn't provided in the args, its callback is passed the default
 value, or `null` if no default value is set.
 
-If an option is `mandatory` but not provided, the parser throws an
-[`ArgParserException`][ArgParserException].
+If an option is `mandatory` but not provided, the results object throws an
+[`ArgumentError`][ArgumentError] on retrieval.
 
 ```dart
 parser.addOption('mode', mandatory: true);

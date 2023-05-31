@@ -65,7 +65,12 @@ class ArgResults {
       throw ArgumentError('Could not find an option named "$name".');
     }
 
-    return _parser.options[name]!.valueOrDefault(_parsed[name]);
+    final option = _parser.options[name]!;
+    if (option.mandatory && !_parsed.containsKey(name)) {
+      throw ArgumentError('Option $name is mandatory.');
+    }
+
+    return option.valueOrDefault(_parsed[name]);
   }
 
   /// The names of the available options.
