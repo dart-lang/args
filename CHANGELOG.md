@@ -1,3 +1,9 @@
+## 2.5.0-wip
+
+* Introduce new typed `ArgResults.getFlag`, `ArgResults.getOption`, and
+  `ArgResults.getMultiOption` methods.
+* Deprecate the untyped `ArgResults` `dynamic operator [](String)` method.
+
 ## 2.4.2
 
 * Change the validation of `mandatory` options; they now perform validation when

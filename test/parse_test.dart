@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:args/args.dart';
 import 'package:test/test.dart';
 
@@ -82,6 +84,79 @@ void main() {
           ..addFlag('a', aliases: ['b'], defaultsTo: true, negatable: true);
         var results = parser.parse(['--no-b']);
         expect(results['a'], isFalse);
+      });
+
+      test('throws if requested as a multi-option', () {
+        var parser = ArgParser();
+        parser.addFlag('a', defaultsTo: true);
+        var results = parser.parse(['--a']);
+        throwsIllegalArg(() => results.getMultiOption('a'));
+      });
+    });
+
+    group('getFlag', () {
+      test('are true if present', () {
+        var parser = ArgParser();
+        parser.addFlag('verbose');
+
+        var args = parser.parse(['--verbose']);
+        expect(args.getFlag('verbose'), isTrue);
+      });
+
+      test('default if missing', () {
+        var parser = ArgParser();
+        parser.addFlag('a', defaultsTo: true);
+        parser.addFlag('b', defaultsTo: false);
+
+        var args = parser.parse([]);
+        expect(args.getFlag('a'), isTrue);
+        expect(args.getFlag('b'), isFalse);
+      });
+
+      test('are false if missing with no default', () {
+        var parser = ArgParser();
+        parser.addFlag('verbose');
+
+        var args = parser.parse([]);
+        expect(args.getFlag('verbose'), isFalse);
+      });
+
+      test('are case-sensitive', () {
+        var parser = ArgParser();
+        parser.addFlag('verbose');
+        parser.addFlag('Verbose');
+        var results = parser.parse(['--verbose']);
+        expect(results.getFlag('verbose'), isTrue);
+        expect(results.getFlag('Verbose'), isFalse);
+      });
+
+      test('match letters, numbers, hyphens and underscores', () {
+        var parser = ArgParser();
+        var allCharacters =
+            'abcdefghijklmnopqrstuvwxyz-ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789';
+        parser.addFlag(allCharacters);
+        var results = parser.parse(['--$allCharacters']);
+        expect(results.getFlag(allCharacters), isTrue);
+      });
+
+      test('can match by alias', () {
+        var parser = ArgParser()..addFlag('a', aliases: ['b']);
+        var results = parser.parse(['--b']);
+        expect(results.getFlag('a'), isTrue);
+      });
+
+      test('can be negated by alias', () {
+        var parser = ArgParser()
+          ..addFlag('a', aliases: ['b'], defaultsTo: true, negatable: true);
+        var results = parser.parse(['--no-b']);
+        expect(results.getFlag('a'), isFalse);
+      });
+
+      test('throws if requested as a multi-option', () {
+        var parser = ArgParser();
+        parser.addFlag('a', defaultsTo: true);
+        var results = parser.parse(['--a']);
+        throwsIllegalArg(() => results.getMultiOption('a'));
       });
     });
 
@@ -475,6 +550,13 @@ void main() {
         expect(args['define'], equals('2'));
       });
 
+      test('throws if requested as a multi-option', () {
+        var parser = ArgParser();
+        parser.addOption('a', defaultsTo: 'b');
+        var results = parser.parse(['--a=c']);
+        throwsIllegalArg(() => results.getMultiOption('a'));
+      });
+
       group('returns a List', () {
         test('with addMultiOption', () {
           var parser = ArgParser();
@@ -541,6 +623,111 @@ void main() {
           var results = parser.parse(['-h']);
           expect(results['help'], true);
           expect(() => results['test'], throwsA(isA<ArgumentError>()));
+        });
+      });
+    });
+
+    group('getOption', () {
+      test('are parsed if present', () {
+        var parser = ArgParser();
+        parser.addOption('mode');
+        var args = parser.parse(['--mode=release']);
+        expect(args.getOption('mode'), equals('release'));
+      });
+
+      test('are null if not present', () {
+        var parser = ArgParser();
+        parser.addOption('mode');
+        var args = parser.parse([]);
+        expect(args.getOption('mode'), isNull);
+      });
+
+      test('default if missing', () {
+        var parser = ArgParser();
+        parser.addOption('mode', defaultsTo: 'debug');
+        var args = parser.parse([]);
+        expect(args.getOption('mode'), equals('debug'));
+      });
+
+      test('allow the value to be separated by whitespace', () {
+        var parser = ArgParser();
+        parser.addOption('mode');
+        var args = parser.parse(['--mode', 'release']);
+        expect(args.getOption('mode'), equals('release'));
+      });
+
+      test('do not throw if the value is in the allowed set', () {
+        var parser = ArgParser();
+        parser.addOption('mode', allowed: ['debug', 'release']);
+        var args = parser.parse(['--mode=debug']);
+        expect(args.getOption('mode'), equals('debug'));
+      });
+
+      test('do not throw if there is no allowed set with allowedHelp', () {
+        var parser = ArgParser();
+        parser.addOption('mode', allowedHelp: {
+          'debug': 'During development.',
+          'release': 'For customers.'
+        });
+        var args = parser.parse(['--mode=profile']);
+        expect(args.getOption('mode'), equals('profile'));
+      });
+
+      test('returns last provided value', () {
+        var parser = ArgParser();
+        parser.addOption('define');
+        var args = parser.parse(['--define=1', '--define=2']);
+        expect(args.getOption('define'), equals('2'));
+      });
+
+      test('throws if requested as a multi-option', () {
+        var parser = ArgParser();
+        parser.addOption('a', defaultsTo: 'b');
+        var results = parser.parse(['--a=c']);
+        throwsIllegalArg(() => results.getMultiOption('a'));
+      });
+
+      group('returns a List', () {
+        test('with addMultiOption', () {
+          var parser = ArgParser();
+          parser.addMultiOption('define');
+          var args = parser.parse(['--define=1']);
+          expect(args.getMultiOption('define'), equals(['1']));
+          args = parser.parse(['--define=1', '--define=2']);
+          expect(args.getMultiOption('define'), equals(['1', '2']));
+        });
+      });
+
+      group('returns the default value if not explicitly set', () {
+        test('with addMultiOption', () {
+          var parser = ArgParser();
+          parser.addMultiOption('define', defaultsTo: ['0']);
+          var args = parser.parse(['']);
+          expect(args.getMultiOption('define'), equals(['0']));
+        });
+      });
+
+      test('are case-sensitive', () {
+        var parser = ArgParser();
+        parser.addOption('verbose', defaultsTo: 'no');
+        parser.addOption('Verbose', defaultsTo: 'no');
+        var results = parser.parse(['--verbose', 'chatty']);
+        expect(results.getOption('verbose'), equals('chatty'));
+        expect(results.getOption('Verbose'), equals('no'));
+      });
+
+      test('can be set by alias', () {
+        var parser = ArgParser()..addOption('a', aliases: ['b']);
+        var results = parser.parse(['--b=1']);
+        expect(results.getOption('a'), '1');
+      });
+
+      group('mandatory', () {
+        test('parse successfully', () {
+          var parser = ArgParser();
+          parser.addOption('test', mandatory: true);
+          var results = parser.parse(['--test', 'test']);
+          expect(results.getOption('test'), equals('test'));
         });
       });
     });

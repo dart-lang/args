@@ -111,8 +111,8 @@ parser.addOption('mode');
 parser.addFlag('verbose', defaultsTo: true);
 var results = parser.parse(['--mode', 'debug', 'something', 'else']);
 
-print(results['mode']); // debug
-print(results['verbose']); // true
+print(results.getOption('mode')); // debug
+print(results.getFlag('verbose')); // true
 ```
 
 By default, the `parse()` method allows additional flags and options to be
@@ -187,7 +187,7 @@ overriding earlier ones; for example:
 var parser = ArgParser();
 parser.addOption('mode');
 var results = parser.parse(['--mode', 'on', '--mode', 'off']);
-print(results['mode']); // prints 'off'
+print(results.getOption('mode')); // prints 'off'
 ```
 
 Multiple values can be parsed with `addMultiOption()`. With this method, an
@@ -198,7 +198,7 @@ values:
 var parser = ArgParser();
 parser.addMultiOption('mode');
 var results = parser.parse(['--mode', 'on', '--mode', 'off']);
-print(results['mode']); // prints '[on, off]'
+print(results.getMultiOption('mode')); // prints '[on, off]'
 ```
 
 By default, values for a multi-valued option may also be separated with commas:
@@ -207,7 +207,7 @@ By default, values for a multi-valued option may also be separated with commas:
 var parser = ArgParser();
 parser.addMultiOption('mode');
 var results = parser.parse(['--mode', 'on,off']);
-print(results['mode']); // prints '[on, off]'
+print(results.getMultiOption('mode')); // prints '[on, off]'
 ```
 
 This can be disabled by passing `splitCommas: false`.
@@ -325,7 +325,7 @@ class CommitCommand extends Command {
   void run() {
     // [argResults] is set before [run()] is called and contains the flags/options
     // passed to this command.
-    print(argResults['all']);
+    print(argResults.getFlag('all'));
   }
 }
 ```

@@ -21,7 +21,7 @@ ArgResults newArgResults(
 }
 
 /// The results of parsing a series of command line arguments using
-/// [ArgParser.parse()].
+/// [ArgParser.parse].
 ///
 /// Includes the parsed options and any remaining unparsed command line
 /// arguments.
@@ -57,9 +57,10 @@ class ArgResults {
       : rest = UnmodifiableListView(rest),
         arguments = UnmodifiableListView(arguments);
 
-  /// Returns the parsed ore default command-line option named [name].
+  /// Returns the parsed or default command-line option named [name].
   ///
   /// [name] must be a valid option name in the parser.
+  @Deprecated('Prefer the getFlag, getOption, and getMultiOption methods')
   dynamic operator [](String name) {
     if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');
@@ -73,11 +74,56 @@ class ArgResults {
     return option.valueOrDefault(_parsed[name]);
   }
 
+  /// Returns the parsed or default command-line flag named [name].
+  ///
+  /// [name] must be a valid flag name in the parser.
+  bool getFlag(String name) {
+    if (!_parser.options.containsKey(name)) {
+      throw ArgumentError('Could not find an option named "$name".');
+    }
+
+    var option = _parser.options[name]!;
+    if (!option.isFlag) {
+      throw ArgumentError('"$name" is not a flag.');
+    }
+    return option.valueOrDefault(_parsed[name]) as bool;
+  }
+
+  /// Returns the parsed or default command-line option named [name].
+  ///
+  /// [name] must be a valid option name in the parser.
+  String? getOption(String name) {
+    if (!_parser.options.containsKey(name)) {
+      throw ArgumentError('Could not find an option named "$name".');
+    }
+
+    var option = _parser.options[name]!;
+    if (!option.isSingle) {
+      throw ArgumentError('"$name" is not an option.');
+    }
+    return option.valueOrDefault(_parsed[name]) as String?;
+  }
+
+  /// Returns the list of parsed (or default) command-line options for [name].
+  ///
+  /// [name] must be a valid option name in the parser.
+  List<String> getMultiOption(String name) {
+    if (!_parser.options.containsKey(name)) {
+      throw ArgumentError('Could not find an option named "$name".');
+    }
+
+    var option = _parser.options[name]!;
+    if (!option.isMultiple) {
+      throw ArgumentError('"$name" is not a multi-option.');
+    }
+    return option.valueOrDefault(_parsed[name]) as List<String>;
+  }
+
   /// The names of the available options.
   ///
   /// Includes the options whose values were parsed or that have defaults.
   /// Options that weren't present and have no default are omitted.
-  Iterable<String> get options {
+  List<String> get options {
     var result = _parsed.keys.toSet();
 
     // Include the options that have defaults.
@@ -85,7 +131,7 @@ class ArgResults {
       if (option.defaultsTo != null) result.add(name);
     });
 
-    return result;
+    return result.toList();
   }
 
   /// Returns `true` if the option with [name] was parsed from an actual
