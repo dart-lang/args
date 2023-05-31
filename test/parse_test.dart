@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:args/args.dart';
 import 'package:test/test.dart';
 
@@ -90,7 +88,7 @@ void main() {
         var parser = ArgParser();
         parser.addFlag('a', defaultsTo: true);
         var results = parser.parse(['--a']);
-        throwsIllegalArg(() => results.getMultiOption('a'));
+        throwsIllegalArg(() => results.multiOption('a'));
       });
     });
 
@@ -100,7 +98,7 @@ void main() {
         parser.addFlag('verbose');
 
         var args = parser.parse(['--verbose']);
-        expect(args.getFlag('verbose'), isTrue);
+        expect(args.flag('verbose'), isTrue);
       });
 
       test('default if missing', () {
@@ -109,8 +107,8 @@ void main() {
         parser.addFlag('b', defaultsTo: false);
 
         var args = parser.parse([]);
-        expect(args.getFlag('a'), isTrue);
-        expect(args.getFlag('b'), isFalse);
+        expect(args.flag('a'), isTrue);
+        expect(args.flag('b'), isFalse);
       });
 
       test('are false if missing with no default', () {
@@ -118,7 +116,7 @@ void main() {
         parser.addFlag('verbose');
 
         var args = parser.parse([]);
-        expect(args.getFlag('verbose'), isFalse);
+        expect(args.flag('verbose'), isFalse);
       });
 
       test('are case-sensitive', () {
@@ -126,8 +124,8 @@ void main() {
         parser.addFlag('verbose');
         parser.addFlag('Verbose');
         var results = parser.parse(['--verbose']);
-        expect(results.getFlag('verbose'), isTrue);
-        expect(results.getFlag('Verbose'), isFalse);
+        expect(results.flag('verbose'), isTrue);
+        expect(results.flag('Verbose'), isFalse);
       });
 
       test('match letters, numbers, hyphens and underscores', () {
@@ -136,27 +134,27 @@ void main() {
             'abcdefghijklmnopqrstuvwxyz-ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789';
         parser.addFlag(allCharacters);
         var results = parser.parse(['--$allCharacters']);
-        expect(results.getFlag(allCharacters), isTrue);
+        expect(results.flag(allCharacters), isTrue);
       });
 
       test('can match by alias', () {
         var parser = ArgParser()..addFlag('a', aliases: ['b']);
         var results = parser.parse(['--b']);
-        expect(results.getFlag('a'), isTrue);
+        expect(results.flag('a'), isTrue);
       });
 
       test('can be negated by alias', () {
         var parser = ArgParser()
           ..addFlag('a', aliases: ['b'], defaultsTo: true, negatable: true);
         var results = parser.parse(['--no-b']);
-        expect(results.getFlag('a'), isFalse);
+        expect(results.flag('a'), isFalse);
       });
 
       test('throws if requested as a multi-option', () {
         var parser = ArgParser();
         parser.addFlag('a', defaultsTo: true);
         var results = parser.parse(['--a']);
-        throwsIllegalArg(() => results.getMultiOption('a'));
+        throwsIllegalArg(() => results.multiOption('a'));
       });
     });
 
@@ -554,7 +552,7 @@ void main() {
         var parser = ArgParser();
         parser.addOption('a', defaultsTo: 'b');
         var results = parser.parse(['--a=c']);
-        throwsIllegalArg(() => results.getMultiOption('a'));
+        throwsIllegalArg(() => results.multiOption('a'));
       });
 
       group('returns a List', () {
@@ -632,35 +630,35 @@ void main() {
         var parser = ArgParser();
         parser.addOption('mode');
         var args = parser.parse(['--mode=release']);
-        expect(args.getOption('mode'), equals('release'));
+        expect(args.option('mode'), equals('release'));
       });
 
       test('are null if not present', () {
         var parser = ArgParser();
         parser.addOption('mode');
         var args = parser.parse([]);
-        expect(args.getOption('mode'), isNull);
+        expect(args.option('mode'), isNull);
       });
 
       test('default if missing', () {
         var parser = ArgParser();
         parser.addOption('mode', defaultsTo: 'debug');
         var args = parser.parse([]);
-        expect(args.getOption('mode'), equals('debug'));
+        expect(args.option('mode'), equals('debug'));
       });
 
       test('allow the value to be separated by whitespace', () {
         var parser = ArgParser();
         parser.addOption('mode');
         var args = parser.parse(['--mode', 'release']);
-        expect(args.getOption('mode'), equals('release'));
+        expect(args.option('mode'), equals('release'));
       });
 
       test('do not throw if the value is in the allowed set', () {
         var parser = ArgParser();
         parser.addOption('mode', allowed: ['debug', 'release']);
         var args = parser.parse(['--mode=debug']);
-        expect(args.getOption('mode'), equals('debug'));
+        expect(args.option('mode'), equals('debug'));
       });
 
       test('do not throw if there is no allowed set with allowedHelp', () {
@@ -670,21 +668,21 @@ void main() {
           'release': 'For customers.'
         });
         var args = parser.parse(['--mode=profile']);
-        expect(args.getOption('mode'), equals('profile'));
+        expect(args.option('mode'), equals('profile'));
       });
 
       test('returns last provided value', () {
         var parser = ArgParser();
         parser.addOption('define');
         var args = parser.parse(['--define=1', '--define=2']);
-        expect(args.getOption('define'), equals('2'));
+        expect(args.option('define'), equals('2'));
       });
 
       test('throws if requested as a multi-option', () {
         var parser = ArgParser();
         parser.addOption('a', defaultsTo: 'b');
         var results = parser.parse(['--a=c']);
-        throwsIllegalArg(() => results.getMultiOption('a'));
+        throwsIllegalArg(() => results.multiOption('a'));
       });
 
       group('returns a List', () {
@@ -692,9 +690,9 @@ void main() {
           var parser = ArgParser();
           parser.addMultiOption('define');
           var args = parser.parse(['--define=1']);
-          expect(args.getMultiOption('define'), equals(['1']));
+          expect(args.multiOption('define'), equals(['1']));
           args = parser.parse(['--define=1', '--define=2']);
-          expect(args.getMultiOption('define'), equals(['1', '2']));
+          expect(args.multiOption('define'), equals(['1', '2']));
         });
       });
 
@@ -703,7 +701,7 @@ void main() {
           var parser = ArgParser();
           parser.addMultiOption('define', defaultsTo: ['0']);
           var args = parser.parse(['']);
-          expect(args.getMultiOption('define'), equals(['0']));
+          expect(args.multiOption('define'), equals(['0']));
         });
       });
 
@@ -712,14 +710,14 @@ void main() {
         parser.addOption('verbose', defaultsTo: 'no');
         parser.addOption('Verbose', defaultsTo: 'no');
         var results = parser.parse(['--verbose', 'chatty']);
-        expect(results.getOption('verbose'), equals('chatty'));
-        expect(results.getOption('Verbose'), equals('no'));
+        expect(results.option('verbose'), equals('chatty'));
+        expect(results.option('Verbose'), equals('no'));
       });
 
       test('can be set by alias', () {
         var parser = ArgParser()..addOption('a', aliases: ['b']);
         var results = parser.parse(['--b=1']);
-        expect(results.getOption('a'), '1');
+        expect(results.option('a'), '1');
       });
 
       group('mandatory', () {
@@ -727,7 +725,7 @@ void main() {
           var parser = ArgParser();
           parser.addOption('test', mandatory: true);
           var results = parser.parse(['--test', 'test']);
-          expect(results.getOption('test'), equals('test'));
+          expect(results.option('test'), equals('test'));
         });
       });
     });

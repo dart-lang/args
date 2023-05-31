@@ -2,7 +2,6 @@
 
 * Introduce new typed `ArgResults.getFlag`, `ArgResults.getOption`, and
   `ArgResults.getMultiOption` methods.
-* Deprecate the untyped `ArgResults` `dynamic operator [](String)` method.
 
 ## 2.4.2
 

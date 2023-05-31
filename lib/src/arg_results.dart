@@ -60,7 +60,6 @@ class ArgResults {
   /// Returns the parsed or default command-line option named [name].
   ///
   /// [name] must be a valid option name in the parser.
-  @Deprecated('Prefer the getFlag, getOption, and getMultiOption methods')
   dynamic operator [](String name) {
     if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');
@@ -77,7 +76,7 @@ class ArgResults {
   /// Returns the parsed or default command-line flag named [name].
   ///
   /// [name] must be a valid flag name in the parser.
-  bool getFlag(String name) {
+  bool flag(String name) {
     if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');
     }
@@ -92,7 +91,7 @@ class ArgResults {
   /// Returns the parsed or default command-line option named [name].
   ///
   /// [name] must be a valid option name in the parser.
-  String? getOption(String name) {
+  String? option(String name) {
     if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');
     }
@@ -107,7 +106,7 @@ class ArgResults {
   /// Returns the list of parsed (or default) command-line options for [name].
   ///
   /// [name] must be a valid option name in the parser.
-  List<String> getMultiOption(String name) {
+  List<String> multiOption(String name) {
     if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');
     }
