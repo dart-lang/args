@@ -3,6 +3,7 @@
 * Change the validation of `mandatory` options; they now perform validation when
   the value is retrieved (from the `ArgResults` object), instead of when the
   args are parsed.
+* Require Dart 2.19.
 
 ## 2.4.1
 
