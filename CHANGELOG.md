@@ -1,7 +1,7 @@
 ## 2.4.2
 
 * Change the validation of `mandatory` options; they now perform validation when
-  the value is retreived (from the `ArgResults` object), instead of when the
+  the value is retrieved (from the `ArgResults` object), instead of when the
   args are parsed.
 
 ## 2.4.1
