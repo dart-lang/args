@@ -736,7 +736,7 @@ Run "test help" to see global options.'''));
     runner.addCommand(subcommand);
     expect(
         () => runner.run([subcommand.name]),
-        throwsA(isA<UsageException>().having((e) => e.message, 'message',
+        throwsA(isA<ArgumentError>().having((e) => e.message, 'message',
             contains('Option mandatory-option is mandatory'))));
     expect(await runner.run([subcommand.name, '--mandatory-option', 'foo']),
         'foo');
