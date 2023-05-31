@@ -192,13 +192,13 @@ class CommandRunner<T> {
       commands = command._subcommands as Map<String, Command<T>>;
       commandString += ' ${argResults.name}';
 
-      if (argResults.options.contains('help') && argResults['help']) {
+      if (argResults.options.contains('help') && (argResults['help'] as bool)) {
         command.printUsage();
         return null;
       }
     }
 
-    if (topLevelResults['help']) {
+    if (topLevelResults['help'] as bool) {
       command!.printUsage();
       return null;
     }
