@@ -122,7 +122,7 @@ class ArgResults {
   ///
   /// Includes the options whose values were parsed or that have defaults.
   /// Options that weren't present and have no default are omitted.
-  List<String> get options {
+  Iterable<String> get options {
     var result = _parsed.keys.toSet();
 
     // Include the options that have defaults.
@@ -130,7 +130,7 @@ class ArgResults {
       if (option.defaultsTo != null) result.add(name);
     });
 
-    return result.toList();
+    return result;
   }
 
   /// Returns `true` if the option with [name] was parsed from an actual

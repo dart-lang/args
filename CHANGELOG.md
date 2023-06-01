@@ -1,7 +1,7 @@
 ## 2.5.0-wip
 
-* Introduce new typed `ArgResults.getFlag`, `ArgResults.getOption`, and
-  `ArgResults.getMultiOption` methods.
+* Introduce new typed `ArgResults` `flag(String)`, `option(String)`, and
+  `multiOption(String)` methods.
 
 ## 2.4.2
 

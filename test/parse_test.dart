@@ -92,7 +92,7 @@ void main() {
       });
     });
 
-    group('getFlag', () {
+    group('flag', () {
       test('are true if present', () {
         var parser = ArgParser();
         parser.addFlag('verbose');
@@ -625,7 +625,7 @@ void main() {
       });
     });
 
-    group('getOption', () {
+    group('option', () {
       test('are parsed if present', () {
         var parser = ArgParser();
         parser.addOption('mode');
