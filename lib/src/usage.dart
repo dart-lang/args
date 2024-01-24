@@ -120,16 +120,22 @@ class _Usage {
       option.abbr == null ? '' : '-${option.abbr}, ';
 
   String _longOption(Option option) {
-    String result;
-    if (option.negatable!) {
-      result = '--[no-]${option.name}';
-    } else {
-      result = '--${option.name}';
+    final result = StringBuffer();
+    String separator() {
+      return result.isEmpty ? '' : ',';
     }
 
-    if (option.valueHelp != null) result += '=<${option.valueHelp}>';
+    for (final name in [option.name, ...option.aliases]) {
+      if (option.negatable!) {
+        result.write('${separator()}--[no-]$name');
+      } else {
+        result.write('${separator()}--$name');
+      }
+    }
 
-    return result;
+    if (option.valueHelp != null) result.write('=<${option.valueHelp}>');
+
+    return result.toString();
   }
 
   String _mandatoryOption(Option option) {
