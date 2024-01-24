@@ -1,3 +1,7 @@
+## 2.4.3
+
+* Show alias(es) in usage
+
 ## 2.4.2
 
 * Change the validation of `mandatory` options; they now perform validation when
