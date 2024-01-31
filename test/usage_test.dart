@@ -87,8 +87,24 @@ void main() {
           ''');
     });
 
-    test('verify that aliases are shown for options', () {
+    test('verify that aliases are not shown for options by default', () {
       var parser = ArgParser();
+      parser.addOption('feed',
+          aliases: ['food', 'foodstuff'], help: 'Preferred food');
+      parser.addFlag('zebra', help: 'First');
+      parser.addFlag('monkey', help: 'Second', aliases: ['primate']);
+      parser.addFlag('wombat', help: 'Third');
+
+      validateUsage(parser, '''
+          --feed           Preferred food
+          --[no-]zebra     First
+          --[no-]monkey    Second
+          --[no-]wombat    Third
+          ''');
+    });
+
+    test('verify that aliases shown for options if requested', () {
+      var parser = ArgParser(showAliasesInUsage: true);
       parser.addOption('feed',
           aliases: ['food', 'foodstuff'], help: 'Preferred food');
       parser.addFlag('zebra', help: 'First');

@@ -21,6 +21,8 @@ class AllowAnythingParser implements ArgParser {
   bool get allowsAnything => true;
   @override
   int? get usageLineLength => null;
+  @override
+  bool get showAliasesInUsage => false;
 
   @override
   ArgParser addCommand(String name, [ArgParser? parser]) {
