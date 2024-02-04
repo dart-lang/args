@@ -22,8 +22,11 @@ import 'utils.dart';
 /// text is wrapped. Help that extends past this column will be wrapped at the
 /// nearest whitespace (or truncated if there is no available whitespace). If
 /// `null` there will not be any wrapping.
-String generateUsage(List optionsAndSeparators, {int? lineLength}) =>
-    _Usage(optionsAndSeparators, lineLength).generate();
+///
+/// [showAliases] specifies whether or not to show option aliases
+String generateUsage(List optionsAndSeparators,
+        {int? lineLength, bool showAliases = false}) =>
+    _Usage(optionsAndSeparators, lineLength, showAliases).generate();
 
 class _Usage {
   /// Abbreviation, long name, help.
@@ -58,7 +61,10 @@ class _Usage {
   /// whitespace (or truncated if there is no available whitespace).
   final int? lineLength;
 
-  _Usage(this._optionsAndSeparators, this.lineLength);
+  /// Whether or not to show option aliases
+  final bool showAliases;
+
+  _Usage(this._optionsAndSeparators, this.lineLength, this.showAliases);
 
   /// Generates a string displaying usage information for the defined options.
   /// This is basically the help text shown on the command line.
@@ -120,16 +126,24 @@ class _Usage {
       option.abbr == null ? '' : '-${option.abbr}, ';
 
   String _longOption(Option option) {
-    String result;
-    if (option.negatable!) {
-      result = '--[no-]${option.name}';
-    } else {
-      result = '--${option.name}';
+    final result = StringBuffer();
+    String separator() => result.isEmpty ? '' : ',';
+
+    final names = <String>[option.name];
+    if (showAliases) {
+      names.addAll(option.aliases);
+    }
+    for (final name in names) {
+      if (option.negatable!) {
+        result.write('${separator()}--[no-]$name');
+      } else {
+        result.write('${separator()}--$name');
+      }
     }
 
-    if (option.valueHelp != null) result += '=<${option.valueHelp}>';
+    if (option.valueHelp != null) result.write('=<${option.valueHelp}>');
 
-    return result;
+    return result.toString();
   }
 
   String _mandatoryOption(Option option) {

@@ -49,16 +49,26 @@ class ArgParser {
   /// arguments.
   bool get allowsAnything => false;
 
+  /// Whether or not this parser's [usage] will show option aliases
+  final bool showAliasesInUsage;
+
   /// Creates a new ArgParser.
   ///
   /// If [allowTrailingOptions] is `true` (the default), the parser will parse
   /// flags and options that appear after positional arguments. If it's `false`,
   /// the parser stops parsing as soon as it finds an argument that is neither
   /// an option nor a command.
-  factory ArgParser({bool allowTrailingOptions = true, int? usageLineLength}) =>
+  ///
+  /// If [showAliasesInUsage] is `true` (default is `false`), the parser's
+  /// usage will show option aliases
+  factory ArgParser(
+          {bool allowTrailingOptions = true,
+          int? usageLineLength,
+          bool showAliasesInUsage = false}) =>
       ArgParser._(<String, Option>{}, <String, ArgParser>{}, <String, String>{},
           allowTrailingOptions: allowTrailingOptions,
-          usageLineLength: usageLineLength);
+          usageLineLength: usageLineLength,
+          showAliasesInUsage: showAliasesInUsage);
 
   /// Creates a new ArgParser that treats *all input* as non-option arguments.
   ///
@@ -70,7 +80,9 @@ class ArgParser {
 
   ArgParser._(Map<String, Option> options, Map<String, ArgParser> commands,
       this._aliases,
-      {this.allowTrailingOptions = true, this.usageLineLength})
+      {this.allowTrailingOptions = true,
+      this.usageLineLength,
+      this.showAliasesInUsage = false})
       : _options = options,
         options = UnmodifiableMapView(options),
         _commands = commands,
@@ -337,7 +349,8 @@ class ArgParser {
   ///
   /// This is basically the help text shown on the command line.
   String get usage {
-    return generateUsage(_optionsAndSeparators, lineLength: usageLineLength);
+    return generateUsage(_optionsAndSeparators,
+        lineLength: usageLineLength, showAliases: showAliasesInUsage);
   }
 
   /// Returns the default value for [option].
