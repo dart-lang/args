@@ -295,11 +295,12 @@ e.g.
 File `dgit.dart`
 
 ```dart
-void main(List<String> args){
+void main(List<String> args) {
   var runner = CommandRunner("dgit", "A dart implementation of distributed version control.")
     ..addCommand(CommitCommand())
     ..addCommand(StashCommand())
-    ..run(args); 
+    ..run(args);
+}
 ```
 
 When the above `run(args)` line executes it parses the command line args looking for one of the commands (`commit` or `stash`).
