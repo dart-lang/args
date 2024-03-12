@@ -33,7 +33,7 @@ class SquareCommand extends Command<String> {
 
   @override
   FutureOr<String>? run() {
-    final size = int.parse(argResults!.option('size') ?? '20');
+    final size = int.parse(argResults?.option('size') ?? '20');
     final char = globalResults?.option('char')?[0] ?? '#';
     return draw(size, size, char, (x, y) => true);
   }
@@ -55,7 +55,7 @@ class CircleCommand extends Command<String> {
 
   @override
   FutureOr<String>? run() {
-    final size = 2 * int.parse(argResults!.option('radius') ?? '10');
+    final size = 2 * int.parse(argResults?.option('radius') ?? '10');
     final char = globalResults?.option('char')?[0] ?? '#';
     return draw(size, size, char, (x, y) => x * x + y * y < 1);
   }
@@ -93,7 +93,7 @@ class EquilateralTriangleCommand extends Command<String> {
 
   @override
   FutureOr<String>? run() {
-    final size = int.parse(argResults!.option('size') ?? '20');
+    final size = int.parse(argResults?.option('size') ?? '20');
     final char = globalResults?.option('char')?[0] ?? '#';
     return drawTriangle(size, size * sqrt(3) ~/ 2, char);
   }
@@ -116,7 +116,7 @@ class IsoscelesTriangleCommand extends Command<String> {
 
   @override
   FutureOr<String>? run() {
-    final width = int.parse(argResults!.option('width') ?? '50');
+    final width = int.parse(argResults?.option('width') ?? '50');
     final height = int.parse(argResults!.option('height') ?? '10');
     final char = globalResults?.option('char')?[0] ?? '#';
     return drawTriangle(width, height, char);
