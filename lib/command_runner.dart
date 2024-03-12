@@ -320,7 +320,7 @@ abstract class Command<T> {
   /// The parsed argument results for this command.
   ///
   /// This will be `null` until just before [Command.run] is called.
-  ArgResults get argResults => _argResults!;
+  ArgResults? get argResults => _argResults;
   ArgResults? _argResults;
 
   /// The argument parser for this command.

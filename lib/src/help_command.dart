@@ -24,7 +24,7 @@ class HelpCommand<T> extends Command<T> {
   @override
   Null run() {
     // Show the default help if no command was specified.
-    if (argResults.rest.isEmpty) {
+    if (argResults!.rest.isEmpty) {
       runner!.printUsage();
       return;
     }
@@ -35,7 +35,7 @@ class HelpCommand<T> extends Command<T> {
     Command<T>? command;
     var commandString = runner!.executableName;
 
-    for (var name in argResults.rest) {
+    for (var name in argResults!.rest) {
       if (commands.isEmpty) {
         command!.usageException(
             'Command "$commandString" does not expect a subcommand.');
