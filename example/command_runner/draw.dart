@@ -117,7 +117,7 @@ class IsoscelesTriangleCommand extends Command<String> {
   @override
   FutureOr<String>? run() {
     final width = int.parse(argResults?.option('width') ?? '50');
-    final height = int.parse(argResults!.option('height') ?? '10');
+    final height = int.parse(argResults?.option('height') ?? '10');
     final char = globalResults?.option('char')?[0] ?? '#';
     return drawTriangle(width, height, char);
   }
