@@ -60,6 +60,10 @@ class ArgResults {
   /// Returns the parsed or default command-line option named [name].
   ///
   /// [name] must be a valid option name in the parser.
+  ///
+  /// > [!Note]
+  /// > Callers should prefer using the most strongly typed methods - [flag] for
+  /// > flags, [option] for options, and [multiOption] for multi-options.
   dynamic operator [](String name) {
     if (!_parser.options.containsKey(name)) {
       throw ArgumentError('Could not find an option named "$name".');

@@ -92,8 +92,8 @@ void main() {
       });
     });
 
-    group('flag', () {
-      test('are true if present', () {
+    group('flag()', () {
+      test('returns true if present', () {
         var parser = ArgParser();
         parser.addFlag('verbose');
 
@@ -101,7 +101,7 @@ void main() {
         expect(args.flag('verbose'), isTrue);
       });
 
-      test('default if missing', () {
+      test('returns default if missing', () {
         var parser = ArgParser();
         parser.addFlag('a', defaultsTo: true);
         parser.addFlag('b', defaultsTo: false);
@@ -548,7 +548,7 @@ void main() {
         expect(args['define'], equals('2'));
       });
 
-      test('throws if requested as a multi-option', () {
+      test('throw if requested as a multi-option', () {
         var parser = ArgParser();
         parser.addOption('a', defaultsTo: 'b');
         var results = parser.parse(['--a=c']);
@@ -625,7 +625,7 @@ void main() {
       });
     });
 
-    group('option', () {
+    group('option()', () {
       test('are parsed if present', () {
         var parser = ArgParser();
         parser.addOption('mode');
@@ -678,7 +678,7 @@ void main() {
         expect(args.option('define'), equals('2'));
       });
 
-      test('throws if requested as a multi-option', () {
+      test('throw if requested as a multi-option', () {
         var parser = ArgParser();
         parser.addOption('a', defaultsTo: 'b');
         var results = parser.parse(['--a=c']);
