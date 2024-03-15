@@ -1,3 +1,8 @@
+## 2.5.0-wip
+
+* Introduce new typed `ArgResults` `flag(String)`, `option(String)`, and
+  `multiOption(String)` methods.
+
 ## 2.4.2
 
 * Change the validation of `mandatory` options; they now perform validation when
