@@ -62,7 +62,7 @@ class ArgResults {
   /// [name] must be a valid option name in the parser.
   ///
   /// > [!Note]
-  /// > Callers should prefer using the most strongly typed methods - [flag] for
+  /// > Callers should prefer using the more strongly typed methods - [flag] for
   /// > flags, [option] for options, and [multiOption] for multi-options.
   dynamic operator [](String name) {
     if (!_parser.options.containsKey(name)) {
