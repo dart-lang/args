@@ -1,7 +1,8 @@
-## 2.5.0-wip
+## 2.5.0
 
 * Introduce new typed `ArgResults` `flag(String)`, `option(String)`, and
   `multiOption(String)` methods.
+* Require Dart 3.0.
 
 ## 2.4.2
 
