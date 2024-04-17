@@ -260,7 +260,7 @@ void main() {
 
           // This reified type is important in strong mode so that people can
           // safely write "as List<String>".
-          expect(a, TypeMatcher<List<String>>());
+          expect(a, isA<List<String>>());
         });
 
         test(

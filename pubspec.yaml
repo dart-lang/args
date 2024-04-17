@@ -1,5 +1,5 @@
 name: args
-version: 2.5.0
+version: 2.5.1-wip
 description: >-
   Library for defining parsers for parsing raw command-line arguments into a set
   of options and values using GNU and POSIX style options.
@@ -9,8 +9,8 @@ topics:
   - cli
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.3.0
 
 dev_dependencies:
-  dart_flutter_team_lints: ^1.0.0
+  dart_flutter_team_lints: ^2.0.0
   test: ^1.16.0

@@ -27,7 +27,7 @@ class ArgParser {
 
   /// A list of the [Option]s in [options] intermingled with [String]
   /// separators.
-  final _optionsAndSeparators = [];
+  final _optionsAndSeparators = <Object>[];
 
   /// Whether or not this parser parses options that appear after non-option
   /// arguments.
@@ -142,7 +142,7 @@ class ArgParser {
         null,
         null,
         defaultsTo,
-        callback == null ? null : (value) => callback(value as bool),
+        callback == null ? null : (bool value) => callback(value),
         OptionType.flag,
         negatable: negatable,
         hide: hide,
@@ -264,7 +264,7 @@ class ArgParser {
         allowed,
         allowedHelp,
         defaultsTo?.toList() ?? <String>[],
-        callback == null ? null : (value) => callback(value as List<String>),
+        callback == null ? null : (List<String> value) => callback(value),
         OptionType.multiple,
         splitCommas: splitCommas,
         hide: hide,
@@ -278,7 +278,7 @@ class ArgParser {
       String? valueHelp,
       Iterable<String>? allowed,
       Map<String, String>? allowedHelp,
-      defaultsTo,
+      Object? defaultsTo,
       Function? callback,
       OptionType type,
       {bool negatable = false,

@@ -1,3 +1,7 @@
+## 2.5.1-wip
+
+* Require Dart 3.3
+
 ## 2.5.0
 
 * Introduce new typed `ArgResults` `flag(String)`, `option(String)`, and
