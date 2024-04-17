@@ -4,6 +4,7 @@
 
 import 'package:args/command_runner.dart';
 import 'package:test/test.dart';
+
 import 'test_utils.dart';
 
 void main() {
@@ -12,7 +13,7 @@ void main() {
     foo = FooCommand();
 
     // Make sure [Command.runner] is set up.
-    CommandRunner('test', 'A test command runner.').addCommand(foo);
+    CommandRunner<void>('test', 'A test command runner.').addCommand(foo);
   });
 
   group('.invocation has a sane default', () {
@@ -92,7 +93,7 @@ Run "test help" to see global options.'''));
       var wrapping = WrappingCommand();
 
       // Make sure [Command.runner] is set up.
-      CommandRunner('longtest', 'A long-lined test command runner.')
+      CommandRunner<void>('longtest', 'A long-lined test command runner.')
           .addCommand(wrapping);
 
       wrapping.addSubcommand(LongCommand());
@@ -118,7 +119,7 @@ options.'''));
       var longCommand = LongCommand();
 
       // Make sure [Command.runner] is set up.
-      CommandRunner('longtest', 'A long-lined test command runner.')
+      CommandRunner<void>('longtest', 'A long-lined test command runner.')
           .addCommand(longCommand);
 
       expect(longCommand.usage, equals('''

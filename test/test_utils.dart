@@ -308,7 +308,7 @@ class AsyncCommand extends Command {
   final takesArguments = false;
 
   @override
-  Future run() => Future.value().then((_) => hasRun = true);
+  Future run() => Future<void>.value().then((_) => hasRun = true);
 }
 
 class AllowAnythingCommand extends Command {

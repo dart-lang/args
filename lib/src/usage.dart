@@ -236,7 +236,7 @@ class _Usage {
   String _buildAllowedList(Option option) {
     var isDefault = option.defaultsTo is List
         ? (option.defaultsTo as List).contains
-        : (value) => value == option.defaultsTo;
+        : (String value) => value == option.defaultsTo;
 
     var allowedBuffer = StringBuffer();
     allowedBuffer.write('[');

@@ -56,7 +56,8 @@ void main() {
     });
 
     test('works as a subcommand in a CommandRunner', () async {
-      var commandRunner = CommandRunner('command', 'Description of command');
+      var commandRunner =
+          CommandRunner<void>('command', 'Description of command');
       var command = AllowAnythingCommand();
       commandRunner.addCommand(command);
 
