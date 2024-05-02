@@ -69,6 +69,7 @@ class AllowAnythingParser implements ArgParser {
       Iterable<String>? defaultsTo,
       void Function(List<String>)? callback,
       bool splitCommas = true,
+      bool mandatory = false,
       bool hide = false,
       List<String> aliases = const []}) {
     throw UnsupportedError(

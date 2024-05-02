@@ -267,7 +267,7 @@ class ArgParser {
         valueHelp,
         allowed,
         allowedHelp,
-        defaultsTo?.toList() ?? <String>[],
+        mandatory ? defaultsTo?.toList() : (defaultsTo?.toList() ?? <String>[]),
         callback == null ? null : (List<String> value) => callback(value),
         OptionType.multiple,
         splitCommas: splitCommas,
