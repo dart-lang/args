@@ -1,6 +1,7 @@
 ## 2.5.1-wip
 
 * Require Dart 3.3
+* Add `mandatory` parameter to `addMultiOption` method.
 
 ## 2.5.0
 
