@@ -5,7 +5,7 @@
 /// This is an example of converting the args in test.dart to use this API.
 /// It shows what it looks like to build an [ArgParser] and then, when the code
 /// is run, demonstrates what the generated usage text looks like.
-library example;
+library;
 
 import 'dart:io';
 
