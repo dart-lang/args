@@ -236,6 +236,9 @@ class ArgParser {
   /// If [splitCommas] is `true` (the default), multiple options may be passed
   /// by writing `--option a,b` in addition to `--option a --option b`.
   ///
+  /// If [mandatory] is true and a value is not provided, an [ArgumentError]
+  /// will be thrown.
+  ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
   /// If [aliases] is provided, these are used as aliases for [name]. These
@@ -254,6 +257,7 @@ class ArgParser {
       Iterable<String>? defaultsTo,
       void Function(List<String>)? callback,
       bool splitCommas = true,
+      bool mandatory = false,
       bool hide = false,
       List<String> aliases = const []}) {
     _addOption(
@@ -263,10 +267,11 @@ class ArgParser {
         valueHelp,
         allowed,
         allowedHelp,
-        defaultsTo?.toList() ?? <String>[],
+        mandatory ? defaultsTo?.toList() : (defaultsTo?.toList() ?? <String>[]),
         callback == null ? null : (List<String> value) => callback(value),
         OptionType.multiple,
         splitCommas: splitCommas,
+        mandatory: mandatory,
         hide: hide,
         aliases: aliases);
   }
