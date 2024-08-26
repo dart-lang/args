@@ -31,7 +31,7 @@ class CommandRunner<T> {
 
   /// A single-line template for how to invoke this executable.
   ///
-  /// Defaults to "$executableName <command> `arguments`". Subclasses can
+  /// Defaults to `"$executableName <command> arguments`". Subclasses can
   /// override this for a more specific template.
   String get invocation => '$executableName <command> [arguments]';
 
