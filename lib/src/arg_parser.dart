@@ -180,6 +180,10 @@ class ArgParser {
   /// often surprising, and its use is discouraged in favor of reading values
   /// from the [ArgResults].
   ///
+  /// If [mandatory] is `true` an exception will be thrown when this option is
+  /// accessed but not set. If this option is not set and not accessed, no 
+  /// exception is thrown.
+  ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
   /// If [aliases] is provided, these are used as aliases for [name]. These
