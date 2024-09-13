@@ -1,5 +1,6 @@
 ## 2.5.1-wip
 
+* Added source argument when throwing a `ArgParserException`.
 * Require Dart 3.3
 
 ## 2.5.0
