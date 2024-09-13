@@ -9,6 +9,6 @@ class ArgParserException extends FormatException {
   /// This will be empty if the error was on the root parser.
   final List<String> commands;
 
-  ArgParserException(super.message, [Iterable<String>? commands])
+  ArgParserException(super.message, super.source, [Iterable<String>? commands])
       : commands = commands == null ? const [] : List.unmodifiable(commands);
 }

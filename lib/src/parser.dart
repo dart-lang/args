@@ -63,7 +63,8 @@ class Parser {
       // options so that commands can have option-like names.
       var command = _grammar.commands[_current];
       if (command != null) {
-        _validate(_rest.isEmpty, 'Cannot specify arguments before a command.');
+        _validate(_rest.isEmpty, 'Cannot specify arguments before a command.',
+            _current);
         var commandName = _args.removeFirst();
         var commandParser = Parser(commandName, command, _args, this, _rest);
 
@@ -71,7 +72,7 @@ class Parser {
           commandResults = commandParser.parse();
         } on ArgParserException catch (error) {
           throw ArgParserException(
-              error.message, [commandName, ...error.commands]);
+              error.message, error.source, [commandName, ...error.commands]);
         }
 
         // All remaining arguments were passed to command so clear them here.
@@ -101,7 +102,7 @@ class Parser {
       // Check if an option is mandatory and was passed; if not, throw an
       // exception.
       if (option.mandatory && parsedOption == null) {
-        throw ArgParserException('Option $name is mandatory.');
+        throw ArgParserException('Option $name is mandatory.', name);
       }
 
       // ignore: avoid_dynamic_calls
@@ -120,7 +121,8 @@ class Parser {
   /// Validates that there is a valid value there.
   void _readNextArgAsValue(Option option) {
     // Take the option argument from the next command line arg.
-    _validate(_args.isNotEmpty, 'Missing argument for "${option.name}".');
+    _validate(_args.isNotEmpty, 'Missing argument for "${option.name}".',
+        option.name);
 
     _setOption(_results, option, _current);
     _args.removeFirst();
@@ -145,7 +147,8 @@ class Parser {
     var option = _grammar.findByAbbreviation(opt);
     if (option == null) {
       // Walk up to the parent command if possible.
-      _validate(_parent != null, 'Could not find an option or flag "-$opt".');
+      _validate(_parent != null, 'Could not find an option or flag "-$opt".',
+          '-$opt');
       return _parent!._handleSoloOption(opt);
     }
 
@@ -193,8 +196,8 @@ class Parser {
     var first = _grammar.findByAbbreviation(c);
     if (first == null) {
       // Walk up to the parent command if possible.
-      _validate(
-          _parent != null, 'Could not find an option with short name "-$c".');
+      _validate(_parent != null,
+          'Could not find an option with short name "-$c".', '-$c');
       return _parent!
           ._handleAbbreviation(lettersAndDigits, rest, innermostCommand);
     } else if (!first.isFlag) {
@@ -208,7 +211,8 @@ class Parser {
       _validate(
           rest == '',
           'Option "-$c" is a flag and cannot handle value '
-          '"${lettersAndDigits.substring(1)}$rest".');
+              '"${lettersAndDigits.substring(1)}$rest".',
+          '-$c');
 
       // Not an option, so all characters should be flags.
       // We use "innermostCommand" here so that if a parent command parses the
@@ -228,16 +232,16 @@ class Parser {
     var option = _grammar.findByAbbreviation(c);
     if (option == null) {
       // Walk up to the parent command if possible.
-      _validate(
-          _parent != null, 'Could not find an option with short name "-$c".');
+      _validate(_parent != null,
+          'Could not find an option with short name "-$c".', '-$c');
       _parent!._parseShortFlag(c);
       return;
     }
 
     // In a list of short options, only the first can be a non-flag. If
     // we get here we've checked that already.
-    _validate(
-        option.isFlag, 'Option "-$c" must be a flag to be in a collapsed "-".');
+    _validate(option.isFlag,
+        'Option "-$c" must be a flag to be in a collapsed "-".', '-$c');
 
     _setFlag(_results, option, true);
   }
@@ -269,8 +273,8 @@ class Parser {
     if (option != null) {
       _args.removeFirst();
       if (option.isFlag) {
-        _validate(
-            value == null, 'Flag option "$name" should not be given a value.');
+        _validate(value == null,
+            'Flag option "$name" should not be given a value.', name);
 
         _setFlag(_results, option, true);
       } else if (value != null) {
@@ -286,18 +290,20 @@ class Parser {
       option = _grammar.findByNameOrAlias(positiveName);
       if (option == null) {
         // Walk up to the parent command if possible.
-        _validate(_parent != null, 'Could not find an option named "$name".');
+        _validate(
+            _parent != null, 'Could not find an option named "$name".', name);
         return _parent!._handleLongOption(name, value);
       }
 
       _args.removeFirst();
-      _validate(option.isFlag, 'Cannot negate non-flag option "$name".');
-      _validate(option.negatable!, 'Cannot negate option "$name".');
+      _validate(option.isFlag, 'Cannot negate non-flag option "$name".', name);
+      _validate(option.negatable!, 'Cannot negate option "$name".', name);
 
       _setFlag(_results, option, false);
     } else {
       // Walk up to the parent command if possible.
-      _validate(_parent != null, 'Could not find an option named "$name".');
+      _validate(
+          _parent != null, 'Could not find an option named "$name".', name);
       return _parent!._handleLongOption(name, value);
     }
 
@@ -307,8 +313,10 @@ class Parser {
   /// Called during parsing to validate the arguments.
   ///
   /// Throws an [ArgParserException] if [condition] is `false`.
-  void _validate(bool condition, String message) {
-    if (!condition) throw ArgParserException(message);
+  void _validate(bool condition, String message, String source) {
+    if (!condition) {
+      throw ArgParserException(message, source);
+    }
   }
 
   /// Validates and stores [value] as the value for [option], which must not be
@@ -347,7 +355,7 @@ class Parser {
     if (option.allowed == null) return;
 
     _validate(option.allowed!.contains(value),
-        '"$value" is not an allowed value for option "${option.name}".');
+        '"$value" is not an allowed value for option "${option.name}".', value);
   }
 }
 
