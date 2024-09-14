@@ -50,7 +50,7 @@ void main() {
         var parser = ArgParser();
         parser.addFlag('verbose');
 
-        throwsArgParserException(parser, ['--verbose=true']);
+        throwsArgParserException(parser, ['--verbose=true'], '--verbose');
       });
 
       test('are case-sensitive', () {
@@ -189,7 +189,7 @@ void main() {
         var parser = ArgParser();
         parser.addFlag('strum', negatable: false);
 
-        throwsArgParserException(parser, ['--no-strum']);
+        throwsArgParserException(parser, ['--no-strum'], '--no-strum');
       });
     });
 
@@ -399,14 +399,14 @@ void main() {
 
       test('throw if unknown', () {
         var parser = ArgParser();
-        throwsArgParserException(parser, ['-f']);
+        throwsArgParserException(parser, ['-f'], '-f');
       });
 
       test('throw if the value is missing', () {
         var parser = ArgParser();
         parser.addOption('file', abbr: 'f');
 
-        throwsArgParserException(parser, ['-f']);
+        throwsArgParserException(parser, ['-f'], '-f');
       });
 
       test('does not throw if the value looks like an option', () {
@@ -424,7 +424,7 @@ void main() {
         var parser = ArgParser();
         parser.addOption('mode', abbr: 'm', allowed: ['debug', 'release']);
 
-        throwsArgParserException(parser, ['-mprofile']);
+        throwsArgParserException(parser, ['-mprofile'], '-m');
       });
 
       group('throw if a comma-separated value is not allowed', () {
@@ -433,7 +433,7 @@ void main() {
           parser
               .addMultiOption('mode', abbr: 'm', allowed: ['debug', 'release']);
 
-          throwsArgParserException(parser, ['-mdebug,profile']);
+          throwsArgParserException(parser, ['-mdebug,profile'], '-m');
         });
       });
 
@@ -443,7 +443,7 @@ void main() {
         parser.addOption('banana', abbr: 'b'); // Takes an argument.
         parser.addFlag('cherry', abbr: 'c');
 
-        throwsArgParserException(parser, ['-abc']);
+        throwsArgParserException(parser, ['-abc'], '-b');
       });
 
       test('throw if it has a value but the option is a flag', () {
@@ -452,7 +452,7 @@ void main() {
         parser.addFlag('banana', abbr: 'b');
 
         // The '?!' means this can only be understood as '--apple b?!c'.
-        throwsArgParserException(parser, ['-ab?!c']);
+        throwsArgParserException(parser, ['-ab?!c'], '-a');
       });
 
       test('are case-sensitive', () {
@@ -496,14 +496,15 @@ void main() {
 
       test('throw if unknown', () {
         var parser = ArgParser();
-        throwsArgParserException(parser, ['--unknown']);
-        throwsArgParserException(parser, ['--nobody']); // Starts with "no".
+        throwsArgParserException(parser, ['--unknown'], '--unknown');
+        throwsArgParserException(
+            parser, ['--nobody'], '--nobody'); // Starts with "no".
       });
 
       test('throw if the arg does not include a value', () {
         var parser = ArgParser();
         parser.addOption('mode');
-        throwsArgParserException(parser, ['--mode']);
+        throwsArgParserException(parser, ['--mode'], '--mode');
       });
 
       test('do not throw if the value looks like an option', () {
@@ -538,7 +539,7 @@ void main() {
       test('throw if the value is not in the allowed set', () {
         var parser = ArgParser();
         parser.addOption('mode', allowed: ['debug', 'release']);
-        throwsArgParserException(parser, ['--mode=profile']);
+        throwsArgParserException(parser, ['--mode=profile'], '--mode');
       });
 
       test('returns last provided value', () {

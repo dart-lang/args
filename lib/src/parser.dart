@@ -119,12 +119,11 @@ class Parser {
   /// Pulls the value for [option] from the second argument in [_args].
   ///
   /// Validates that there is a valid value there.
-  void _readNextArgAsValue(Option option) {
+  void _readNextArgAsValue(Option option, String source) {
     // Take the option argument from the next command line arg.
-    _validate(_args.isNotEmpty, 'Missing argument for "${option.name}".',
-        option.name);
+    _validate(_args.isNotEmpty, 'Missing argument for "$source".', source);
 
-    _setOption(_results, option, _current);
+    _setOption(_results, option, _current, source);
     _args.removeFirst();
   }
 
@@ -157,7 +156,7 @@ class Parser {
     if (option.isFlag) {
       _setFlag(_results, option, true);
     } else {
-      _readNextArgAsValue(option);
+      _readNextArgAsValue(option, '-$opt');
     }
 
     return true;
@@ -204,7 +203,7 @@ class Parser {
       // The first character is a non-flag option, so the rest must be the
       // value.
       var value = '${lettersAndDigits.substring(1)}$rest';
-      _setOption(_results, first, value);
+      _setOption(_results, first, value, '-$c');
     } else {
       // If we got some non-flag characters, then it must be a value, but
       // if we got here, it's a flag, which is wrong.
@@ -274,15 +273,15 @@ class Parser {
       _args.removeFirst();
       if (option.isFlag) {
         _validate(value == null,
-            'Flag option "$name" should not be given a value.', name);
+            'Flag option "--$name" should not be given a value.', '--$name');
 
         _setFlag(_results, option, true);
       } else if (value != null) {
         // We have a value like --foo=bar.
-        _setOption(_results, option, value);
+        _setOption(_results, option, value, '--$name');
       } else {
         // Option like --foo, so look for the value as the next arg.
-        _readNextArgAsValue(option);
+        _readNextArgAsValue(option, '--$name');
       }
     } else if (name.startsWith('no-')) {
       // See if it's a negated flag.
@@ -290,20 +289,22 @@ class Parser {
       option = _grammar.findByNameOrAlias(positiveName);
       if (option == null) {
         // Walk up to the parent command if possible.
-        _validate(
-            _parent != null, 'Could not find an option named "$name".', name);
+        _validate(_parent != null, 'Could not find an option named "--$name".',
+            '--$name');
         return _parent!._handleLongOption(name, value);
       }
 
       _args.removeFirst();
-      _validate(option.isFlag, 'Cannot negate non-flag option "$name".', name);
-      _validate(option.negatable!, 'Cannot negate option "$name".', name);
+      _validate(
+          option.isFlag, 'Cannot negate non-flag option "--$name".', '--$name');
+      _validate(
+          option.negatable!, 'Cannot negate option "--$name".', '--$name');
 
       _setFlag(_results, option, false);
     } else {
       // Walk up to the parent command if possible.
-      _validate(
-          _parent != null, 'Could not find an option named "$name".', name);
+      _validate(_parent != null, 'Could not find an option named "--$name".',
+          '--$name');
       return _parent!._handleLongOption(name, value);
     }
 
@@ -322,11 +323,11 @@ class Parser {
 
   /// Validates and stores [value] as the value for [option], which must not be
   /// a flag.
-  void _setOption(Map results, Option option, String value) {
+  void _setOption(Map results, Option option, String value, String source) {
     assert(!option.isFlag);
 
     if (!option.isMultiple) {
-      _validateAllowed(option, value);
+      _validateAllowed(option, value, source);
       results[option.name] = value;
       return;
     }
@@ -335,11 +336,11 @@ class Parser {
 
     if (option.splitCommas) {
       for (var element in value.split(',')) {
-        _validateAllowed(option, element);
+        _validateAllowed(option, element, source);
         list.add(element);
       }
     } else {
-      _validateAllowed(option, value);
+      _validateAllowed(option, value, source);
       list.add(value);
     }
   }
@@ -352,11 +353,11 @@ class Parser {
   }
 
   /// Validates that [value] is allowed as a value of [option].
-  void _validateAllowed(Option option, String value) {
+  void _validateAllowed(Option option, String value, String source) {
     if (option.allowed == null) return;
 
     _validate(option.allowed!.contains(value),
-        '"$value" is not an allowed value for option "${option.name}".', value);
+        '"$value" is not an allowed value for option "$source".', source);
   }
 }
 

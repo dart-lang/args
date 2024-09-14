@@ -19,8 +19,8 @@ void main() {
       parser = ArgParser(allowTrailingOptions: true);
     });
 
-    void expectThrows(List<String> args) {
-      throwsArgParserException(parser, args,
+    void expectThrows(List<String> args, String source) {
+      throwsArgParserException(parser, args, source,
           reason: 'with allowTrailingOptions: true');
     }
 
@@ -58,7 +58,7 @@ void main() {
 
     test('throws on a trailing option missing its value', () {
       parser.addOption('opt');
-      expectThrows(['arg', '--opt']);
+      expectThrows(['arg', '--opt'], '--opt');
     });
 
     test('parses a trailing option', () {
@@ -69,16 +69,16 @@ void main() {
     });
 
     test('throws on a trailing unknown flag', () {
-      expectThrows(['arg', '--xflag']);
+      expectThrows(['arg', '--xflag'], '--xflag');
     });
 
     test('throws on a trailing unknown option and value', () {
-      expectThrows(['arg', '--xopt', 'v']);
+      expectThrows(['arg', '--xopt', 'v'], '--xopt');
     });
 
     test('throws on a command', () {
       parser.addCommand('com');
-      expectThrows(['arg', 'com']);
+      expectThrows(['arg', 'com'], 'com');
     });
   });
 
