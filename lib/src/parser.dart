@@ -71,8 +71,8 @@ class Parser {
         try {
           commandResults = commandParser.parse();
         } on ArgParserException catch (error) {
-          throw ArgParserException(
-              error.message, error.source, [commandName, ...error.commands]);
+          throw ArgParserException(error.message,
+              [commandName, ...error.commands], error.source, error.offset);
         }
 
         // All remaining arguments were passed to command so clear them here.
@@ -102,7 +102,7 @@ class Parser {
       // Check if an option is mandatory and was passed; if not, throw an
       // exception.
       if (option.mandatory && parsedOption == null) {
-        throw ArgParserException('Option $name is mandatory.', name);
+        throw ArgParserException('Option $name is mandatory.', null, name);
       }
 
       // ignore: avoid_dynamic_calls
@@ -313,9 +313,10 @@ class Parser {
   /// Called during parsing to validate the arguments.
   ///
   /// Throws an [ArgParserException] if [condition] is `false`.
-  void _validate(bool condition, String message, String source) {
+  void _validate(bool condition, String message,
+      [dynamic source, int? offset]) {
     if (!condition) {
-      throw ArgParserException(message, source);
+      throw ArgParserException(message, null, source, offset);
     }
   }
 
