@@ -5,6 +5,8 @@
 import 'package:args/args.dart';
 import 'package:test/test.dart';
 
+import 'test_utils.dart';
+
 void main() {
   test('allowTrailingOptions defaults to true', () {
     var parser = ArgParser();
@@ -18,7 +20,7 @@ void main() {
     });
 
     void expectThrows(List<String> args) {
-      expect(() => parser.parse(args), throwsFormatException,
+      throwsArgParserException(parser, args,
           reason: 'with allowTrailingOptions: true');
     }
 

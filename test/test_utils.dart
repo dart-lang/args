@@ -343,8 +343,10 @@ void throwsIllegalArg(void Function() function, {String? reason}) {
   expect(function, throwsArgumentError, reason: reason);
 }
 
-void throwsFormat(ArgParser parser, List<String> args) {
-  expect(() => parser.parse(args), throwsFormatException);
+void throwsArgParserException(ArgParser parser, List<String> args,
+    {String? reason}) {
+  expect(() => parser.parse(args), throwsA(isA<ArgParserException>()),
+      reason: reason);
 }
 
 Matcher throwsUsageException(Object? message, Object? usage) =>
