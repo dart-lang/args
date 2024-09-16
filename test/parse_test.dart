@@ -730,6 +730,52 @@ void main() {
       });
     });
 
+    group('actual()', () {
+      test('returns value if present', () {
+        var parser = ArgParser();
+        parser.addFlag('verbose');
+        parser.addOption('mode');
+        parser.addMultiOption('define');
+
+        var args = parser.parse(['--verbose', '--mode=release', '--define=1']);
+        expect(args.actual('verbose'), '--verbose');
+        expect(args.actual('mode'), '--mode');
+        expect(args.actual('define'), '--define');
+      });
+
+      test('returns null if missing', () {
+        var parser = ArgParser();
+        parser.addFlag('a', defaultsTo: true);
+        parser.addOption('b', defaultsTo: 'c');
+        parser.addMultiOption('d', defaultsTo: ['e']);
+
+        var args = parser.parse([]);
+        expect(args.actual('a'), isNull);
+        expect(args.actual('b'), isNull);
+        expect(args.actual('d'), isNull);
+      });
+
+      test('can match by alias', () {
+        var parser = ArgParser()..addFlag('verbose', abbr: 'v');
+        var results = parser.parse(['-v']);
+        expect(results.actual('verbose'), '-v');
+      });
+
+      test('can be negated by alias', () {
+        var parser = ArgParser()
+          ..addFlag('a', aliases: ['b'], defaultsTo: true, negatable: true);
+        var results = parser.parse(['--no-b']);
+        expect(results.actual('a'), '--no-b');
+      });
+
+      // abbr test
+      test('can match by abbreviation', () {
+        var parser = ArgParser()..addFlag('a', abbr: 'b');
+        var results = parser.parse(['-b']);
+        expect(results.actual('a'), '-b');
+      });
+    });
+
     group('remaining args', () {
       test('stops parsing args when a non-option-like arg is encountered', () {
         var parser = ArgParser();

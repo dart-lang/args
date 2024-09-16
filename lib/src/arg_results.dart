@@ -13,11 +13,12 @@ import 'arg_parser.dart';
 ArgResults newArgResults(
     ArgParser parser,
     Map<String, dynamic> parsed,
+    Map<String, String> actual,
     String? name,
     ArgResults? command,
     List<String> rest,
     List<String> arguments) {
-  return ArgResults._(parser, parsed, name, command, rest, arguments);
+  return ArgResults._(parser, parsed, actual, name, command, rest, arguments);
 }
 
 /// The results of parsing a series of command line arguments using
@@ -31,6 +32,9 @@ class ArgResults {
 
   /// The option values that were parsed from arguments.
   final Map<String, dynamic> _parsed;
+
+  /// The actual values that were parsed from arguments.
+  final Map<String, String> _actual;
 
   /// The name of the command for which these options are parsed, or `null` if
   /// these are the top-level results.
@@ -52,8 +56,8 @@ class ArgResults {
   /// The original arguments that were parsed.
   final List<String> arguments;
 
-  ArgResults._(this._parser, this._parsed, this.name, this.command,
-      List<String> rest, List<String> arguments)
+  ArgResults._(this._parser, this._parsed, this._actual, this.name,
+      this.command, List<String> rest, List<String> arguments)
       : rest = UnmodifiableListView(rest),
         arguments = UnmodifiableListView(arguments);
 
@@ -132,6 +136,18 @@ class ArgResults {
     });
 
     return result;
+  }
+
+  /// Returns the actual value of the command-line option named [name].
+  /// Returns `null` if the option was not provided.
+  ///
+  /// [name] must be a valid option name in the parser.
+  String? actual(String name) {
+    if (_actual.containsKey(name)) {
+      return _actual[name];
+    } else {
+      return null;
+    }
   }
 
   /// Returns `true` if the option with [name] was parsed from an actual
