@@ -71,8 +71,12 @@ class Parser {
         try {
           commandResults = commandParser.parse();
         } on ArgParserException catch (error) {
-          throw ArgParserException(error.message,
-              [commandName, ...error.commands], error.source, error.offset);
+          throw ArgParserException(
+              error.message,
+              [commandName, ...error.commands],
+              error.arg,
+              error.source,
+              error.offset);
         }
 
         // All remaining arguments were passed to command so clear them here.
@@ -119,11 +123,11 @@ class Parser {
   /// Pulls the value for [option] from the second argument in [_args].
   ///
   /// Validates that there is a valid value there.
-  void _readNextArgAsValue(Option option, String source) {
+  void _readNextArgAsValue(Option option, String arg) {
     // Take the option argument from the next command line arg.
-    _validate(_args.isNotEmpty, 'Missing argument for "$source".', source);
+    _validate(_args.isNotEmpty, 'Missing argument for "$arg".', arg);
 
-    _setOption(_results, option, _current, source);
+    _setOption(_results, option, _current, arg);
     _args.removeFirst();
   }
 
@@ -315,19 +319,19 @@ class Parser {
   ///
   /// Throws an [ArgParserException] if [condition] is `false`.
   void _validate(bool condition, String message,
-      [dynamic source, int? offset]) {
+      [String? args, List<String>? source, int? offset]) {
     if (!condition) {
-      throw ArgParserException(message, null, source, offset);
+      throw ArgParserException(message, null, args, source, offset);
     }
   }
 
   /// Validates and stores [value] as the value for [option], which must not be
   /// a flag.
-  void _setOption(Map results, Option option, String value, String source) {
+  void _setOption(Map results, Option option, String value, String arg) {
     assert(!option.isFlag);
 
     if (!option.isMultiple) {
-      _validateAllowed(option, value, source);
+      _validateAllowed(option, value, arg);
       results[option.name] = value;
       return;
     }
@@ -336,11 +340,11 @@ class Parser {
 
     if (option.splitCommas) {
       for (var element in value.split(',')) {
-        _validateAllowed(option, element, source);
+        _validateAllowed(option, element, arg);
         list.add(element);
       }
     } else {
-      _validateAllowed(option, value, source);
+      _validateAllowed(option, value, arg);
       list.add(value);
     }
   }
@@ -353,11 +357,11 @@ class Parser {
   }
 
   /// Validates that [value] is allowed as a value of [option].
-  void _validateAllowed(Option option, String value, String source) {
+  void _validateAllowed(Option option, String value, String arg) {
     if (option.allowed == null) return;
 
     _validate(option.allowed!.contains(value),
-        '"$value" is not an allowed value for option "$source".', source);
+        '"$value" is not an allowed value for option "$arg".', arg);
   }
 }
 

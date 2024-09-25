@@ -19,8 +19,8 @@ void main() {
       parser = ArgParser(allowTrailingOptions: true);
     });
 
-    void expectThrows(List<String> args, String source) {
-      throwsArgParserException(parser, args, source,
+    void expectThrows(List<String> args, String arg) {
+      throwsArgParserException(parser, args, arg,
           reason: 'with allowTrailingOptions: true');
     }
 
