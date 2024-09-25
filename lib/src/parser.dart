@@ -2,12 +2,53 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:collection';
-
 import 'arg_parser.dart';
 import 'arg_parser_exception.dart';
 import 'arg_results.dart';
 import 'option.dart';
+
+/// A queue of arguments that can be removed from the front.
+/// This is used to keep track of the arguments that have been parsed.
+class ArgsQueue<T> {
+  /// The arguments to be parsed.
+  final Iterable<T> _args;
+
+  /// The index of the next argument to be parsed.
+  int _index = 0;
+
+  /// Creates a new queue of arguments.
+  ArgsQueue(this._args);
+
+  /// The source of the arguments.
+  Iterable<T> get args => _args;
+
+  /// The current index of the queue.
+  int get index => _index;
+
+  /// The number of arguments in the queue.
+  bool get isEmpty => _index >= _args.length;
+
+  /// The number of arguments in the queue.
+  bool get isNotEmpty => _index < _args.length;
+
+  /// The first argument in the queue.
+  T get first => _args.elementAt(_index);
+
+  /// Removes the first argument from the queue.
+  T removeFirst() {
+    return _args.elementAt(_index++);
+  }
+
+  /// Returns the remaining arguments in the queue.
+  List<T> toList() {
+    return _args.skip(_index).toList();
+  }
+
+  /// Clears the queue.
+  void clear() {
+    _index = _args.length;
+  }
+}
 
 /// The actual argument parsing class.
 ///
@@ -26,7 +67,7 @@ class Parser {
   final ArgParser _grammar;
 
   /// The arguments being parsed.
-  final Queue<String> _args;
+  final ArgsQueue<String> _args;
 
   /// The remaining non-option, non-command arguments.
   final List<String> _rest;
@@ -114,7 +155,7 @@ class Parser {
     });
 
     // Add in the leftover arguments we didn't parse to the innermost command.
-    _rest.addAll(_args);
+    _rest.addAll(_args.toList());
     _args.clear();
     return newArgResults(
         _grammar, _results, _commandName, commandResults, _rest, arguments);
@@ -318,10 +359,9 @@ class Parser {
   /// Called during parsing to validate the arguments.
   ///
   /// Throws an [ArgParserException] if [condition] is `false`.
-  void _validate(bool condition, String message,
-      [String? args, List<String>? source, int? offset]) {
+  void _validate(bool condition, String message, [String? args]) {
     if (!condition) {
-      throw ArgParserException(message, null, args, source, offset);
+      throw ArgParserException(message, null, args, _args.args, _args.index);
     }
   }
 
