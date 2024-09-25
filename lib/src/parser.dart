@@ -315,17 +315,19 @@ class Parser {
   bool _handleLongOption(String name, String? value) {
     var option = _grammar.findByNameOrAlias(name);
     if (option != null) {
-      _args.removeFirst();
       if (option.isFlag) {
         _validate(value == null,
             'Flag option "--$name" should not be given a value.', '--$name');
 
+        _args.removeFirst();
         _setFlag(_results, option, true);
       } else if (value != null) {
         // We have a value like --foo=bar.
+        _args.removeFirst();
         _setOption(_results, option, value, '--$name');
       } else {
         // Option like --foo, so look for the value as the next arg.
+        _args.removeFirst();
         _readNextArgAsValue(option, '--$name');
       }
     } else if (name.startsWith('no-')) {

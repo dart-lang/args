@@ -349,7 +349,7 @@ void throwsFormat(ArgParser parser, List<String> args, {String? reason}) {
 }
 
 void throwsArgParserException(ArgParser parser, List<String> args,
-    String message, List<String> commands, String arg) {
+    String message, List<String> commands, String arg, int offset) {
   try {
     parser.parse(args);
     fail('Expected an ArgParserException');
