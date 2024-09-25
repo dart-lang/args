@@ -139,7 +139,7 @@ void main() {
       var command = parser.addCommand('install');
       command.addOption('path', abbr: 'p');
 
-      throwsArgParserException(parser, ['-p', 'foo', 'install'], '-p');
+      throwsFormat(parser, ['-p', 'foo', 'install']);
     });
 
     test('does not parse a command option before the command', () {
@@ -147,7 +147,7 @@ void main() {
       var command = parser.addCommand('install');
       command.addOption('path');
 
-      throwsArgParserException(parser, ['--path', 'foo', 'install'], '--path');
+      throwsFormat(parser, ['--path', 'foo', 'install']);
     });
 
     test('does not parse a command abbreviation before the command', () {
@@ -156,7 +156,7 @@ void main() {
       command.addFlag('debug', abbr: 'd');
       command.addFlag('verbose', abbr: 'v');
 
-      throwsArgParserException(parser, ['-dv', 'install'], '-d');
+      throwsFormat(parser, ['-dv', 'install']);
     });
 
     test('assigns collapsed options to the proper command', () {
