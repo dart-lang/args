@@ -9,7 +9,8 @@ class ArgParserException extends FormatException {
   /// This will be empty if the error was on the root parser.
   final List<String> commands;
 
-  /// The name of the argument that was being parsed when the error was discovered.
+  /// The name of the argument that was being parsed when the error was
+  /// discovered.
   final String? argumentName;
 
   ArgParserException(super.message,
