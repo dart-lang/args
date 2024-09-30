@@ -74,7 +74,7 @@ class Parser {
           throw ArgParserException(
               error.message,
               [commandName, ...error.commands],
-              error.arg,
+              argumentNameerror.argumentName,
               error.source,
               error.offset);
         }

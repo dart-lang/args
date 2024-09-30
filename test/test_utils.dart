@@ -356,7 +356,7 @@ void throwsArgParserException(ArgParser parser, List<String> args,
   } on ArgParserException catch (e) {
     expect(e.message, message);
     expect(e.commands, commands);
-    expect(e.arg, arg);
+    expect(e.argumentName, arg);
   } catch (e) {
     fail('Expected an ArgParserException, but got $e');
   }
