@@ -1,4 +1,4 @@
-## 2.5.1-wip
+## 2.6.0-wip
 
 * Added source argument when throwing a `ArgParserException`.
 * Fix inconsistent `FormatException` messages
