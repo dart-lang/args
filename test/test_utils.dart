@@ -343,8 +343,23 @@ void throwsIllegalArg(void Function() function, {String? reason}) {
   expect(function, throwsArgumentError, reason: reason);
 }
 
-void throwsFormat(ArgParser parser, List<String> args) {
-  expect(() => parser.parse(args), throwsFormatException);
+void throwsFormat(ArgParser parser, List<String> args, {String? reason}) {
+  expect(() => parser.parse(args), throwsA(isA<FormatException>()),
+      reason: reason);
+}
+
+void throwsArgParserException(ArgParser parser, List<String> args,
+    String message, List<String> commands, String arg) {
+  try {
+    parser.parse(args);
+    fail('Expected an ArgParserException');
+  } on ArgParserException catch (e) {
+    expect(e.message, message);
+    expect(e.commands, commands);
+    expect(e.argumentName, arg);
+  } catch (e) {
+    fail('Expected an ArgParserException, but got $e');
+  }
 }
 
 Matcher throwsUsageException(Object? message, Object? usage) =>

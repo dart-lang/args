@@ -583,7 +583,7 @@ Run "test help" to see global options.
         expect(
             runner.run(['--asdf']),
             throwsUsageException(
-                'Could not find an option named "asdf".', _defaultUsage));
+                'Could not find an option named "--asdf".', _defaultUsage));
       });
 
       test('for a command throws the command usage', () {
@@ -591,7 +591,7 @@ Run "test help" to see global options.
         runner.addCommand(command);
 
         expect(runner.run(['foo', '--asdf']),
-            throwsUsageException('Could not find an option named "asdf".', '''
+            throwsUsageException('Could not find an option named "--asdf".', '''
 Usage: test foo [arguments]
 -h, --help    Print this usage information.
 
@@ -616,7 +616,7 @@ Also, footer!'''));
     test('includes the footer in usage errors', () {
       expect(
           runner.run(['--bad']),
-          throwsUsageException('Could not find an option named "bad".',
+          throwsUsageException('Could not find an option named "--bad".',
               '$_defaultUsage\nAlso, footer!'));
     });
   });
@@ -652,7 +652,7 @@ newlines properly.'''));
 
     test('includes the footer in usage errors', () {
       expect(runner.run(['--bad']),
-          throwsUsageException('Could not find an option named "bad".', '''
+          throwsUsageException('Could not find an option named "--bad".', '''
 Usage: test <command> [arguments]
 
 Global options:
@@ -679,7 +679,7 @@ newlines properly.'''));
       expect(
           runner.run(['--bad']),
           throwsUsageException(
-              'Could not find an option named "bad".', _defaultUsage));
+              'Could not find an option named "--bad".', _defaultUsage));
     });
 
     test("a top-level command doesn't exist", () {

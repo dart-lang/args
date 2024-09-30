@@ -66,7 +66,7 @@ class ArgResults {
   /// > flags, [option] for options, and [multiOption] for multi-options.
   dynamic operator [](String name) {
     if (!_parser.options.containsKey(name)) {
-      throw ArgumentError('Could not find an option named "$name".');
+      throw ArgumentError('Could not find an option named "--$name".');
     }
 
     final option = _parser.options[name]!;
@@ -83,7 +83,7 @@ class ArgResults {
   bool flag(String name) {
     var option = _parser.options[name];
     if (option == null) {
-      throw ArgumentError('Could not find an option named "$name".');
+      throw ArgumentError('Could not find an option named "--$name".');
     }
     if (!option.isFlag) {
       throw ArgumentError('"$name" is not a flag.');
@@ -97,7 +97,7 @@ class ArgResults {
   String? option(String name) {
     var option = _parser.options[name];
     if (option == null) {
-      throw ArgumentError('Could not find an option named "$name".');
+      throw ArgumentError('Could not find an option named "--$name".');
     }
     if (!option.isSingle) {
       throw ArgumentError('"$name" is a multi-option.');
@@ -111,7 +111,7 @@ class ArgResults {
   List<String> multiOption(String name) {
     var option = _parser.options[name];
     if (option == null) {
-      throw ArgumentError('Could not find an option named "$name".');
+      throw ArgumentError('Could not find an option named "--$name".');
     }
     if (!option.isMultiple) {
       throw ArgumentError('"$name" is not a multi-option.');
@@ -143,7 +143,7 @@ class ArgResults {
   /// [name] must be a valid option name in the parser.
   bool wasParsed(String name) {
     if (!_parser.options.containsKey(name)) {
-      throw ArgumentError('Could not find an option named "$name".');
+      throw ArgumentError('Could not find an option named "--$name".');
     }
 
     return _parsed.containsKey(name);

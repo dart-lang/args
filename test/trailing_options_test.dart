@@ -5,6 +5,8 @@
 import 'package:args/args.dart';
 import 'package:test/test.dart';
 
+import 'test_utils.dart';
+
 void main() {
   test('allowTrailingOptions defaults to true', () {
     var parser = ArgParser();
@@ -17,9 +19,8 @@ void main() {
       parser = ArgParser(allowTrailingOptions: true);
     });
 
-    void expectThrows(List<String> args) {
-      expect(() => parser.parse(args), throwsFormatException,
-          reason: 'with allowTrailingOptions: true');
+    void expectThrows(List<String> args, String arg) {
+      throwsFormat(parser, args, reason: 'with allowTrailingOptions: true');
     }
 
     test('collects non-options in rest', () {
@@ -56,7 +57,7 @@ void main() {
 
     test('throws on a trailing option missing its value', () {
       parser.addOption('opt');
-      expectThrows(['arg', '--opt']);
+      expectThrows(['arg', '--opt'], '--opt');
     });
 
     test('parses a trailing option', () {
@@ -67,16 +68,16 @@ void main() {
     });
 
     test('throws on a trailing unknown flag', () {
-      expectThrows(['arg', '--xflag']);
+      expectThrows(['arg', '--xflag'], '--xflag');
     });
 
     test('throws on a trailing unknown option and value', () {
-      expectThrows(['arg', '--xopt', 'v']);
+      expectThrows(['arg', '--xopt', 'v'], '--xopt');
     });
 
     test('throws on a command', () {
       parser.addCommand('com');
-      expectThrows(['arg', 'com']);
+      expectThrows(['arg', 'com'], 'com');
     });
   });
 

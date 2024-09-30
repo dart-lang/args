@@ -766,5 +766,54 @@ void main() {
         expect(results.rest, equals(['stop', '--', 'arg']));
       });
     });
+
+    group('ArgParser Exception Tests', () {
+      test('throws exception for unknown option', () {
+        var parser = ArgParser();
+        throwsArgParserException(parser, ['--verbose'],
+            'Could not find an option named "--verbose".', [], '--verbose');
+        throwsArgParserException(
+            parser, ['-v'], 'Could not find an option or flag "-v".', [], '-v');
+      });
+
+      test('throws exception for flag with value', () {
+        var parser = ArgParser();
+        parser.addFlag('flag', abbr: 'f');
+        throwsArgParserException(parser, ['--flag=1'],
+            'Flag option "--flag" should not be given a value.', [], '--flag');
+        throwsArgParserException(parser, ['-f=1'],
+            'Option "-f" is a flag and cannot handle value "=1".', [], '-f');
+      });
+
+      test('throws exception after parsing multiple options', () {
+        var parser = ArgParser();
+        parser.addOption('first');
+        parser.addOption('second');
+        throwsArgParserException(
+            parser,
+            ['--first', '1', '--second', '2', '--verbose', '3'],
+            'Could not find an option named "--verbose".',
+            [],
+            '--verbose');
+      });
+
+      test('throws exception for option with invalid value', () {
+        var parser = ArgParser();
+        parser.addOption('first', allowed: ['a', 'b']);
+        throwsArgParserException(parser, ['--first', 'c'],
+            '"c" is not an allowed value for option "--first".', [], '--first');
+      });
+
+      test('throws exception after parsing command', () {
+        var parser = ArgParser();
+        parser.addCommand('command', ArgParser());
+        throwsArgParserException(
+            parser,
+            ['command', '--verbose'],
+            'Could not find an option named "--verbose".',
+            ['command'],
+            '--verbose');
+      });
+    });
   });
 }
