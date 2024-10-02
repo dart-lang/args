@@ -349,14 +349,16 @@ void throwsFormat(ArgParser parser, List<String> args, {String? reason}) {
 }
 
 void throwsArgParserException(ArgParser parser, List<String> args,
-    String message, List<String> commands, String arg, int offset) {
+    String message, List<String> commands, String argumentName, int offset) {
   try {
     parser.parse(args);
     fail('Expected an ArgParserException');
   } on ArgParserException catch (e) {
     expect(e.message, message);
     expect(e.commands, commands);
-    expect(e.argumentName, arg);
+    expect(e.argumentName, argumentName);
+    expect(e.source, args);
+    expect(e.offset, offset);
   } catch (e) {
     fail('Expected an ArgParserException, but got $e');
   }
