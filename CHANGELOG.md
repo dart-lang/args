@@ -2,6 +2,7 @@
 
 * Added source argument when throwing a `ArgParserException`.
 * Fix inconsistent `FormatException` messages
+* Add function to retrieve actual input values for command options by name.
 * Require Dart 3.3
 
 ## 2.5.0

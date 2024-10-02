@@ -34,6 +34,9 @@ class Parser {
   /// The accumulated parsed options.
   final Map<String, dynamic> _results = <String, dynamic>{};
 
+  /// The actual inputs that were parsed.
+  final Map<String, String> _actualStores = <String, String>{};
+
   Parser(this._commandName, this._grammar, this._args,
       [this._parent, List<String>? rest])
       : _rest = [...?rest];
@@ -45,8 +48,8 @@ class Parser {
   ArgResults parse() {
     var arguments = _args.toList();
     if (_grammar.allowsAnything) {
-      return newArgResults(
-          _grammar, const {}, _commandName, null, arguments, arguments);
+      return newArgResults(_grammar, const {}, const {}, _commandName, null,
+          arguments, arguments);
     }
 
     ArgResults? commandResults;
@@ -116,8 +119,8 @@ class Parser {
     // Add in the leftover arguments we didn't parse to the innermost command.
     _rest.addAll(_args);
     _args.clear();
-    return newArgResults(
-        _grammar, _results, _commandName, commandResults, _rest, arguments);
+    return newArgResults(_grammar, _results, _actualStores, _commandName,
+        commandResults, _rest, arguments);
   }
 
   /// Pulls the value for [option] from the second argument in [_args].
@@ -127,7 +130,7 @@ class Parser {
     // Take the option argument from the next command line arg.
     _validate(_args.isNotEmpty, 'Missing argument for "$arg".', arg);
 
-    _setOption(_results, option, _current, arg);
+    _setOption(_results, option, _current, _actualStores, arg);
     _args.removeFirst();
   }
 
@@ -158,7 +161,7 @@ class Parser {
     _args.removeFirst();
 
     if (option.isFlag) {
-      _setFlag(_results, option, true);
+      _setFlag(_results, option, true, _actualStores, '-$opt');
     } else {
       _readNextArgAsValue(option, '-$opt');
     }
@@ -207,7 +210,7 @@ class Parser {
       // The first character is a non-flag option, so the rest must be the
       // value.
       var value = '${lettersAndDigits.substring(1)}$rest';
-      _setOption(_results, first, value, '-$c');
+      _setOption(_results, first, value, _actualStores, '-$c');
     } else {
       // If we got some non-flag characters, then it must be a value, but
       // if we got here, it's a flag, which is wrong.
@@ -246,7 +249,7 @@ class Parser {
     _validate(option.isFlag,
         'Option "-$c" must be a flag to be in a collapsed "-".', '-$c');
 
-    _setFlag(_results, option, true);
+    _setFlag(_results, option, true, _actualStores, '-$c');
   }
 
   /// Tries to parse the current argument as a long-form named option, which
@@ -279,10 +282,10 @@ class Parser {
         _validate(value == null,
             'Flag option "--$name" should not be given a value.', '--$name');
 
-        _setFlag(_results, option, true);
+        _setFlag(_results, option, true, _actualStores, '--$name');
       } else if (value != null) {
         // We have a value like --foo=bar.
-        _setOption(_results, option, value, '--$name');
+        _setOption(_results, option, value, _actualStores, '--$name');
       } else {
         // Option like --foo, so look for the value as the next arg.
         _readNextArgAsValue(option, '--$name');
@@ -304,7 +307,7 @@ class Parser {
       _validate(
           option.negatable!, 'Cannot negate option "--$name".', '--$name');
 
-      _setFlag(_results, option, false);
+      _setFlag(_results, option, false, _actualStores, '--$name');
     } else {
       // Walk up to the parent command if possible.
       _validate(_parent != null, 'Could not find an option named "--$name".',
@@ -327,8 +330,10 @@ class Parser {
 
   /// Validates and stores [value] as the value for [option], which must not be
   /// a flag.
-  void _setOption(Map results, Option option, String value, String arg) {
+  void _setOption(Map results, Option option, String value,
+      Map<String, String> actualStores, String arg) {
     assert(!option.isFlag);
+    actualStores[option.name] = arg;
 
     if (!option.isMultiple) {
       _validateAllowed(option, value, arg);
@@ -351,9 +356,11 @@ class Parser {
 
   /// Validates and stores [value] as the value for [option], which must be a
   /// flag.
-  void _setFlag(Map results, Option option, bool value) {
+  void _setFlag(Map results, Option option, bool value,
+      Map<String, String> actualStores, String source) {
     assert(option.isFlag);
     results[option.name] = value;
+    actualStores[option.name] = source;
   }
 
   /// Validates that [value] is allowed as a value of [option].
