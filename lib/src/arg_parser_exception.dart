@@ -19,4 +19,10 @@ class ArgParserException extends FormatException {
       super.source,
       super.offset])
       : commands = commands == null ? const [] : List.unmodifiable(commands);
+
+  /// Returns a string representation of this exception.
+  @override
+  String toString() {
+    return 'FormatException: $message';
+  }
 }

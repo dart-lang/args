@@ -771,18 +771,23 @@ void main() {
       test('throws exception for unknown option', () {
         var parser = ArgParser();
         throwsArgParserException(parser, ['--verbose'],
-            'Could not find an option named "--verbose".', [], '--verbose');
-        throwsArgParserException(
-            parser, ['-v'], 'Could not find an option or flag "-v".', [], '-v');
+            'Could not find an option named "--verbose".', [], '--verbose', 0);
+        throwsArgParserException(parser, ['-v'],
+            'Could not find an option or flag "-v".', [], '-v', 0);
       });
 
       test('throws exception for flag with value', () {
         var parser = ArgParser();
         parser.addFlag('flag', abbr: 'f');
-        throwsArgParserException(parser, ['--flag=1'],
-            'Flag option "--flag" should not be given a value.', [], '--flag');
+        throwsArgParserException(
+            parser,
+            ['--flag=1'],
+            'Flag option "--flag" should not be given a value.',
+            [],
+            '--flag',
+            0);
         throwsArgParserException(parser, ['-f=1'],
-            'Option "-f" is a flag and cannot handle value "=1".', [], '-f');
+            'Option "-f" is a flag and cannot handle value "=1".', [], '-f', 0);
       });
 
       test('throws exception after parsing multiple options', () {
@@ -794,14 +799,20 @@ void main() {
             ['--first', '1', '--second', '2', '--verbose', '3'],
             'Could not find an option named "--verbose".',
             [],
-            '--verbose');
+            '--verbose',
+            4);
       });
 
       test('throws exception for option with invalid value', () {
         var parser = ArgParser();
         parser.addOption('first', allowed: ['a', 'b']);
-        throwsArgParserException(parser, ['--first', 'c'],
-            '"c" is not an allowed value for option "--first".', [], '--first');
+        throwsArgParserException(
+            parser,
+            ['--first', 'c'],
+            '"c" is not an allowed value for option "--first".',
+            [],
+            '--first',
+            1);
       });
 
       test('throws exception after parsing command', () {
@@ -812,7 +823,8 @@ void main() {
             ['command', '--verbose'],
             'Could not find an option named "--verbose".',
             ['command'],
-            '--verbose');
+            '--verbose',
+            1);
       });
     });
   });

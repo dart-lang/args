@@ -331,7 +331,7 @@ class ArgParser {
   /// Parses [args], a list of command-line arguments, matches them against the
   /// flags and options defined by this parser, and returns the result.
   ArgResults parse(Iterable<String> args) =>
-      Parser(null, this, Queue.of(args)).parse();
+      Parser(null, this, ArgsQueue(args)).parse();
 
   /// Generates a string displaying usage information for the defined options.
   ///
