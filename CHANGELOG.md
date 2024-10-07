@@ -3,6 +3,7 @@
 * Added source argument when throwing a `ArgParserException`.
 * Fix inconsistent `FormatException` messages
 * Require Dart 3.3
+* Add `mandatory` parameter to `addMultiOption` method.
 
 ## 2.5.0
 

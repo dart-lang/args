@@ -741,6 +741,18 @@ Run "test help" to see global options.'''));
     expect(await runner.run([subcommand.name, '--mandatory-option', 'foo']),
         'foo');
   });
+
+  test('mandatory multi-options in commands', () async {
+    var subcommand = _MandatoryMultiOptionCommand();
+    runner.addCommand(subcommand);
+    expect(
+        () => runner.run([subcommand.name]),
+        throwsA(isA<ArgumentError>().having((e) => e.message, 'message',
+            contains('Option mandatory-multi-option is mandatory'))));
+    expect(
+        await runner.run([subcommand.name, '--mandatory-multi-option', 'foo']),
+        ['foo']);
+  });
 }
 
 class _MandatoryOptionCommand extends Command {
@@ -756,4 +768,19 @@ class _MandatoryOptionCommand extends Command {
 
   @override
   String run() => argResults!['mandatory-option'] as String;
+}
+
+class _MandatoryMultiOptionCommand extends Command {
+  _MandatoryMultiOptionCommand() {
+    argParser.addMultiOption('mandatory-multi-option', mandatory: true);
+  }
+
+  @override
+  String get description => 'A command with a mandatory multi-option';
+
+  @override
+  String get name => 'mandatory-multi-option-command';
+
+  @override
+  List<String> run() => argResults!['mandatory-multi-option'] as List<String>;
 }
