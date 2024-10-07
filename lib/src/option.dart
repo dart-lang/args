@@ -20,6 +20,7 @@ Option newOption(
     bool? splitCommas,
     bool mandatory = false,
     bool hide = false,
+    bool hideNegatable = false,
     List<String> aliases = const []}) {
   return Option._(name, abbr, help, valueHelp, allowed, allowedHelp, defaultsTo,
       callback, type,
@@ -27,6 +28,7 @@ Option newOption(
       splitCommas: splitCommas,
       mandatory: mandatory,
       hide: hide,
+      hideNegatable: hideNegatable,
       aliases: aliases);
 }
 
@@ -65,6 +67,11 @@ class Option {
   ///
   /// This is `null` unless [type] is [OptionType.flag].
   final bool? negatable;
+
+  /// Whether to document that this flag is [negatable].
+  ///
+  /// This is `null` unless [type] is [OptionType.flag].
+  final bool? hideNegatable;
 
   /// The callback to invoke with the option's value when the option is parsed.
   final Function? callback;
@@ -108,6 +115,7 @@ class Option {
       bool? splitCommas,
       this.mandatory = false,
       this.hide = false,
+      this.hideNegatable,
       this.aliases = const []})
       : allowed = allowed == null ? null : List.unmodifiable(allowed),
         allowedHelp =

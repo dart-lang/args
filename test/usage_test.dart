@@ -16,6 +16,15 @@ void main() {
           ''');
     });
 
+    test('negatable flags with hideNegatable don\'t show "no-" in title', () {
+      var parser = ArgParser();
+      parser.addFlag('mode', help: 'The mode', hideNegatable: true);
+
+      validateUsage(parser, '''
+          --mode    The mode
+          ''');
+    });
+
     test('non-negatable flags don\'t show "no-" in title', () {
       var parser = ArgParser();
       parser.addFlag('mode', negatable: false, help: 'The mode');

@@ -119,6 +119,10 @@ class ArgParser {
   ///
   /// If [hide] is `true`, this option won't be included in [usage].
   ///
+  /// If [hideNegatable] is `true`, the fact that this flag can be negated will
+  /// not be documented in [usage].
+  /// It is an error for [hideNegatable] to be `true` if [negatable] is `false`.
+  ///
   /// If [aliases] is provided, these are used as aliases for [name]. These
   /// aliases will not appear as keys in the [options] map.
   ///
@@ -133,6 +137,7 @@ class ArgParser {
       bool negatable = true,
       void Function(bool)? callback,
       bool hide = false,
+      bool hideNegatable = false,
       List<String> aliases = const []}) {
     _addOption(
         name,
@@ -146,6 +151,7 @@ class ArgParser {
         OptionType.flag,
         negatable: negatable,
         hide: hide,
+        hideNegatable: hideNegatable,
         aliases: aliases);
   }
 
@@ -285,6 +291,7 @@ class ArgParser {
       bool? splitCommas,
       bool mandatory = false,
       bool hide = false,
+      bool hideNegatable = false,
       List<String> aliases = const []}) {
     var allNames = [name, ...aliases];
     if (allNames.any((name) => findByNameOrAlias(name) != null)) {
@@ -306,12 +313,19 @@ class ArgParser {
           'The option $name cannot be mandatory and have a default value.');
     }
 
+    if (!negatable && hideNegatable) {
+      throw ArgumentError(
+        'The option $name cannot have `hideNegatable` without being negatable.',
+      );
+    }
+
     var option = newOption(name, abbr, help, valueHelp, allowed, allowedHelp,
         defaultsTo, callback, type,
         negatable: negatable,
         splitCommas: splitCommas,
         mandatory: mandatory,
         hide: hide,
+        hideNegatable: hideNegatable,
         aliases: aliases);
     _options[name] = option;
     _optionsAndSeparators.add(option);
