@@ -6,8 +6,10 @@ name: arg_parser_example
 version: 1.0.0
 description: An example of using ArgParser
 publish_to: 'none'
+
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: ^3.0.0
+
 dependencies:
   args:
     path: ../..
