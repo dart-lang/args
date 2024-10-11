@@ -121,7 +121,7 @@ class _Usage {
 
   String _longOption(Option option) {
     String result;
-    if (option.negatable! && !option.hideNegatable!) {
+    if (option.negatable! && !option.hideNegatedUsage!) {
       result = '--[no-]${option.name}';
     } else {
       result = '--${option.name}';
