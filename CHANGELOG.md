@@ -1,8 +1,10 @@
-## 2.6.0-wip
+## 2.6.0
 
 * Added source argument when throwing a `ArgParserException`.
 * Fix inconsistent `FormatException` messages
 * Require Dart 3.3
+* Added option `hideNegatedUsage` to `ArgParser.flag()` allowing a flag to be
+  `negatable` without showing it in the usage text.
 
 ## 2.5.0
 
